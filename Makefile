@@ -1,8 +1,14 @@
-CC=gcc-4.8
-CCFLAGS=-Wall -std=c99
-LIBS=-ledit
 
-default_target:
-	$(CC) $(CCFLAGS) repl.c $(LIBS) -o repl
+CC = gcc
+CFLAGS = -Wall -std=c99
+INCLUDE = -I./ext/mpc
 
-.PHONY: default_target
+SOURCES = $(wildcard *.c) ext/mpc/mpc.c
+
+all:
+	$(CC) $(CFLAGS) $(SOURCES) -lm -ledit $(LIBS) $(INCLUDE) -o repl
+
+clean:
+	rm -rf build/
+
+.PHONY: all
