@@ -1,3 +1,0 @@
-[submodule "ext/mcp"]
-	path = ext/mcp
-	url = git@github.com:orangeduck/mpc.git
