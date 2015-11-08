@@ -16,13 +16,15 @@ typedef struct {
 } lval;
 
 enum { LVAL_ERR, LVAL_NUM, LVAL_SYM, LVAL_SEXPR };
-enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
 
-void lval_del(lval* v);
+void lval_del(lval* val);
 lval* lval_add(lval* v, lval* x);
 lval* lval_num(long number);
 lval* lval_err(char* error);
-lval* lval_sym(char* symbolss);
+lval* lval_sym(char* symbols);
 lval* lval_sexpr(void);
+lval* lval_pop(lval* val, int index);
+lval* lval_take(lval* val, int index);
+
 
 #endif

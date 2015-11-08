@@ -37,8 +37,9 @@ int main(int argc, char** argv) {
 
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Lisp, &r)) {
-            lval* result = lval_read(r.output);
+            lval* result = lval_eval(lval_read(r.output));
             lval_println(result);
+            lval_del(result);
             mpc_ast_delete(r.output);
         } else {
             mpc_err_print(r.output);
