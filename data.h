@@ -15,7 +15,7 @@ typedef struct {
     struct lval** cell;
 } lval;
 
-enum { LVAL_ERR, LVAL_NUM, LVAL_SYM, LVAL_SEXPR };
+enum { LVAL_ERR, LVAL_NUM, LVAL_SYM, LVAL_SEXPR, LVAL_QEXPR };
 
 void lval_del(lval* val);
 lval* lval_add(lval* v, lval* x);
@@ -23,6 +23,7 @@ lval* lval_num(long number);
 lval* lval_err(char* error);
 lval* lval_sym(char* symbols);
 lval* lval_sexpr(void);
+lval* lval_qexpr(void);
 lval* lval_pop(lval* val, int index);
 lval* lval_take(lval* val, int index);
 

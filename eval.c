@@ -17,6 +17,7 @@ lval* lval_read(mpc_ast_t* t) {
     lval* x = NULL;
     if (strcmp(t->tag, ">") == 0) { x = lval_sexpr(); }
     if (strstr(t->tag, "sexpr")) { x = lval_sexpr(); }
+    if (strstr(t->tag, "qexpr")) { x = lval_qexpr(); }
 
     for (int i = 0; i < t->children_num; i++) {
         if (strcmp(t->children[i]->contents, "(") == 0) { continue; }
