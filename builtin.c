@@ -9,7 +9,7 @@ builtin(lval* a, char* func) {
     if (strcmp("tail", func) == 0) { return builtin_tail(a); }
     if (strcmp("eval", func) == 0) { return builtin_eval(a); }
     if (strcmp("join", func) == 0) { return builtin_join(a); }
-    if (strstr("+-/*", func)) { return builtin_op(a, func); }
+    if (strstr("+-/*%", func)) { return builtin_op(a, func); }
     lval_del(a);
     return lval_err("Unknown Function!");
 }
@@ -37,6 +37,7 @@ builtin_op(lval* a, char* op) {
         if (strcmp(op, "+") == 0) { x->number += y->number; }
         if (strcmp(op, "-") == 0) { x->number -= y->number; }
         if (strcmp(op, "*") == 0) { x->number *= y->number; }
+        if (strcmp(op, "%") == 0) { x->number %= y->number; }
         if (strcmp(op, "/") == 0) {
             if (y->number == 0) {
                 lval_del(x); lval_del(y);
