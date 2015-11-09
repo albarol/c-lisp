@@ -4,6 +4,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LASSERT(args, cond, err) \
+    if (!(cond)) { lval_del(args); return lval_err(err); }
+
+
 typedef struct {
     int type;
     long number;
@@ -26,6 +30,6 @@ lval* lval_sexpr(void);
 lval* lval_qexpr(void);
 lval* lval_pop(lval* val, int index);
 lval* lval_take(lval* val, int index);
-
+lval* lval_join(lval* x, lval* y);
 
 #endif

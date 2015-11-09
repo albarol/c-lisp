@@ -1,7 +1,8 @@
 
 #include "eval.h"
 
-lval* lval_read_num(mpc_ast_t* t) {
+lval*
+lval_read_num(mpc_ast_t* t) {
     errno = 0;
     long x = strtol(t->contents, NULL, 10);
     return errno != ERANGE
@@ -9,7 +10,8 @@ lval* lval_read_num(mpc_ast_t* t) {
         : lval_err("invalid number");
 }
 
-lval* lval_read(mpc_ast_t* t) {
+lval*
+lval_read(mpc_ast_t* t) {
 
     if (strstr(t->tag, "number")) { return lval_read_num(t); }
     if (strstr(t->tag, "symbol")) { return lval_sym(t->contents); }
@@ -52,7 +54,7 @@ lval_eval_sexpr(lval* v) {
         return lval_err("S-Expression did not start with symbol");
     }
 
-    lval* result = builtin_op(v, f->sym);
+    lval* result = builtin(v, f->sym);
     lval_del(f);
     return result;
 }
@@ -61,41 +63,4 @@ lval*
 lval_eval(lval* v) {
     if (v->type == LVAL_SEXPR) { return lval_eval_sexpr(v); }
     return v;
-}
-
-lval*
-builtin_op(lval* a, char* op) {
-
-    for (int i = 0; i < a->count; i++) {
-        if (((lval *)a->cell[i])->type != LVAL_NUM) {
-            lval_del(a);
-            return lval_err("Cannot operate on non-number!");
-        }
-    }
-
-    lval* x = lval_pop(a, 0);
-
-    if ((strcmp(op, "-") == 0) && a->count == 0) {
-        x->number = -x->number;
-    }
-
-    while (a->count > 0) {
-
-        lval* y = lval_pop(a, 0);
-
-        if (strcmp(op, "+") == 0) { x->number += y->number; }
-        if (strcmp(op, "-") == 0) { x->number -= y->number; }
-        if (strcmp(op, "*") == 0) { x->number *= y->number; }
-        if (strcmp(op, "/") == 0) {
-            if (y->number == 0) {
-                lval_del(x); lval_del(y);
-                x = lval_err("Division By Zero!"); break;
-            }
-            x->number /= y->number;
-        }
-
-        lval_del(y);
-    }
-
-    lval_del(a); return x;
 }
