@@ -4,6 +4,7 @@
 #include "token.h"
 #include "environment.h"
 #include "ast.h"
+#include "error.h"
 
 void clisp_builtin_load_functions(clisp_env_t* env);
 

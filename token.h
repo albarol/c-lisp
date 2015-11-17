@@ -3,9 +3,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdarg.h>
 
-#define LASSERT(args, cond, err) \
-      if (!(cond)) { clisp_token_del(args); return clisp_token_error(err); }
 
 struct clisp_token_t;
 struct clisp_env_t;
@@ -39,10 +38,8 @@ struct clisp_token_t {
     struct clisp_token_t** tokens;
 };
 
-
-
 clisp_token_t* clisp_token_number(long number);
-clisp_token_t* clisp_token_error(char* error);
+clisp_token_t* clisp_token_error(char* error, ...);
 clisp_token_t* clisp_token_symbol(char* symbol);
 clisp_token_t* clisp_token_sexpr(void);
 clisp_token_t* clisp_token_qexpr(void);

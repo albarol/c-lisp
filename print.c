@@ -34,3 +34,16 @@ clisp_print_write_expr(clisp_token_t* token, char open, char close) {
 
     putchar(close);
 }
+
+char*
+clisp_print_type_name(clisp_token_type_t type) {
+    switch (type) {
+        case TOKEN_FUNCTION: return "Function";
+        case TOKEN_NUMBER: return "Number";
+        case TOKEN_ERROR: return "Error";
+        case TOKEN_SYMBOL: return "Symbol";
+        case TOKEN_SEXPRESSION: return "S-Expression";
+        case TOKEN_QEXPRESSION: return "Q-Expression";
+        default: return "Unknown";
+    }
+}

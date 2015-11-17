@@ -11,11 +11,19 @@ clisp_token_number(long num) {
 }
 
 clisp_token_t*
-clisp_token_error(char* error) {
+clisp_token_error(char* fmt, ...) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
     token->type = TOKEN_ERROR;
-    token->error = malloc(strlen(error) + 1);
-    strcpy(token->error, error);
+
+    va_list args;
+    va_start(args, fmt);
+
+    token->error = malloc(512);
+    vsnprintf(token->error, 511, fmt, args);
+
+    token->error = realloc(token->error, strlen(token->error)+1);
+    va_end(args);
+
     return token;
 }
 
