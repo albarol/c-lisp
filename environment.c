@@ -10,6 +10,11 @@ clisp_env_new(void) {
     return env;
 }
 
+clisp_env_t*
+clisp_env_copy(clisp_env_t* env) {
+    return env;
+}
+
 void
 clisp_env_del(clisp_env_t* env) {
 

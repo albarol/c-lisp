@@ -23,5 +23,6 @@ clisp_token_t* clisp_builtin_eval(clisp_env_t* env, clisp_token_t* token);
 clisp_token_t* clisp_builtin_list_join(clisp_env_t* env, clisp_token_t* token);
 
 clisp_token_t* clisp_builtin_define(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_lambda(clisp_env_t* env, clisp_token_t* token);
 
 #endif

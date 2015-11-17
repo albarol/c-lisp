@@ -9,7 +9,17 @@ clisp_print_write(clisp_token_t* token) {
         case TOKEN_SYMBOL: printf("%s", token->symbol); break;
         case TOKEN_SEXPRESSION: clisp_print_write_expr(token, '(', ')'); break;
         case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
-        case TOKEN_FUNCTION: printf("<function>"); break;
+        case TOKEN_FUNCTION:
+            if(token->function) {
+                printf("<function>");
+            } else {
+                printf("(\\ ");
+                clisp_print_write(token->formals);
+                putchar(' ');
+                clisp_print_write(token->body);
+                putchar(')');
+            }
+            break;
     }
 }
 

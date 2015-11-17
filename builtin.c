@@ -184,3 +184,24 @@ clisp_builtin_define(clisp_env_t* env, clisp_token_t* token) {
     clisp_token_del(token);
     return clisp_token_sexpr();
 }
+
+clisp_token_t*
+clisp_builtin_lambda(clisp_env_t* env, clisp_token_t* token) {
+
+    clisp_assert_count(token, 2);
+    clisp_assert_type(token, token->tokens[0]->type, TOKEN_QEXPRESSION);
+    clisp_assert_type(token, token->tokens[1]->type, TOKEN_QEXPRESSION);
+
+    for (int i = 0; i < token->tokens[0]->count; i++) {
+        clisp_token_t* child = token->tokens[0]->tokens[i];
+        clisp_assert(token, child->type = TOKEN_SYMBOL,
+                     "Cannot define non-symbol. Got: %s, Expected: %s",
+                     clisp_print_type_name(child->type), clisp_print_type_name(TOKEN_SYMBOL));
+    }
+
+    clisp_token_t* formals = clisp_token_pop(token, 0);
+    clisp_token_t* body = clisp_token_pop(token, 0);
+    clisp_token_del(token);
+
+    return clisp_token_lambda(formals, body);
+}

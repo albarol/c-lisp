@@ -62,14 +62,35 @@ clisp_token_function(clisp_function_t function) {
     return token;
 }
 
+clisp_token_t*
+clisp_token_lambda(clisp_token_t* formals, clisp_token_t* body) {
+
+    clisp_token_t* token = malloc(sizeof(clisp_token_t));
+    token->type = TOKEN_FUNCTION;
+    token->function = NULL;
+
+    token->env = clisp_env_new();
+    token->formals = formals;
+    token->body = body;
+
+    return token;
+}
+
 
 void
 clisp_token_del(clisp_token_t* token) {
 
     switch (token->type) {
 
-        case TOKEN_FUNCTION:
         case TOKEN_NUMBER:
+            break;
+
+        case TOKEN_FUNCTION:
+            if (token->function) {
+                clisp_env_del(token->env);
+                clisp_token_del(token->formals);
+                clisp_token_del(token->body);
+            }
             break;
 
         case TOKEN_ERROR:
@@ -141,7 +162,14 @@ clisp_token_copy(clisp_token_t* token) {
 
     switch (token->type) {
         case TOKEN_FUNCTION:
-            copy_token->function = token->function;
+            if (token->function) {
+                copy_token->function = token->function;
+            } else {
+                copy_token->function = NULL;
+                copy_token->env = clisp_env_copy(token->env);
+                copy_token->formals = clisp_token_copy(token->formals);
+                copy_token->body = clisp_token_copy(token->body);
+            }
             break;
 
         case TOKEN_NUMBER:
