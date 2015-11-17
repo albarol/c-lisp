@@ -3,179 +3,185 @@
 
 
 void
-lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
-    lval* k = lval_sym(name);
-    lval* v = lval_fun(func);
-    lenv_put(e, k, v);
-    lval_del(k); lval_del(v);
+clisp_builtin_load_functions(clisp_env_t* env) {
+
+    clisp_env_put_function(env, "+", clisp_builtin_arithmetic_add);
+    clisp_env_put_function(env, "-", clisp_builtin_arithmetic_sub);
+    clisp_env_put_function(env, "*", clisp_builtin_arithmetic_mul);
+    clisp_env_put_function(env, "/", clisp_builtin_arithmetic_div);
+
+    clisp_env_put_function(env, "list", clisp_builtin_list_create);
+    clisp_env_put_function(env, "head", clisp_builtin_list_head);
+    clisp_env_put_function(env, "tail", clisp_builtin_list_tail);
+    clisp_env_put_function(env, "join", clisp_builtin_list_join);
+
+    clisp_env_put_function(env, "eval", clisp_builtin_eval);
+
+    clisp_env_put_function(env, "def", clisp_builtin_define);
 }
 
-void
-lenv_add_builtins(lenv* e) {
-    lenv_add_builtin(e, "list", builtin_list);
-    lenv_add_builtin(e, "head", builtin_head);
-    lenv_add_builtin(e, "tail", builtin_tail);
-    lenv_add_builtin(e, "eval", builtin_eval);
-    lenv_add_builtin(e, "join", builtin_join);
-    lenv_add_builtin(e, "def", builtin_def);
+clisp_token_t*
+clisp_builtin_arithmetic(clisp_env_t* env, clisp_token_t* token, char* op) {
 
-    lenv_add_builtin(e, "+", builtin_add);
-    lenv_add_builtin(e, "-", builtin_sub);
-    lenv_add_builtin(e, "*", builtin_mul);
-    lenv_add_builtin(e, "/", builtin_div);
-}
+    for (int i = 0; i < token->count; i++) {
+        clisp_token_t* item = token->tokens[i];
 
-lval*
-builtin_op(lenv* e, lval* a, char* op) {
-
-    for (int i = 0; i < a->count; i++) {
-        if (((lval *)a->cell[i])->type != LVAL_NUM) {
-            lval_del(a);
-            return lval_err("Cannot operate on non-number!");
+        if (item->type != TOKEN_NUMBER) {
+            clisp_token_del(token);
+            return clisp_token_error("Cannot operate on non-number!");
         }
     }
 
-    lval* x = lval_pop(a, 0);
+    clisp_token_t* first = clisp_token_pop(token, 0);
 
-    if ((strcmp(op, "-") == 0) && a->count == 0) {
-        x->number = -x->number;
+    if ((strcmp(op, "-") == 0) && token->count == 0) {
+        first->number = -first->number;
     }
 
-    while (a->count > 0) {
+    while (token->count > 0) {
 
-        lval* y = lval_pop(a, 0);
+        clisp_token_t* second = clisp_token_pop(token, 0);
 
-        if (strcmp(op, "+") == 0) { x->number += y->number; }
-        if (strcmp(op, "-") == 0) { x->number -= y->number; }
-        if (strcmp(op, "*") == 0) { x->number *= y->number; }
-        if (strcmp(op, "%") == 0) { x->number %= y->number; }
+        if (strcmp(op, "+") == 0) { first->number += second->number; }
+        if (strcmp(op, "-") == 0) { first->number -= second->number; }
+        if (strcmp(op, "*") == 0) { first->number *= second->number; }
+        if (strcmp(op, "%") == 0) { first->number %= second->number; }
         if (strcmp(op, "/") == 0) {
-            if (y->number == 0) {
-                lval_del(x); lval_del(y);
-                x = lval_err("Division By Zero!"); break;
+            if (second->number == 0) {
+                clisp_token_del(first);
+                clisp_token_del(second);
+                first = clisp_token_error("Division By Zero!");
+                break;
             }
-            x->number /= y->number;
+            first->number /= second->number;
         }
 
-        lval_del(y);
+        clisp_token_del(second);
     }
 
-    lval_del(a); return x;
+    clisp_token_del(token);
+    return first;
 }
 
 
-lval*
-builtin_add(lenv* e, lval* a) {
-    return builtin_op(e, a, "+");
+clisp_token_t*
+clisp_builtin_arithmetic_add(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_arithmetic(env, token, "+");
 }
 
-lval*
-builtin_sub(lenv* e, lval* a) {
-    return builtin_op(e, a, "-");
+clisp_token_t*
+clisp_builtin_arithmetic_sub(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_arithmetic(env, token, "-");
 }
 
-lval*
-builtin_mul(lenv* e, lval* a) {
-    return builtin_op(e, a, "*");
+clisp_token_t*
+clisp_builtin_arithmetic_mul(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_arithmetic(env, token, "*");
 }
 
-lval*
-builtin_div(lenv* e, lval* a) {
-    return builtin_op(e, a, "/");
+clisp_token_t*
+clisp_builtin_arithmetic_div(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_arithmetic(env, token, "/");
 }
 
 
-lval*
-builtin_head(lenv* e, lval* a) {
-    LASSERT(a, a->count == 1,
+
+clisp_token_t*
+clisp_builtin_list_create(clisp_env_t* env, clisp_token_t* token) {
+    token->type = TOKEN_QEXPRESSION;
+    return token;
+}
+
+
+clisp_token_t*
+clisp_builtin_list_head(clisp_env_t* env, clisp_token_t* token) {
+    LASSERT(token, token->count == 1,
             "Function 'head' passed too many arguments!");
-    lval* list = a->cell[0];
-    LASSERT(a, list->type == LVAL_QEXPR,
+
+    clisp_token_t* list = token->tokens[0];
+    LASSERT(token, list->type == TOKEN_QEXPRESSION,
             "Function 'head' passed incorrect types");
-    LASSERT(a, list->count != 0,
+    LASSERT(token, list->count != 0,
             "Function 'head' passed {}!");
 
-    list = lval_take(a, 0);
+    list = clisp_token_take(token, 0);
 
-    while (list->count > 1) { lval_del(lval_pop(list, 1)); }
+    while (list->count > 1) {
+        clisp_token_del(clisp_token_pop(list, 1));
+    }
     return list;
 }
 
-lval*
-builtin_tail(lenv* e, lval* a) {
-    LASSERT(a, a->count == 1,
+clisp_token_t*
+clisp_builtin_list_tail(clisp_env_t* env, clisp_token_t* token) {
+    LASSERT(token, token->count == 1,
             "Function 'tail' passed too many arguments!");
-    lval* list = a->cell[0];
-    LASSERT(a, list->type == LVAL_QEXPR,
+    clisp_token_t* list = token->tokens[0];
+    LASSERT(token, list->type == TOKEN_QEXPRESSION,
             "Function 'tail' passed incorrect types");
-    LASSERT(a, list->count != 0,
+    LASSERT(token, list->count != 0,
             "Function 'tail' passed {}!");
 
-    list = lval_take(a, 0);
-    lval_del(lval_pop(list, 0));
+    list = clisp_token_take(token, 0);
+    clisp_token_del(clisp_token_pop(list, 0));
     return list;
 }
 
-lval*
-builtin_list(lenv* e, lval* a) {
-    a->type = LVAL_QEXPR;
-    return a;
-}
+clisp_token_t*
+clisp_builtin_list_join(clisp_env_t* env, clisp_token_t* token) {
 
-
-lval*
-builtin_eval(lenv* e, lval* a) {
-    LASSERT(a, a->count == 1,
-            "Function 'eval' passed too many arguments!");
-
-    lval* v = a->cell[0];
-    LASSERT(a, v->type == LVAL_QEXPR,
-            "Function 'eval' passed incorrect types");
-
-    v = lval_take(a, 0);
-    v->type = LVAL_SEXPR;
-    return lval_eval(e, v);
-}
-
-lval*
-builtin_join(lenv* e, lval* a) {
-
-    for (int i = 0; i < a->count; i++) {
-        lval* child = a->cell[i];
-        LASSERT(a, child->type == LVAL_QEXPR,
+    for (int i = 0; i < token->count; i++) {
+        clisp_token_t* child = token->tokens[i];
+        LASSERT(token, child->type == TOKEN_QEXPRESSION,
                 "Function 'join' passed incorrect type");
     }
 
-    lval* x = lval_pop(a, 0);
+    clisp_token_t* child = clisp_token_pop(token, 0);
 
-    while (a->count) {
-        x = lval_join(x, lval_pop(a, 0));
+    while (token->count) {
+        child = clisp_token_join(child, clisp_token_pop(token, 0));
     }
 
-    lval_del(a);
-    return x;
+    clisp_token_del(token);
+    return child;
 }
 
-lval*
-builtin_def(lenv* e, lval* a) {
-    LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
+
+clisp_token_t*
+clisp_builtin_eval(clisp_env_t* env, clisp_token_t* token) {
+    LASSERT(token, token->count == 1,
+            "Function 'eval' passed too many arguments!");
+
+    clisp_token_t* child = token->tokens[0];
+    LASSERT(token, token->type == TOKEN_QEXPRESSION,
+            "Function 'eval' passed incorrect types");
+
+    child = clisp_token_take(token, 0);
+    child->type = TOKEN_QEXPRESSION;
+    return clisp_ast_eval(env, child);
+}
+
+
+clisp_token_t*
+clisp_builtin_define(clisp_env_t* env, clisp_token_t* token) {
+    LASSERT(token, token->tokens[0]->type == TOKEN_QEXPRESSION,
             "Function 'def' passed incorrect type!");
 
-    lval* syms = a->cell[0];
+    clisp_token_t* child = token->tokens[0];
 
-    for (int i = 0; i < syms->count; i++) {
-        LASSERT(a, syms->cell[i]->type == LVAL_SYM,
+    for (int i = 0; i < child->count; i++) {
+        LASSERT(token, child->tokens[i]->type == TOKEN_SYMBOL,
                 "Function 'def' cannot define non-symbol");
     }
 
-    LASSERT(a, syms->count == a->count-1,
+    LASSERT(token, child->count == token->count-1,
             "Function 'def' cannot define incorrect "
             "number of values to symbols");
 
-    for (int i = 0; i < syms->count; i++) {
-        lenv_put(e, syms->cell[i], a->cell[i+1]);
+    for (int i = 0; i < child->count; i++) {
+        clisp_env_put(env, child->tokens[i], token->tokens[i+1]);
     }
 
-    lval_del(a);
-    return lval_sexpr();
+    clisp_token_del(token);
+    return clisp_token_sexpr();
 }

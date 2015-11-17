@@ -1,24 +1,25 @@
 #ifndef __CLISP_BUILTIN__
 #define __CLISP_BUILTIN__
 
-#include "data.h"
-#include "eval.h"
+#include "token.h"
+#include "environment.h"
+#include "ast.h"
 
-void lenv_add_builtin(lenv* e, char* name, lbuiltin func);
-void lenv_add_builtins(lenv* e);
+void clisp_builtin_load_functions(clisp_env_t* env);
 
-lval* builtin(lval* a, char* func);
-lval* builtin_op(lenv* e, lval* a, char* op);
-lval* builtin_add(lenv* e, lval* a);
-lval* builtin_sub(lenv* e, lval* a);
-lval* builtin_mul(lenv* e, lval* a);
-lval* builtin_div(lenv* e, lval* a);
-lval* builtin_list(lenv* e, lval* a);
-lval* builtin_head(lenv* e, lval* a);
-lval* builtin_tail(lenv* e, lval* a);
-lval* builtin_eval(lenv* e, lval* a);
-lval* builtin_join(lenv* e, lval* a);
+clisp_token_t* clisp_builtin_arithmetic(clisp_env_t* env, clisp_token_t* token, char* op);
+clisp_token_t* clisp_builtin_arithmetic_add(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_arithmetic_sub(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_arithmetic_mul(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_arithmetic_div(clisp_env_t* env, clisp_token_t* token);
 
-lval* builtin_def(lenv* e, lval* a);
+clisp_token_t* clisp_builtin_list_create(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_list_head(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_list_tail(clisp_env_t* env, clisp_token_t* token);
+
+clisp_token_t* clisp_builtin_eval(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_list_join(clisp_env_t* env, clisp_token_t* token);
+
+clisp_token_t* clisp_builtin_define(clisp_env_t* env, clisp_token_t* token);
 
 #endif

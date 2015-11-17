@@ -2,29 +2,32 @@
 #include "print.h"
 
 void
-lval_print(lval* v) {
-    switch(v->type) {
-        case LVAL_NUM: printf("%li", v->number); break;
-        case LVAL_ERR: printf("Error: %s", v->err); break;
-        case LVAL_SYM: printf("%s", v->sym); break;
-        case LVAL_SEXPR: lval_print_expr(v, '(', ')'); break;
-        case LVAL_QEXPR: lval_print_expr(v, '{', '}'); break;
-        case LVAL_FUN: printf("<function>"); break;
+clisp_print_write(clisp_token_t* token) {
+    switch(token->type) {
+        case TOKEN_NUMBER: printf("%li", token->number); break;
+        case TOKEN_ERROR: printf("Error: %s", token->error); break;
+        case TOKEN_SYMBOL: printf("%s", token->symbol); break;
+        case TOKEN_SEXPRESSION: clisp_print_write_expr(token, '(', ')'); break;
+        case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
+        case TOKEN_FUNCTION: printf("<function>"); break;
     }
 }
 
 void
-lval_println(lval* v) { lval_print(v); putchar('\n'); }
+clisp_print_writeln(clisp_token_t* token) {
+    clisp_print_write(token);
+    putchar('\n');
+}
 
 void
-lval_print_expr(lval* v, char open, char close) {
+clisp_print_write_expr(clisp_token_t* token, char open, char close) {
     putchar(open);
 
-    for (int i = 0; i < v->count; i++) {
+    for (int i = 0; i < token->count; i++) {
 
-        lval_print((lval*) v->cell[i]);
+        clisp_print_write(token->tokens[i]);
 
-        if (i != (v->count - 1)) {
+        if (i != (token->count - 1)) {
             putchar(' ');
         }
     }

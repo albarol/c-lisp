@@ -1,6 +1,6 @@
 
 CC = clang
-CFLAGS = -Wall -std=c99
+CFLAGS = -w --std=c11
 INCLUDE = -I./ext/mpc -I./
 
 SOURCES = $(wildcard *.c) ext/mpc/mpc.c

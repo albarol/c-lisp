@@ -3,10 +3,10 @@
 
 #include <stdio.h>
 
-#include "data.h"
+#include "token.h"
 
-void lval_print(lval* v);
-void lval_println(lval* v);
-void lval_print_expr(lval* v, char open, char close);
+void clisp_print_write(clisp_token_t* token);
+void clisp_print_writeln(clisp_token_t* token);
+void clisp_print_write_expr(clisp_token_t* token, char open, char close);
 
 #endif

@@ -3,9 +3,10 @@
 #include <editline/readline.h>
 #include <editline/history.h>
 
-#include "data.h"
+#include "token.h"
+#include "environment.h"
 #include "print.h"
-#include "eval.h"
+#include "ast.h"
 
 static char input[2048];
 
@@ -34,8 +35,8 @@ int main(int argc, char** argv) {
     Number, Symbol, Sexpr, Qexpr, Expr, Lisp);
 
 
-    lenv* e = lenv_new();
-    lenv_add_builtins(e);
+    clisp_env_t* env = clisp_env_new();
+    clisp_builtin_load_functions(env);
 
     while (1) {
 
@@ -44,9 +45,9 @@ int main(int argc, char** argv) {
 
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Lisp, &r)) {
-            lval* result = lval_eval(e, lval_read(r.output));
-            lval_println(result);
-            lval_del(result);
+            clisp_token_t* result = clisp_ast_eval(env, clisp_ast_read(r.output));
+            clisp_print_writeln(result);
+            clisp_token_del(result);
             mpc_ast_delete(r.output);
         } else {
             mpc_err_print(r.output);
@@ -57,7 +58,7 @@ int main(int argc, char** argv) {
     }
 
     mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Lisp);
-    lenv_del(e);
+    clisp_env_del(env);
 
     return 0;
 }
