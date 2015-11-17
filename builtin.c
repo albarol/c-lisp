@@ -9,6 +9,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_function(env, "-", clisp_builtin_arithmetic_sub);
     clisp_env_put_function(env, "*", clisp_builtin_arithmetic_mul);
     clisp_env_put_function(env, "/", clisp_builtin_arithmetic_div);
+    clisp_env_put_function(env, "mod", clisp_builtin_arithmetic_mod);
 
     clisp_env_put_function(env, "list", clisp_builtin_list_create);
     clisp_env_put_function(env, "head", clisp_builtin_list_head);
@@ -45,7 +46,7 @@ clisp_builtin_arithmetic(clisp_env_t* env, clisp_token_t* token, char* op) {
         if (strcmp(op, "+") == 0) { first->number += second->number; }
         if (strcmp(op, "-") == 0) { first->number -= second->number; }
         if (strcmp(op, "*") == 0) { first->number *= second->number; }
-        if (strcmp(op, "%") == 0) { first->number %= second->number; }
+        if (strcmp(op, "mod") == 0) { first->number %= second->number; }
         if (strcmp(op, "/") == 0) {
             if (second->number == 0) {
                 clisp_token_del(first);
@@ -84,6 +85,10 @@ clisp_builtin_arithmetic_div(clisp_env_t* env, clisp_token_t* token) {
     return clisp_builtin_arithmetic(env, token, "/");
 }
 
+clisp_token_t*
+clisp_builtin_arithmetic_mod(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_arithmetic(env, token, "mod");
+}
 
 
 clisp_token_t*

@@ -12,6 +12,7 @@ clisp_token_t* clisp_builtin_arithmetic_add(clisp_env_t* env, clisp_token_t* tok
 clisp_token_t* clisp_builtin_arithmetic_sub(clisp_env_t* env, clisp_token_t* token);
 clisp_token_t* clisp_builtin_arithmetic_mul(clisp_env_t* env, clisp_token_t* token);
 clisp_token_t* clisp_builtin_arithmetic_div(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_arithmetic_mod(clisp_env_t* env, clisp_token_t* token);
 
 clisp_token_t* clisp_builtin_list_create(clisp_env_t* env, clisp_token_t* token);
 clisp_token_t* clisp_builtin_list_head(clisp_env_t* env, clisp_token_t* token);
