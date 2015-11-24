@@ -19,6 +19,8 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_function(env, "eval", clisp_builtin_eval);
 
     clisp_env_put_function(env, "def", clisp_builtin_define);
+    clisp_env_put_function(env, "=", clisp_builtin_assign);
+    clisp_env_put_function(env, "\\",  clisp_builtin_lambda);
 }
 
 clisp_token_t*
@@ -153,18 +155,17 @@ clisp_builtin_list_join(clisp_env_t* env, clisp_token_t* token) {
 clisp_token_t*
 clisp_builtin_eval(clisp_env_t* env, clisp_token_t* token) {
     clisp_assert_count(token, 1);
-    clisp_assert_type(token, token->type, TOKEN_QEXPRESSION)
 
     clisp_token_t* child = token->tokens[0];
+    clisp_assert_type(token, child->type, TOKEN_QEXPRESSION)
 
     child = clisp_token_take(token, 0);
-    child->type = TOKEN_QEXPRESSION;
+    child->type = TOKEN_SEXPRESSION;
     return clisp_ast_eval(env, child);
 }
 
-
 clisp_token_t*
-clisp_builtin_define(clisp_env_t* env, clisp_token_t* token) {
+clisp_builtin_var_set(clisp_env_t* env, clisp_token_t* token, char* function) {
 
     clisp_token_t* child = token->tokens[0];
     clisp_assert_type(token, child->type, TOKEN_QEXPRESSION);
@@ -174,16 +175,33 @@ clisp_builtin_define(clisp_env_t* env, clisp_token_t* token) {
     }
 
     clisp_assert(token, child->count == token->count-1,
-                 "Function 'def' cannot define incorrect "
+                 "Function cannot define incorrect "
                  "number of values to symbols")
 
     for (int i = 0; i < child->count; i++) {
-        clisp_env_put(env, child->tokens[i], token->tokens[i+1]);
+        if (strcmp(function, "=") == 0) {
+            clisp_env_define(env, child->tokens[i], token->tokens[i+1]);
+        }
+
+        if (strcmp(function, "def") == 0) {
+            clisp_env_put(env, child->tokens[i], token->tokens[i+1]);
+        }
     }
 
     clisp_token_del(token);
     return clisp_token_sexpr();
 }
+
+clisp_token_t*
+clisp_builtin_define(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_var_set(env, token, "def");
+}
+
+clisp_token_t*
+clisp_builtin_assign(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_var_set(env, token, "=");
+}
+
 
 clisp_token_t*
 clisp_builtin_lambda(clisp_env_t* env, clisp_token_t* token) {

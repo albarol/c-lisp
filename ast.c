@@ -61,14 +61,14 @@ clisp_ast_eval_sexpr(clisp_env_t* env, clisp_token_t* token) {
     if (token->count == 0) { return token; }
     if (token->count == 1) { return clisp_token_take(token, 0); }
 
-    clisp_token_t* item = clisp_token_pop(token, 0);
-    if (item->type != TOKEN_FUNCTION) {
+    clisp_token_t* func = clisp_token_pop(token, 0);
+    if (func->type != TOKEN_FUNCTION) {
         clisp_token_del(token);
-        clisp_token_del(item);
+        clisp_token_del(func);
         return clisp_token_error("First element is not a function");
     }
 
-    clisp_token_t* result = item->function(env, token);
-    clisp_token_del(item);
+    clisp_token_t* result = clisp_token_call(env, func, token);
+    clisp_token_del(func);
     return result;
 }

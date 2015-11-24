@@ -10,7 +10,7 @@ clisp_print_write(clisp_token_t* token) {
         case TOKEN_SEXPRESSION: clisp_print_write_expr(token, '(', ')'); break;
         case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
         case TOKEN_FUNCTION:
-            if(token->function) {
+            if(token->builtin) {
                 printf("<function>");
             } else {
                 printf("(\\ ");

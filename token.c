@@ -1,6 +1,6 @@
 
 #include "token.h"
-
+#include "builtin.h"
 
 clisp_token_t*
 clisp_token_number(long num) {
@@ -58,7 +58,7 @@ clisp_token_t*
 clisp_token_function(clisp_function_t function) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
     token->type = TOKEN_FUNCTION;
-    token->function = function;
+    token->builtin = function;
     return token;
 }
 
@@ -67,13 +67,49 @@ clisp_token_lambda(clisp_token_t* formals, clisp_token_t* body) {
 
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
     token->type = TOKEN_FUNCTION;
-    token->function = NULL;
+    token->builtin = NULL;
 
     token->env = clisp_env_new();
     token->formals = formals;
     token->body = body;
 
     return token;
+}
+
+clisp_token_t*
+clisp_token_call(clisp_env_t* env, clisp_token_t* f, clisp_token_t* args) {
+
+    if (f->builtin) { return f->builtin(env, args); }
+
+    int given = args->count;
+    int total = f->formals->count;
+
+    while (args->count) {
+
+        if (f->formals->count == 0) {
+            clisp_token_del(args);
+            return clisp_token_error("Function passed too many arguments. "
+                                     "Got: %i, Expected: %i", given, total);
+        }
+
+        clisp_token_t* symbol = clisp_token_pop(f->formals, 0);
+        clisp_token_t* token = clisp_token_pop(args, 0);
+
+        clisp_env_put(f->env, symbol, token);
+        clisp_token_del(symbol);
+        clisp_token_del(token);
+    }
+
+    clisp_token_del(args);
+
+    if (f->formals->count == 0) {
+
+        f->env->parent = env;
+        return clisp_builtin_eval(f->env,
+                clisp_token_append(clisp_token_sexpr(), clisp_token_copy(f->body)));
+    } else {
+        return clisp_token_copy(f);
+    }
 }
 
 
@@ -86,7 +122,7 @@ clisp_token_del(clisp_token_t* token) {
             break;
 
         case TOKEN_FUNCTION:
-            if (token->function) {
+            if (!token->builtin) {
                 clisp_env_del(token->env);
                 clisp_token_del(token->formals);
                 clisp_token_del(token->body);
@@ -162,10 +198,10 @@ clisp_token_copy(clisp_token_t* token) {
 
     switch (token->type) {
         case TOKEN_FUNCTION:
-            if (token->function) {
-                copy_token->function = token->function;
+            if (token->builtin) {
+                copy_token->builtin = token->builtin;
             } else {
-                copy_token->function = NULL;
+                copy_token->builtin = NULL;
                 copy_token->env = clisp_env_copy(token->env);
                 copy_token->formals = clisp_token_copy(token->formals);
                 copy_token->body = clisp_token_copy(token->body);
