@@ -112,6 +112,43 @@ clisp_token_call(clisp_env_t* env, clisp_token_t* f, clisp_token_t* args) {
     }
 }
 
+int
+clisp_token_cmp(clisp_token_t* first, clisp_token_t* second) {
+
+    if (first->type != second->type) { return 0; }
+
+    switch (first->type) {
+
+        case TOKEN_NUMBER:
+            return (first->number == second->number);
+
+        case TOKEN_ERROR:
+            return (strcmp(first->error, second->error) == 0);
+
+        case TOKEN_SYMBOL:
+            return (strcmp(first->symbol, second->symbol) == 0);
+
+        case TOKEN_FUNCTION:
+            if (first->builtin || second->builtin) {
+                return first->builtin == second->builtin;
+            } else {
+                return clisp_token_cmp(first->formals, second->formals)
+                       && clisp_token_cmp(first->body, second->body);
+            }
+
+        case TOKEN_QEXPRESSION:
+        case TOKEN_SEXPRESSION:
+            if (first->count != second->count) { return 0; }
+            for (int i = 0; i < first->count; i++) {
+                if (!clisp_token_cmp(first->tokens[i], second->tokens[i])) {
+                    return 0;
+                }
+            }
+            return 1;
+        break;
+    }
+    return 0;
+}
 
 void
 clisp_token_del(clisp_token_t* token) {

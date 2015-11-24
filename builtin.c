@@ -2,6 +2,9 @@
 #include "builtin.h"
 
 
+/**
+ * Load all builtin functions
+ */
 void
 clisp_builtin_load_functions(clisp_env_t* env) {
 
@@ -17,12 +20,19 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_function(env, "join", clisp_builtin_list_join);
 
     clisp_env_put_function(env, "eval", clisp_builtin_eval);
-
     clisp_env_put_function(env, "def", clisp_builtin_define);
     clisp_env_put_function(env, "=", clisp_builtin_assign);
     clisp_env_put_function(env, "\\",  clisp_builtin_lambda);
+
+    clisp_env_put_function(env, ">",  clisp_builtin_ord_gt);
+    clisp_env_put_function(env, ">=",  clisp_builtin_ord_gte);
+    clisp_env_put_function(env, "<",  clisp_builtin_ord_lt);
+    clisp_env_put_function(env, "<=",  clisp_builtin_ord_lte);
 }
 
+/**
+ * Define functions for arithmetic operations
+ */
 clisp_token_t*
 clisp_builtin_arithmetic(clisp_env_t* env, clisp_token_t* token, char* op) {
 
@@ -92,13 +102,94 @@ clisp_builtin_arithmetic_mod(clisp_env_t* env, clisp_token_t* token) {
     return clisp_builtin_arithmetic(env, token, "mod");
 }
 
+/**
+ * Define functions for ordering
+ */
+clisp_token_t*
+clisp_builtin_ord(clisp_env_t* env, clisp_token_t* token, char* op) {
+    clisp_assert_count(token, 2);
+    clisp_assert_type(token, token->tokens[0]->type, TOKEN_NUMBER);
+    clisp_assert_type(token, token->tokens[1]->type, TOKEN_NUMBER);
 
+    int result;
+    if (strcmp(op, ">") == 0) {
+        result = (token->tokens[0]->number > token->tokens[1]->number);
+    }
+    else if (strcmp(op, "<") == 0) {
+        result = (token->tokens[0]->number < token->tokens[1]->number);
+    }
+    else if (strcmp(op, ">=") == 0) {
+        result = (token->tokens[0]->number >= token->tokens[1]->number);
+    }
+    else if (strcmp(op, "<=") == 0) {
+        result = (token->tokens[0]->number <= token->tokens[1]->number);
+    }
+
+    clisp_token_del(token);
+    return clisp_token_number(result);
+}
+
+clisp_token_t*
+clisp_builtin_ord_gt(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_ord(env, token, ">");
+}
+
+clisp_token_t*
+clisp_builtin_ord_lt(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_ord(env, token, "<");
+}
+
+clisp_token_t*
+clisp_builtin_ord_gte(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_ord(env, token, ">=");
+}
+
+clisp_token_t*
+clisp_builtin_ord_lte(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_ord(env, token, "<=");
+}
+
+
+
+/**
+ * Define functions for comparison
+ */
+
+clisp_token_t*
+clisp_builtin_cmp(clisp_env_t* env, clisp_token_t* token, char* op) {
+    clisp_assert_count(token, 2);
+
+    int result;
+    if (strcmp(op, "==") == 0) {
+        result = clisp_token_cmp(token->tokens[0], token->tokens[1]);
+    }
+
+    if (strcmp(op, "!=") == 0) {
+        result = !clisp_token_cmp(token->tokens[0], token->tokens[1]);
+    }
+    clisp_token_del(token);
+    return clisp_token_number(result);
+}
+
+clisp_token_t*
+clisp_builtin_cmp_eq(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_cmp(env, token, "==");
+}
+
+clisp_token_t*
+clisp_builtin_cmp_ne(clisp_env_t* env, clisp_token_t* token) {
+    return clisp_builtin_cmp(env, token, "!=");
+}
+
+
+/**
+ * Define functions for lists
+ */
 clisp_token_t*
 clisp_builtin_list_create(clisp_env_t* env, clisp_token_t* token) {
     token->type = TOKEN_QEXPRESSION;
     return token;
 }
-
 
 clisp_token_t*
 clisp_builtin_list_head(clisp_env_t* env, clisp_token_t* token) {
@@ -164,6 +255,10 @@ clisp_builtin_eval(clisp_env_t* env, clisp_token_t* token) {
     return clisp_ast_eval(env, child);
 }
 
+
+/**
+ * Define functions for create functions
+ */
 clisp_token_t*
 clisp_builtin_var_set(clisp_env_t* env, clisp_token_t* token, char* function) {
 

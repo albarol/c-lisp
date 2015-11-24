@@ -49,6 +49,8 @@ clisp_token_t* clisp_token_function(clisp_function_t function);
 clisp_token_t* clisp_token_lambda(clisp_token_t* formals, clisp_token_t* body);
 clisp_token_t* clisp_token_call(clisp_env_t* env, clisp_token_t* function, clisp_token_t* args);
 
+int clisp_token_cmp(clisp_token_t* first, clisp_token_t* second);
+
 void clisp_token_del(clisp_token_t* token);
 clisp_token_t* clisp_token_append(clisp_token_t* super, clisp_token_t* child);
 clisp_token_t* clisp_token_pop(clisp_token_t* super, int position);
