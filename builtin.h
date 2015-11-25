@@ -24,6 +24,7 @@ clisp_token_t* clisp_builtin_ord_lte(clisp_env_t* env, clisp_token_t* token);
 clisp_token_t* clisp_builtin_cmp(clisp_env_t* env, clisp_token_t* token, char* op);
 clisp_token_t* clisp_builtin_cmp_eq(clisp_env_t* env, clisp_token_t* token);
 clisp_token_t* clisp_builtin_cmp_ne(clisp_env_t* env, clisp_token_t* token);
+clisp_token_t* clisp_builtin_cmp_if(clisp_env_t* env, clisp_token_t* token);
 
 clisp_token_t* clisp_builtin_list_create(clisp_env_t* env, clisp_token_t* token);
 clisp_token_t* clisp_builtin_list_head(clisp_env_t* env, clisp_token_t* token);

@@ -28,6 +28,10 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_function(env, ">=",  clisp_builtin_ord_gte);
     clisp_env_put_function(env, "<",  clisp_builtin_ord_lt);
     clisp_env_put_function(env, "<=",  clisp_builtin_ord_lte);
+
+    clisp_env_put_function(env, "==",  clisp_builtin_cmp_eq);
+    clisp_env_put_function(env, "!=",  clisp_builtin_cmp_ne);
+    clisp_env_put_function(env, "if",  clisp_builtin_cmp_if);
 }
 
 /**
@@ -179,6 +183,27 @@ clisp_builtin_cmp_eq(clisp_env_t* env, clisp_token_t* token) {
 clisp_token_t*
 clisp_builtin_cmp_ne(clisp_env_t* env, clisp_token_t* token) {
     return clisp_builtin_cmp(env, token, "!=");
+}
+
+clisp_token_t*
+clisp_builtin_cmp_if(clisp_env_t* env, clisp_token_t* token) {
+    clisp_assert_count(token, 3);
+    clisp_assert_type(token, token->tokens[0]->type, TOKEN_NUMBER);
+    clisp_assert_type(token, token->tokens[1]->type, TOKEN_QEXPRESSION);
+    clisp_assert_type(token, token->tokens[2]->type, TOKEN_QEXPRESSION);
+
+    clisp_token_t* new_token;
+    token->tokens[1]->type = TOKEN_SEXPRESSION;
+    token->tokens[2]->type = TOKEN_SEXPRESSION;
+
+    if (token->tokens[0]->number) {
+        new_token = clisp_ast_eval(env, clisp_token_pop(token, 1));
+    } else {
+        new_token = clisp_ast_eval(env, clisp_token_pop(token, 2));
+    }
+
+    clisp_token_del(token);
+    return new_token;
 }
 
 
