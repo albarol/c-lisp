@@ -1,6 +1,8 @@
 #ifndef __CLISP_BUILTIN__
 #define __CLISP_BUILTIN__
 
+#include <math.h>
+
 #include "token.h"
 #include "environment.h"
 #include "ast.h"

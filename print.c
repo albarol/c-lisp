@@ -4,7 +4,13 @@
 void
 clisp_print_write(clisp_token_t* token) {
     switch(token->type) {
-        case TOKEN_NUMBER: printf("%li", token->number); break;
+        case TOKEN_NUMBER:
+            if (clisp_utils_isint(token->number)) {
+                printf("%.0f", token->number);
+            } else {
+                printf("%.2f", token->number);
+            }
+            break;
         case TOKEN_ERROR: printf("Error: %s", token->error); break;
         case TOKEN_SYMBOL: printf("%s", token->symbol); break;
         case TOKEN_SEXPRESSION: clisp_print_write_expr(token, '(', ')'); break;

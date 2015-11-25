@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "token.h"
+#include "utils.h"
 
 void clisp_print_write(clisp_token_t* token);
 void clisp_print_writeln(clisp_token_t* token);

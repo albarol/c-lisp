@@ -3,7 +3,7 @@
 #include "builtin.h"
 
 clisp_token_t*
-clisp_token_number(long num) {
+clisp_token_number(float num) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
     token->type = TOKEN_NUMBER;
     token->number = num;

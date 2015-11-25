@@ -26,7 +26,7 @@ clisp_ast_read(mpc_ast_t* t) {
 clisp_token_t*
 clisp_ast_read_number(mpc_ast_t* t) {
     errno = 0;
-    long x = strtol(t->contents, NULL, 10);
+    float x = strtof(t->contents, NULL);
     return errno != ERANGE
         ? clisp_token_number(x)
         : clisp_token_error("Invalid number");

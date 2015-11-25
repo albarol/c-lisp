@@ -27,7 +27,7 @@ typedef enum {
 struct clisp_token_t {
     clisp_token_type_t type;
 
-    long number;
+    float number;
     char* symbol;
     char* error;
 
@@ -40,7 +40,7 @@ struct clisp_token_t {
     clisp_token_t** tokens;
 };
 
-clisp_token_t* clisp_token_number(long number);
+clisp_token_t* clisp_token_number(float number);
 clisp_token_t* clisp_token_error(char* error, ...);
 clisp_token_t* clisp_token_symbol(char* symbol);
 clisp_token_t* clisp_token_sexpr(void);

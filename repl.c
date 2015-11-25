@@ -15,7 +15,6 @@ int main(int argc, char** argv) {
     puts("Lisp version 0.0.1\n");
     puts("Press Ctrl+c to Exit\n");
 
-
     mpc_parser_t* Number = mpc_new("number");
     mpc_parser_t* Symbol = mpc_new("symbol");
     mpc_parser_t* Sexpr = mpc_new("sexpr");
@@ -25,7 +24,7 @@ int main(int argc, char** argv) {
 
     mpca_lang(MPCA_LANG_DEFAULT,
     "                                                          \
-        number   : /-?[0-9]+/;                                 \
+        number   : /-?[0-9]+(\\.[0-9]+)?/;                     \
         symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&]+/ ;          \
         sexpr    : '(' <expr>* ')' ;                           \
         qexpr    : '{' <expr>* '}' ;                           \

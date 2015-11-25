@@ -62,7 +62,7 @@ clisp_builtin_arithmetic(clisp_env_t* env, clisp_token_t* token, char* op) {
         if (strcmp(op, "+") == 0) { first->number += second->number; }
         if (strcmp(op, "-") == 0) { first->number -= second->number; }
         if (strcmp(op, "*") == 0) { first->number *= second->number; }
-        if (strcmp(op, "mod") == 0) { first->number %= second->number; }
+        if (strcmp(op, "mod") == 0) { first->number = fmod(first->number, second->number); }
         if (strcmp(op, "/") == 0) {
             if (second->number == 0) {
                 clisp_token_del(first);
