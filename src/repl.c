@@ -12,7 +12,7 @@ static char input[2048];
 
 int main(int argc, char** argv) {
 
-    puts("Lisp version 0.0.1\n");
+    puts("CLisp version 0.1.0\n");
     puts("Press Ctrl+c to Exit\n");
 
     mpc_parser_t* Comment = mpc_new("comment");
@@ -43,7 +43,7 @@ int main(int argc, char** argv) {
 
     while (1) {
 
-        char* input = readline("lisp> ");
+        char* input = readline("clisp> ");
         add_history(input);
 
         mpc_result_t r;
