@@ -3,13 +3,13 @@
 
 clisp_token_t*
 clisp_ast_read(mpc_ast_t* t) {
-
     if (strstr(t->tag, "number")) { return clisp_ast_read_number(t); }
     if (strstr(t->tag, "symbol")) { return clisp_token_symbol(t->contents); }
     if (strstr(t->tag, "string")) { return clisp_ast_read_str(t); }
 
     clisp_token_t* token = NULL;
     if (strcmp(t->tag, ">") == 0) { token = clisp_token_sexpr(); }
+    if (strcmp(t->tag, "comment")) { token = clisp_token_sexpr(); }
     if (strstr(t->tag, "sexpr")) { token = clisp_token_sexpr(); }
     if (strstr(t->tag, "qexpr")) { token = clisp_token_qexpr(); }
 

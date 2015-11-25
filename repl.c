@@ -15,6 +15,7 @@ int main(int argc, char** argv) {
     puts("Lisp version 0.0.1\n");
     puts("Press Ctrl+c to Exit\n");
 
+    mpc_parser_t* Comment = mpc_new("comment");
     mpc_parser_t* Number = mpc_new("number");
     mpc_parser_t* String = mpc_new("string");
     mpc_parser_t* Symbol = mpc_new("symbol");
@@ -24,16 +25,17 @@ int main(int argc, char** argv) {
     mpc_parser_t* Lisp = mpc_new("lisp");
 
     mpca_lang(MPCA_LANG_DEFAULT,
-    "                                                                     \
-        number   : /-?[0-9]+(\\.[0-9]+)?/;                                \
-        string   : /\"(\\\\.|[^\"])*\"/ ;                                 \
-        symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&\\^\\%]+/ ;               \
-        sexpr    : '(' <expr>* ')' ;                                      \
-        qexpr    : '{' <expr>* '}' ;                                      \
-        expr     : <number> | <symbol> | <string> | <sexpr> | <qexpr> ;   \
-        lisp     : /^/ <expr>* /$/ ;                                      \
+    "                                                                                 \
+        comment  : /\;(\\\\.|[^\"])*/;                                                \
+        number   : /-?[0-9]+(\\.[0-9]+)?/;                                            \
+        string   : /\"(\\\\.|[^\"])*\"/ ;                                             \
+        symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&\\^\\%]+/ ;                           \
+        sexpr    : '(' <expr>* ')' ;                                                  \
+        qexpr    : '{' <expr>* '}' ;                                                  \
+        expr     : <comment> | <number> | <symbol> | <string> | <sexpr> | <qexpr> ;   \
+        lisp     : /^/ <expr>* /$/ ;                                                  \
     ",
-    Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
+    Comment, Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
 
 
     clisp_env_t* env = clisp_env_new();
@@ -58,7 +60,7 @@ int main(int argc, char** argv) {
         free(input);
     }
 
-    mpc_cleanup(7, Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
+    mpc_cleanup(8, Comment, Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
     clisp_env_del(env);
 
     return 0;

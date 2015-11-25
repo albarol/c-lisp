@@ -38,6 +38,10 @@ clisp_print_writeln(clisp_token_t* token) {
 
 void
 clisp_print_write_expr(clisp_token_t* token, char open, char close) {
+    if (token->count == 0) {
+        return;
+    }
+
     putchar(open);
 
     for (int i = 0; i < token->count; i++) {
