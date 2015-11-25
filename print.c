@@ -13,6 +13,7 @@ clisp_print_write(clisp_token_t* token) {
             break;
         case TOKEN_ERROR: printf("Error: %s", token->error); break;
         case TOKEN_SYMBOL: printf("%s", token->symbol); break;
+        case TOKEN_STR: clisp_print_write_str(token); break;
         case TOKEN_SEXPRESSION: clisp_print_write_expr(token, '(', ')'); break;
         case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
         case TOKEN_FUNCTION:
@@ -51,6 +52,17 @@ clisp_print_write_expr(clisp_token_t* token, char open, char close) {
     putchar(close);
 }
 
+void
+clisp_print_write_str(clisp_token_t* token) {
+    char* escaped = malloc(strlen(token->str) + 1);
+    strcpy(escaped, token->str);
+
+    escaped = mpcf_escape(escaped);
+
+    printf("\"%s\"", escaped);
+    free(escaped);
+}
+
 char*
 clisp_print_type_name(clisp_token_type_t type) {
     switch (type) {
@@ -58,6 +70,7 @@ clisp_print_type_name(clisp_token_type_t type) {
         case TOKEN_NUMBER: return "Number";
         case TOKEN_ERROR: return "Error";
         case TOKEN_SYMBOL: return "Symbol";
+        case TOKEN_STR: return "String";
         case TOKEN_SEXPRESSION: return "S-Expression";
         case TOKEN_QEXPRESSION: return "Q-Expression";
         default: return "Unknown";

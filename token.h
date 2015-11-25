@@ -18,6 +18,7 @@ typedef enum {
     TOKEN_ERROR,
     TOKEN_NUMBER,
     TOKEN_SYMBOL,
+    TOKEN_STR,
     TOKEN_FUNCTION,
     TOKEN_SEXPRESSION,
     TOKEN_QEXPRESSION
@@ -30,6 +31,7 @@ struct clisp_token_t {
     float number;
     char* symbol;
     char* error;
+    char* str;
 
     clisp_function_t builtin;
     clisp_env_t* env;
@@ -45,6 +47,7 @@ clisp_token_t* clisp_token_error(char* error, ...);
 clisp_token_t* clisp_token_symbol(char* symbol);
 clisp_token_t* clisp_token_sexpr(void);
 clisp_token_t* clisp_token_qexpr(void);
+clisp_token_t* clisp_token_str(char* str);
 clisp_token_t* clisp_token_function(clisp_function_t function);
 clisp_token_t* clisp_token_lambda(clisp_token_t* formals, clisp_token_t* body);
 clisp_token_t* clisp_token_call(clisp_env_t* env, clisp_token_t* function, clisp_token_t* args);

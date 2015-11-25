@@ -6,6 +6,7 @@ clisp_ast_read(mpc_ast_t* t) {
 
     if (strstr(t->tag, "number")) { return clisp_ast_read_number(t); }
     if (strstr(t->tag, "symbol")) { return clisp_token_symbol(t->contents); }
+    if (strstr(t->tag, "string")) { return clisp_ast_read_str(t); }
 
     clisp_token_t* token = NULL;
     if (strcmp(t->tag, ">") == 0) { token = clisp_token_sexpr(); }
@@ -30,6 +31,18 @@ clisp_ast_read_number(mpc_ast_t* t) {
     return errno != ERANGE
         ? clisp_token_number(x)
         : clisp_token_error("Invalid number");
+}
+
+clisp_token_t*
+clisp_ast_read_str(mpc_ast_t* t) {
+    t->contents[strlen(t->contents)-1] = '\0';
+
+    char* unescaped = malloc(strlen(t->contents+1) + 1);
+    strcpy(unescaped, t->contents+1);
+    unescaped = mpcf_unescape(unescaped);
+    clisp_token_t* str = clisp_token_str(unescaped);
+    free(unescaped);
+    return str;
 }
 
 clisp_token_t*

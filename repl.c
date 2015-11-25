@@ -16,6 +16,7 @@ int main(int argc, char** argv) {
     puts("Press Ctrl+c to Exit\n");
 
     mpc_parser_t* Number = mpc_new("number");
+    mpc_parser_t* String = mpc_new("string");
     mpc_parser_t* Symbol = mpc_new("symbol");
     mpc_parser_t* Sexpr = mpc_new("sexpr");
     mpc_parser_t* Qexpr = mpc_new("qexpr");
@@ -23,15 +24,16 @@ int main(int argc, char** argv) {
     mpc_parser_t* Lisp = mpc_new("lisp");
 
     mpca_lang(MPCA_LANG_DEFAULT,
-    "                                                          \
-        number   : /-?[0-9]+(\\.[0-9]+)?/;                     \
-        symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&\\^\\%]+/ ;          \
-        sexpr    : '(' <expr>* ')' ;                           \
-        qexpr    : '{' <expr>* '}' ;                           \
-        expr     : <number> | <symbol> | <sexpr> | <qexpr> ;   \
-        lisp     : /^/ <expr>* /$/ ;                           \
+    "                                                                     \
+        number   : /-?[0-9]+(\\.[0-9]+)?/;                                \
+        string   : /\"(\\\\.|[^\"])*\"/ ;                                 \
+        symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&\\^\\%]+/ ;               \
+        sexpr    : '(' <expr>* ')' ;                                      \
+        qexpr    : '{' <expr>* '}' ;                                      \
+        expr     : <number> | <symbol> | <string> | <sexpr> | <qexpr> ;   \
+        lisp     : /^/ <expr>* /$/ ;                                      \
     ",
-    Number, Symbol, Sexpr, Qexpr, Expr, Lisp);
+    Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
 
 
     clisp_env_t* env = clisp_env_new();
@@ -56,7 +58,7 @@ int main(int argc, char** argv) {
         free(input);
     }
 
-    mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Lisp);
+    mpc_cleanup(7, Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
     clisp_env_del(env);
 
     return 0;
