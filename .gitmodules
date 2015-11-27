@@ -1,3 +1,6 @@
 [submodule "ext/mpc"]
 	path = ext/mpc
 	url = git@github.com:orangeduck/mpc.git
+[submodule "ext/ptest"]
+	path = ext/ptest
+	url = git@github.com:orangeduck/ptest
