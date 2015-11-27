@@ -18,7 +18,7 @@ clisp_env_copy(clisp_env_t* env) {
     new_env->count = env->count;
 
     new_env->symbols = malloc(sizeof(char*) * new_env->count);
-    new_env->tokens = malloc(sizeof(clisp_token_t*) * new_env->count);
+    new_env->tokens = malloc(sizeof(clisp_chunk_t*) * new_env->count);
 
     for (int i = 0; i < new_env->count; i++) {
         new_env->tokens[i] = clisp_token_copy(env->tokens[i]);
@@ -40,8 +40,8 @@ clisp_env_del(clisp_env_t* env) {
 }
 
 
-clisp_token_t*
-clisp_env_get(clisp_env_t* env, clisp_token_t* token_symbol) {
+clisp_chunk_t*
+clisp_env_get(clisp_env_t* env, clisp_chunk_t* token_symbol) {
 
     for (int i = 0; i < env->count; i++) {
 
@@ -58,7 +58,7 @@ clisp_env_get(clisp_env_t* env, clisp_token_t* token_symbol) {
 }
 
 void
-clisp_env_put(clisp_env_t* env, clisp_token_t* token_symbol, clisp_token_t* token) {
+clisp_env_put(clisp_env_t* env, clisp_chunk_t* token_symbol, clisp_chunk_t* token) {
 
     for (int i = 0; i < env->count; i++) {
         if (strcmp(env->symbols[i], token_symbol->symbol) == 0) {
@@ -69,7 +69,7 @@ clisp_env_put(clisp_env_t* env, clisp_token_t* token_symbol, clisp_token_t* toke
     }
 
     env->count++;
-    env->tokens = realloc(env->tokens, sizeof(clisp_token_t*) * env->count);
+    env->tokens = realloc(env->tokens, sizeof(clisp_chunk_t*) * env->count);
     env->symbols = realloc(env->symbols, sizeof(char*) * env->count);
 
     env->tokens[env->count - 1] = clisp_token_copy(token);
@@ -79,8 +79,8 @@ clisp_env_put(clisp_env_t* env, clisp_token_t* token_symbol, clisp_token_t* toke
 
 void
 clisp_env_put_function(clisp_env_t* env, char* name, clisp_function_t function) {
-    clisp_token_t* symbol = clisp_token_symbol(name);
-    clisp_token_t* func = clisp_token_function(function);
+    clisp_chunk_t* symbol = clisp_token_symbol(name);
+    clisp_chunk_t* func = clisp_token_function(function);
     clisp_env_put(env, symbol, func);
 
     clisp_token_del(symbol);
@@ -88,7 +88,7 @@ clisp_env_put_function(clisp_env_t* env, char* name, clisp_function_t function) 
 }
 
 void
-clisp_env_define(clisp_env_t* env, clisp_token_t* token_symbol, clisp_token_t* token) {
+clisp_env_define(clisp_env_t* env, clisp_chunk_t* token_symbol, clisp_chunk_t* token) {
     while (env->parent) {
         env = env->parent;
     }

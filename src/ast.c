@@ -1,13 +1,13 @@
 
 #include "ast.h"
 
-clisp_token_t*
+clisp_chunk_t*
 clisp_ast_read(mpc_ast_t* t) {
     if (strstr(t->tag, "number")) { return clisp_ast_read_number(t); }
     if (strstr(t->tag, "symbol")) { return clisp_token_symbol(t->contents); }
     if (strstr(t->tag, "string")) { return clisp_ast_read_str(t); }
 
-    clisp_token_t* token = NULL;
+    clisp_chunk_t* token = NULL;
     if (strcmp(t->tag, ">") == 0) { token = clisp_token_sexpr(); }
     if (strcmp(t->tag, "comment")) { token = clisp_token_sexpr(); }
     if (strstr(t->tag, "sexpr")) { token = clisp_token_sexpr(); }
@@ -24,7 +24,7 @@ clisp_ast_read(mpc_ast_t* t) {
     return token;
 }
 
-clisp_token_t*
+clisp_chunk_t*
 clisp_ast_read_number(mpc_ast_t* t) {
     errno = 0;
     float x = strtof(t->contents, NULL);
@@ -33,22 +33,22 @@ clisp_ast_read_number(mpc_ast_t* t) {
         : clisp_token_error("Invalid number");
 }
 
-clisp_token_t*
+clisp_chunk_t*
 clisp_ast_read_str(mpc_ast_t* t) {
     t->contents[strlen(t->contents)-1] = '\0';
 
     char* unescaped = malloc(strlen(t->contents+1) + 1);
     strcpy(unescaped, t->contents+1);
     unescaped = mpcf_unescape(unescaped);
-    clisp_token_t* str = clisp_token_str(unescaped);
+    clisp_chunk_t* str = clisp_token_str(unescaped);
     free(unescaped);
     return str;
 }
 
-clisp_token_t*
-clisp_ast_eval(clisp_env_t* env, clisp_token_t* token) {
+clisp_chunk_t*
+clisp_ast_eval(clisp_env_t* env, clisp_chunk_t* token) {
     if (token->type == CLISP_SYMBOL) {
-        clisp_token_t* looked = clisp_env_get(env, token);
+        clisp_chunk_t* looked = clisp_env_get(env, token);
         clisp_token_del(token);
         return looked;
     }
@@ -58,8 +58,8 @@ clisp_ast_eval(clisp_env_t* env, clisp_token_t* token) {
     return token;
 }
 
-clisp_token_t*
-clisp_ast_eval_sexpr(clisp_env_t* env, clisp_token_t* token) {
+clisp_chunk_t*
+clisp_ast_eval_sexpr(clisp_env_t* env, clisp_chunk_t* token) {
 
     for (int i = 0; i < token->count; i++) {
         token->tokens[i] = clisp_ast_eval(env, token->tokens[i]);
@@ -74,14 +74,14 @@ clisp_ast_eval_sexpr(clisp_env_t* env, clisp_token_t* token) {
     if (token->count == 0) { return token; }
     if (token->count == 1) { return clisp_token_take(token, 0); }
 
-    clisp_token_t* func = clisp_token_pop(token, 0);
+    clisp_chunk_t* func = clisp_token_pop(token, 0);
     if (func->type != CLISP_FUNCTION) {
         clisp_token_del(token);
         clisp_token_del(func);
         return clisp_token_error("First element is not a function");
     }
 
-    clisp_token_t* result = clisp_token_call(env, func, token);
+    clisp_chunk_t* result = clisp_token_call(env, func, token);
     clisp_token_del(func);
     return result;
 }

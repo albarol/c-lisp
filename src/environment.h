@@ -7,16 +7,16 @@ struct clisp_env_t {
     clisp_env_t* parent;
     int count;
     char** symbols;
-    clisp_token_t** tokens;
+    clisp_chunk_t** tokens;
 };
 
 clisp_env_t* clisp_env_new(void);
 clisp_env_t* clisp_env_copy(clisp_env_t* env);
 void clisp_env_del(clisp_env_t* env);
-clisp_token_t* clisp_env_get(clisp_env_t* env, clisp_token_t* token);
-void clisp_env_put(clisp_env_t* env, clisp_token_t* token_symbol, clisp_token_t* token);
+clisp_chunk_t* clisp_env_get(clisp_env_t* env, clisp_chunk_t* token);
+void clisp_env_put(clisp_env_t* env, clisp_chunk_t* token_symbol, clisp_chunk_t* token);
 void clisp_env_put_function(clisp_env_t* env, char* name, clisp_function_t function);
 
-void clisp_env_define(clisp_env_t* env, clisp_token_t* token_symbol, clisp_token_t* token);
+void clisp_env_define(clisp_env_t* env, clisp_chunk_t* token_symbol, clisp_chunk_t* token);
 
 #endif

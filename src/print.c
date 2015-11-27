@@ -2,7 +2,7 @@
 #include "print.h"
 
 void
-clisp_print_write(clisp_token_t* token) {
+clisp_print_write(clisp_chunk_t* token) {
     switch(token->type) {
         case CLISP_NUMBER:
             if (clisp_utils_isint(token->number)) {
@@ -31,13 +31,13 @@ clisp_print_write(clisp_token_t* token) {
 }
 
 void
-clisp_print_writeln(clisp_token_t* token) {
+clisp_print_writeln(clisp_chunk_t* token) {
     clisp_print_write(token);
     putchar('\n');
 }
 
 void
-clisp_print_write_expr(clisp_token_t* token, char open, char close) {
+clisp_print_write_expr(clisp_chunk_t* token, char open, char close) {
     if (token->count == 0) {
         return;
     }
@@ -57,7 +57,7 @@ clisp_print_write_expr(clisp_token_t* token, char open, char close) {
 }
 
 void
-clisp_print_write_str(clisp_token_t* token) {
+clisp_print_write_str(clisp_chunk_t* token) {
     char* escaped = malloc(strlen(token->str) + 1);
     strcpy(escaped, token->str);
 
@@ -68,7 +68,7 @@ clisp_print_write_str(clisp_token_t* token) {
 }
 
 char*
-clisp_print_type_name(clisp_chunk_type type) {
+clisp_print_type_name(clisp_chunk_type_t type) {
     switch (type) {
         case CLISP_FUNCTION: return "Function";
         case CLISP_NUMBER: return "Number";

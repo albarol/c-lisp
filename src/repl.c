@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
 
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Lisp, &r)) {
-            clisp_token_t* result = clisp_ast_eval(env, clisp_ast_read(r.output));
+            clisp_chunk_t* result = clisp_ast_eval(env, clisp_ast_read(r.output));
             clisp_print_writeln(result);
             clisp_token_del(result);
             mpc_ast_delete(r.output);
