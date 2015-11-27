@@ -1,6 +1,8 @@
 #ifndef __CLISP_TYPES__
 #define __CLISP_TYPES__
 
+#include <stdlib.h>
+
 struct clisp_chunk_t;
 struct clisp_env_t;
 typedef struct clisp_chunk_t clisp_chunk_t;
@@ -42,5 +44,9 @@ struct clisp_chunk_t {
     clisp_chunk_t** tokens;
 };
 
+clisp_chunk_t* clisp_chunk_new(clisp_chunk_type_t type);
+void clisp_chunk_delete(clisp_chunk_t* chunk);
+
+clisp_chunk_t* clisp_chunk_number(float num);
 
 #endif

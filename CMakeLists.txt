@@ -10,6 +10,7 @@ set(EXE_NAME "clisp")
 # define folders
 set(CLISP_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(MPC_DIR "${CLISP_DIR}/ext/mpc")
+set(PTEST_DIR "${CLISP_DIR}/ext/ptest")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CLISP_DIR}/CMake/packages/")
 set(EXECUTABLE_OUTPUT_PATH ${CLISP_DIR}/build)
 
@@ -18,6 +19,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CLISP_DIR}/build)
 #=============================#
 find_package(edit REQUIRED)
 include_directories(${MPC_DIR})
+include_directories(${PTEST_DIR})
 
 #=============================#
 #     Setup Source            #
@@ -30,7 +32,6 @@ set(CLISP_SOURCES
     src/builtin.c
     src/environment.c
     src/print.c
-    src/repl.c
     src/token.c
     src/utils.c
     src/types.c
@@ -51,7 +52,7 @@ set(CLISP_HEADERS
 #     Setup Output            #
 #=============================#
 
-add_executable(${EXE_NAME} ${CLISP_SOURCES} ${CLISP_HEADERS})
+add_executable(${EXE_NAME} ${CLISP_SOURCES} ${CLISP_HEADERS} src/repl.c)
 
 if(UNIX)
   target_link_libraries(${EXE_NAME} m)
@@ -59,3 +60,21 @@ if(UNIX)
 endif(UNIX)
 
 link_directories(${CLISP_DIR}/ext/mpc)
+
+#=============================#
+#     Setup Tests             #
+#=============================#
+set(CLISP_TESTS
+    ${PTEST_DIR}/ptest.h
+    ${PTEST_DIR}/ptest.c
+    tests/test.c
+    tests/test_types.c
+)
+add_executable(clispTest ${CLISP_TESTS} ${CLISP_SOURCES} ${CLISP_HEADERS})
+
+if(UNIX)
+    target_link_libraries(clispTest m)
+    target_link_libraries(clispTest edit)
+endif(UNIX)
+
+link_directories(${PTEST_DIR})
