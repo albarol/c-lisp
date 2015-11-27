@@ -4,14 +4,14 @@
 clisp_chunk_t*
 clisp_ast_read(mpc_ast_t* t) {
     if (strstr(t->tag, "number")) { return clisp_ast_read_number(t); }
-    if (strstr(t->tag, "symbol")) { return clisp_token_symbol(t->contents); }
+    if (strstr(t->tag, "symbol")) { return clisp_chunk_symbol(t->contents); }
     if (strstr(t->tag, "string")) { return clisp_ast_read_str(t); }
 
     clisp_chunk_t* token = NULL;
-    if (strcmp(t->tag, ">") == 0) { token = clisp_token_sexpr(); }
-    if (strcmp(t->tag, "comment")) { token = clisp_token_sexpr(); }
-    if (strstr(t->tag, "sexpr")) { token = clisp_token_sexpr(); }
-    if (strstr(t->tag, "qexpr")) { token = clisp_token_qexpr(); }
+    if (strcmp(t->tag, ">") == 0) { token = clisp_chunk_sexpr(); }
+    if (strcmp(t->tag, "comment")) { token = clisp_chunk_sexpr(); }
+    if (strstr(t->tag, "sexpr")) { token = clisp_chunk_sexpr(); }
+    if (strstr(t->tag, "qexpr")) { token = clisp_chunk_qexpr(); }
 
     for (int i = 0; i < t->children_num; i++) {
         if (strcmp(t->children[i]->contents, "(") == 0) { continue; }
@@ -29,8 +29,8 @@ clisp_ast_read_number(mpc_ast_t* t) {
     errno = 0;
     float x = strtof(t->contents, NULL);
     return errno != ERANGE
-        ? clisp_token_number(x)
-        : clisp_token_error("Invalid number");
+        ? clisp_chunk_number(x)
+        : clisp_chunk_error("Invalid number");
 }
 
 clisp_chunk_t*
@@ -40,7 +40,7 @@ clisp_ast_read_str(mpc_ast_t* t) {
     char* unescaped = malloc(strlen(t->contents+1) + 1);
     strcpy(unescaped, t->contents+1);
     unescaped = mpcf_unescape(unescaped);
-    clisp_chunk_t* str = clisp_token_str(unescaped);
+    clisp_chunk_t* str = clisp_chunk_str(unescaped);
     free(unescaped);
     return str;
 }
@@ -78,7 +78,7 @@ clisp_ast_eval_sexpr(clisp_env_t* env, clisp_chunk_t* token) {
     if (func->type != CLISP_FUNCTION) {
         clisp_token_del(token);
         clisp_token_del(func);
-        return clisp_token_error("First element is not a function");
+        return clisp_chunk_error("First element is not a function");
     }
 
     clisp_chunk_t* result = clisp_token_call(env, func, token);

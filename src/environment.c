@@ -45,7 +45,7 @@ clisp_env_get(clisp_env_t* env, clisp_chunk_t* token_symbol) {
 
     for (int i = 0; i < env->count; i++) {
 
-        if (strcmp(env->symbols[i], token_symbol->symbol) == 0) {
+        if (strcmp(env->symbols[i], token_symbol->value.string) == 0) {
             return clisp_token_copy(env->tokens[i]);
         }
     }
@@ -54,14 +54,14 @@ clisp_env_get(clisp_env_t* env, clisp_chunk_t* token_symbol) {
         return clisp_env_get(env->parent, token_symbol);
     }
 
-    return clisp_token_error("Unbound Symbol!");
+    return clisp_chunk_error("Unbound Symbol!");
 }
 
 void
 clisp_env_put(clisp_env_t* env, clisp_chunk_t* token_symbol, clisp_chunk_t* token) {
 
     for (int i = 0; i < env->count; i++) {
-        if (strcmp(env->symbols[i], token_symbol->symbol) == 0) {
+        if (strcmp(env->symbols[i], token_symbol->value.string) == 0) {
             clisp_token_del(env->tokens[i]);
             env->tokens[i] = clisp_token_copy(token);
             return;
@@ -73,13 +73,13 @@ clisp_env_put(clisp_env_t* env, clisp_chunk_t* token_symbol, clisp_chunk_t* toke
     env->symbols = realloc(env->symbols, sizeof(char*) * env->count);
 
     env->tokens[env->count - 1] = clisp_token_copy(token);
-    env->symbols[env->count - 1] = malloc(strlen(token_symbol->symbol) + 1);
-    strcpy(env->symbols[env->count - 1], token_symbol->symbol);
+    env->symbols[env->count - 1] = malloc(strlen(token_symbol->value.string) + 1);
+    strcpy(env->symbols[env->count - 1], token_symbol->value.string);
 }
 
 void
 clisp_env_put_function(clisp_env_t* env, char* name, clisp_builtin_t function) {
-    clisp_chunk_t* symbol = clisp_token_symbol(name);
+    clisp_chunk_t* symbol = clisp_chunk_symbol(name);
     clisp_chunk_t* func = clisp_token_function(function);
     clisp_env_put(env, symbol, func);
 

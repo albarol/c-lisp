@@ -5,14 +5,14 @@ void
 clisp_print_write(clisp_chunk_t* token) {
     switch(token->type) {
         case CLISP_NUMBER:
-            if (clisp_utils_isint(token->number)) {
-                printf("%.0f", token->number);
+            if (clisp_utils_isint(token->value.number)) {
+                printf("%.0f", token->value.number);
             } else {
-                printf("%.2f", token->number);
+                printf("%.2f", token->value.number);
             }
             break;
-        case CLISP_ERROR: printf("Error: %s", token->error); break;
-        case CLISP_SYMBOL: printf("%s", token->symbol); break;
+        case CLISP_ERROR: printf("Error: %s", token->value.string); break;
+        case CLISP_SYMBOL: printf("%s", token->value.string); break;
         case CLISP_STRING: clisp_print_write_str(token); break;
         case CLISP_ATOM: clisp_print_write_expr(token, '(', ')'); break;
         case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
@@ -58,8 +58,8 @@ clisp_print_write_expr(clisp_chunk_t* token, char open, char close) {
 
 void
 clisp_print_write_str(clisp_chunk_t* token) {
-    char* escaped = malloc(strlen(token->str) + 1);
-    strcpy(escaped, token->str);
+    char* escaped = malloc(strlen(token->value.string) + 1);
+    strcpy(escaped, token->value.string);
 
     escaped = mpcf_escape(escaped);
 

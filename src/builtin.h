@@ -7,6 +7,7 @@
 #include "environment.h"
 #include "ast.h"
 #include "error.h"
+#include "print.h"
 
 void clisp_builtin_load_functions(clisp_env_t* env);
 

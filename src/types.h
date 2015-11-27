@@ -33,10 +33,10 @@ typedef enum {
 struct clisp_chunk_t {
     clisp_chunk_type_t type;
 
-    float number;
-    char* symbol;
-    char* error;
-    char* str;
+    union {
+        float number;
+        char* string;
+    } value;
 
     clisp_builtin_t builtin;
     clisp_env_t* env;
@@ -57,5 +57,6 @@ clisp_chunk_t* clisp_chunk_error(char* error, ...);
 clisp_chunk_t* clisp_chunk_sexpr(void);
 clisp_chunk_t* clisp_chunk_qexpr(void);
 clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function);
+clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
 
 #endif

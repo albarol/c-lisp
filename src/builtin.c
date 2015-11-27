@@ -1,4 +1,3 @@
-
 #include "builtin.h"
 
 
@@ -46,38 +45,38 @@ clisp_builtin_math(clisp_env_t* env, clisp_chunk_t* token, char* op) {
 
         if (item->type != CLISP_NUMBER) {
             clisp_token_del(token);
-            return clisp_token_error("Cannot operate on non-number!");
+            return clisp_chunk_error("Cannot operate on non-number!");
         }
     }
 
     clisp_chunk_t* first = clisp_token_pop(token, 0);
 
     if ((strcmp(op, "-") == 0) && token->count == 0) {
-        first->number = -first->number;
+        first->value.number = -first->value.number;
     }
 
     while (token->count > 0) {
 
         clisp_chunk_t* second = clisp_token_pop(token, 0);
 
-        if (strcmp(op, "+") == 0) { first->number += second->number; }
-        if (strcmp(op, "-") == 0) { first->number -= second->number; }
-        if (strcmp(op, "*") == 0) { first->number *= second->number; }
-        if (strcmp(op, "%") == 0) { first->number = fmod(first->number, second->number); }
+        if (strcmp(op, "+") == 0) { first->value.number += second->value.number; }
+        if (strcmp(op, "-") == 0) { first->value.number -= second->value.number; }
+        if (strcmp(op, "*") == 0) { first->value.number *= second->value.number; }
+        if (strcmp(op, "%") == 0) { first->value.number = fmod(first->value.number, second->value.number); }
         if (strcmp(op, "^") == 0) {
-            float base = first->number;
-            for (int i = 1; i < second->number; i++) {
-                first->number *= base;
+            float base = first->value.number;
+            for (int i = 1; i < second->value.number; i++) {
+                first->value.number *= base;
             }
         }
         if (strcmp(op, "/") == 0) {
-            if (second->number == 0) {
+            if (second->value.number == 0) {
                 clisp_token_del(first);
                 clisp_token_del(second);
-                first = clisp_token_error("Division By Zero!");
+                first = clisp_chunk_error("Division By Zero!");
                 break;
             }
-            first->number /= second->number;
+            first->value.number /= second->value.number;
         }
 
         clisp_token_del(second);
@@ -129,20 +128,20 @@ clisp_builtin_ord(clisp_env_t* env, clisp_chunk_t* token, char* op) {
 
     int result;
     if (strcmp(op, ">") == 0) {
-        result = (token->tokens[0]->number > token->tokens[1]->number);
+        result = (token->tokens[0]->value.number > token->tokens[1]->value.number);
     }
     else if (strcmp(op, "<") == 0) {
-        result = (token->tokens[0]->number < token->tokens[1]->number);
+        result = (token->tokens[0]->value.number < token->tokens[1]->value.number);
     }
     else if (strcmp(op, ">=") == 0) {
-        result = (token->tokens[0]->number >= token->tokens[1]->number);
+        result = (token->tokens[0]->value.number >= token->tokens[1]->value.number);
     }
     else if (strcmp(op, "<=") == 0) {
-        result = (token->tokens[0]->number <= token->tokens[1]->number);
+        result = (token->tokens[0]->value.number <= token->tokens[1]->value.number);
     }
 
     clisp_token_del(token);
-    return clisp_token_number(result);
+    return clisp_chunk_number(result);
 }
 
 clisp_chunk_t*
@@ -184,7 +183,7 @@ clisp_builtin_cmp(clisp_env_t* env, clisp_chunk_t* token, char* op) {
         result = !clisp_token_cmp(token->tokens[0], token->tokens[1]);
     }
     clisp_token_del(token);
-    return clisp_token_number(result);
+    return clisp_chunk_number(result);
 }
 
 clisp_chunk_t*
@@ -208,7 +207,7 @@ clisp_builtin_cmp_if(clisp_env_t* env, clisp_chunk_t* token) {
     token->tokens[1]->type = CLISP_ATOM;
     token->tokens[2]->type = CLISP_ATOM;
 
-    if (token->tokens[0]->number) {
+    if (token->tokens[0]->value.number) {
         new_token = clisp_ast_eval(env, clisp_token_pop(token, 1));
     } else {
         new_token = clisp_ast_eval(env, clisp_token_pop(token, 2));
@@ -306,9 +305,9 @@ clisp_builtin_var_set(clisp_env_t* env, clisp_chunk_t* token, char* function) {
         clisp_assert(token, child->tokens[i]->type, CLISP_SYMBOL)
     }
 
-    clisp_assert(token, child->count == token->count-1,
+    clisp_assert(token, child->count == token->count - 1,
                  "Function cannot define incorrect "
-                 "number of values to symbols")
+                         "number of values to symbols")
 
     for (int i = 0; i < child->count; i++) {
         if (strcmp(function, "=") == 0) {
@@ -321,7 +320,7 @@ clisp_builtin_var_set(clisp_env_t* env, clisp_chunk_t* token, char* function) {
     }
 
     clisp_token_del(token);
-    return clisp_token_sexpr();
+    return clisp_chunk_sexpr();
 }
 
 clisp_chunk_t*

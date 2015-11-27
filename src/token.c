@@ -2,66 +2,6 @@
 #include "token.h"
 #include "builtin.h"
 
-clisp_chunk_t*
-clisp_token_number(float num) {
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = CLISP_NUMBER;
-    token->number = num;
-    return token;
-}
-
-clisp_chunk_t*
-clisp_token_error(char* fmt, ...) {
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = CLISP_ERROR;
-
-    va_list args;
-    va_start(args, fmt);
-
-    token->error = malloc(512);
-    vsnprintf(token->error, 511, fmt, args);
-
-    token->error = realloc(token->error, strlen(token->error)+1);
-    va_end(args);
-
-    return token;
-}
-
-clisp_chunk_t*
-clisp_token_symbol(char* symbol) {
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = CLISP_SYMBOL;
-    token->symbol = malloc(strlen(symbol) + 1);
-    strcpy(token->symbol, symbol);
-    return token;
-}
-
-clisp_chunk_t*
-clisp_token_sexpr(void) {
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = CLISP_ATOM;
-    token->count = 0;
-    token->tokens = NULL;
-    return token;
-}
-
-clisp_chunk_t*
-clisp_token_qexpr(void) {
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = TOKEN_QEXPRESSION;
-    token->count = 0;
-    token->tokens = NULL;
-    return token;
-}
-
-clisp_chunk_t*
-clisp_token_str(char* str) {
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = CLISP_STRING;
-    token->str = malloc(strlen(str) + 1);
-    strcpy(token->str, str);
-    return token;
-}
 
 clisp_chunk_t*
 clisp_token_function(clisp_builtin_t function) {
@@ -97,8 +37,8 @@ clisp_token_call(clisp_env_t* env, clisp_chunk_t* f, clisp_chunk_t* args) {
 
         if (f->formals->count == 0) {
             clisp_token_del(args);
-            return clisp_token_error("Function passed too many arguments. "
-                                     "Got: %i, Expected: %i", given, total);
+            return clisp_chunk_error("Function passed too many arguments. "
+                                             "Got: %i, Expected: %i", given, total);
         }
 
         clisp_chunk_t* symbol = clisp_token_pop(f->formals, 0);
@@ -115,7 +55,7 @@ clisp_token_call(clisp_env_t* env, clisp_chunk_t* f, clisp_chunk_t* args) {
 
         f->env->parent = env;
         return clisp_builtin_eval(f->env,
-                clisp_token_append(clisp_token_sexpr(), clisp_token_copy(f->body)));
+                clisp_token_append(clisp_chunk_sexpr(), clisp_token_copy(f->body)));
     } else {
         return clisp_token_copy(f);
     }
@@ -129,16 +69,16 @@ clisp_token_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
     switch (first->type) {
 
         case CLISP_NUMBER:
-            return (first->number == second->number);
+            return (first->value.number == second->value.number);
 
         case CLISP_ERROR:
-            return (strcmp(first->error, second->error) == 0);
+            return (strcmp(first->value.string, second->value.string) == 0);
 
         case CLISP_SYMBOL:
-            return (strcmp(first->symbol, second->symbol) == 0);
+            return (strcmp(first->value.string, second->value.string) == 0);
 
         case CLISP_STRING:
-            return (strcmp(first->str, second->str) == 0);
+            return (strcmp(first->value.string, second->value.string) == 0);
 
         case CLISP_FUNCTION:
             if (first->builtin || second->builtin) {
@@ -179,15 +119,15 @@ clisp_token_del(clisp_chunk_t* token) {
             break;
 
         case CLISP_ERROR:
-            free(token->error);
+            free(token->value.string);
             break;
 
         case CLISP_SYMBOL:
-            free(token->symbol);
+            free(token->value.string);
             break;
 
         case CLISP_STRING:
-            free(token->str);
+            free(token->value.string);
             break;
 
         case TOKEN_QEXPRESSION:
@@ -262,22 +202,22 @@ clisp_token_copy(clisp_chunk_t* token) {
             break;
 
         case CLISP_NUMBER:
-            copy_token->number = token->number;
+            copy_token->value.number = token->value.number;
             break;
 
         case CLISP_ERROR:
-            copy_token->error = malloc(strlen(token->error));
-            strcpy(copy_token->error, token->symbol);
+            copy_token->value.string = malloc(strlen(token->value.string));
+            strcpy(copy_token->value.string, token->value.string);
             break;
 
         case CLISP_SYMBOL:
-            copy_token->symbol = malloc(strlen(token->symbol));
-            strcpy(copy_token->symbol, token->symbol);
+            copy_token->value.string = malloc(strlen(token->value.string));
+            strcpy(copy_token->value.string, token->value.string);
             break;
 
         case CLISP_STRING:
-            copy_token->symbol = malloc(strlen(token->str));
-            strcpy(copy_token->str, token->str);
+            copy_token->value.string = malloc(strlen(token->value.string));
+            strcpy(copy_token->value.string, token->value.string);
             break;
 
 
