@@ -26,23 +26,25 @@ set(CLISP_SOURCE_DIR ${CLISP_DIR}/src)
 
 set(CLISP_SOURCES
     ${MPC_DIR}/mpc.c
-    ${CLISP_SOURCE_DIR}/ast.c
-    ${CLISP_SOURCE_DIR}/builtin.c
-    ${CLISP_SOURCE_DIR}/environment.c
-    ${CLISP_SOURCE_DIR}/print.c
-    ${CLISP_SOURCE_DIR}/repl.c
-    ${CLISP_SOURCE_DIR}/token.c
-    ${CLISP_SOURCE_DIR}/utils.c
+    src/ast.c
+    src/builtin.c
+    src/environment.c
+    src/print.c
+    src/repl.c
+    src/token.c
+    src/utils.c
+    src/types.c
 )
 
 set(CLISP_HEADERS
-    ${CLISP_SOURCE_DIR}/ast.h
-    ${CLISP_SOURCE_DIR}/builtin.h
-    ${CLISP_SOURCE_DIR}/environment.h
-    ${CLISP_SOURCE_DIR}/error.h
-    ${CLISP_SOURCE_DIR}/print.h
-    ${CLISP_SOURCE_DIR}/token.h
-    ${CLISP_SOURCE_DIR}/utils.h
+    src/ast.h
+    src/builtin.h
+    src/environment.h
+    src/error.h
+    src/print.h
+    src/token.h
+    src/utils.h
+    src/types.h
 )
 
 #=============================#
