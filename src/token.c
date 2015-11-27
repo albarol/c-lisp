@@ -5,7 +5,7 @@
 clisp_token_t*
 clisp_token_number(float num) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
-    token->type = TOKEN_NUMBER;
+    token->type = CLISP_NUMBER;
     token->number = num;
     return token;
 }
@@ -13,7 +13,7 @@ clisp_token_number(float num) {
 clisp_token_t*
 clisp_token_error(char* fmt, ...) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
-    token->type = TOKEN_ERROR;
+    token->type = CLISP_ERROR;
 
     va_list args;
     va_start(args, fmt);
@@ -30,7 +30,7 @@ clisp_token_error(char* fmt, ...) {
 clisp_token_t*
 clisp_token_symbol(char* symbol) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
-    token->type = TOKEN_SYMBOL;
+    token->type = CLISP_SYMBOL;
     token->symbol = malloc(strlen(symbol) + 1);
     strcpy(token->symbol, symbol);
     return token;
@@ -39,7 +39,7 @@ clisp_token_symbol(char* symbol) {
 clisp_token_t*
 clisp_token_sexpr(void) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
-    token->type = TOKEN_SEXPRESSION;
+    token->type = CLISP_ATOM;
     token->count = 0;
     token->tokens = NULL;
     return token;
@@ -57,7 +57,7 @@ clisp_token_qexpr(void) {
 clisp_token_t*
 clisp_token_str(char* str) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
-    token->type = TOKEN_STR;
+    token->type = CLISP_STRING;
     token->str = malloc(strlen(str) + 1);
     strcpy(token->str, str);
     return token;
@@ -66,7 +66,7 @@ clisp_token_str(char* str) {
 clisp_token_t*
 clisp_token_function(clisp_function_t function) {
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
-    token->type = TOKEN_FUNCTION;
+    token->type = CLISP_FUNCTION;
     token->builtin = function;
     return token;
 }
@@ -75,7 +75,7 @@ clisp_token_t*
 clisp_token_lambda(clisp_token_t* formals, clisp_token_t* body) {
 
     clisp_token_t* token = malloc(sizeof(clisp_token_t));
-    token->type = TOKEN_FUNCTION;
+    token->type = CLISP_FUNCTION;
     token->builtin = NULL;
 
     token->env = clisp_env_new();
@@ -128,19 +128,19 @@ clisp_token_cmp(clisp_token_t* first, clisp_token_t* second) {
 
     switch (first->type) {
 
-        case TOKEN_NUMBER:
+        case CLISP_NUMBER:
             return (first->number == second->number);
 
-        case TOKEN_ERROR:
+        case CLISP_ERROR:
             return (strcmp(first->error, second->error) == 0);
 
-        case TOKEN_SYMBOL:
+        case CLISP_SYMBOL:
             return (strcmp(first->symbol, second->symbol) == 0);
 
-        case TOKEN_STR:
+        case CLISP_STRING:
             return (strcmp(first->str, second->str) == 0);
 
-        case TOKEN_FUNCTION:
+        case CLISP_FUNCTION:
             if (first->builtin || second->builtin) {
                 return first->builtin == second->builtin;
             } else {
@@ -149,7 +149,7 @@ clisp_token_cmp(clisp_token_t* first, clisp_token_t* second) {
             }
 
         case TOKEN_QEXPRESSION:
-        case TOKEN_SEXPRESSION:
+        case CLISP_ATOM:
             if (first->count != second->count) { return 0; }
             for (int i = 0; i < first->count; i++) {
                 if (!clisp_token_cmp(first->tokens[i], second->tokens[i])) {
@@ -167,10 +167,10 @@ clisp_token_del(clisp_token_t* token) {
 
     switch (token->type) {
 
-        case TOKEN_NUMBER:
+        case CLISP_NUMBER:
             break;
 
-        case TOKEN_FUNCTION:
+        case CLISP_FUNCTION:
             if (!token->builtin) {
                 clisp_env_del(token->env);
                 clisp_token_del(token->formals);
@@ -178,20 +178,20 @@ clisp_token_del(clisp_token_t* token) {
             }
             break;
 
-        case TOKEN_ERROR:
+        case CLISP_ERROR:
             free(token->error);
             break;
 
-        case TOKEN_SYMBOL:
+        case CLISP_SYMBOL:
             free(token->symbol);
             break;
 
-        case TOKEN_STR:
+        case CLISP_STRING:
             free(token->str);
             break;
 
         case TOKEN_QEXPRESSION:
-        case TOKEN_SEXPRESSION:
+        case CLISP_ATOM:
             for (int i = 0; i < token->count; i++) {
                 clisp_token_del(token->tokens[i]);
             }
@@ -250,7 +250,7 @@ clisp_token_copy(clisp_token_t* token) {
     copy_token->type = token->type;
 
     switch (token->type) {
-        case TOKEN_FUNCTION:
+        case CLISP_FUNCTION:
             if (token->builtin) {
                 copy_token->builtin = token->builtin;
             } else {
@@ -261,28 +261,28 @@ clisp_token_copy(clisp_token_t* token) {
             }
             break;
 
-        case TOKEN_NUMBER:
+        case CLISP_NUMBER:
             copy_token->number = token->number;
             break;
 
-        case TOKEN_ERROR:
+        case CLISP_ERROR:
             copy_token->error = malloc(strlen(token->error));
             strcpy(copy_token->error, token->symbol);
             break;
 
-        case TOKEN_SYMBOL:
+        case CLISP_SYMBOL:
             copy_token->symbol = malloc(strlen(token->symbol));
             strcpy(copy_token->symbol, token->symbol);
             break;
 
-        case TOKEN_STR:
+        case CLISP_STRING:
             copy_token->symbol = malloc(strlen(token->str));
             strcpy(copy_token->str, token->str);
             break;
 
 
         case TOKEN_QEXPRESSION:
-        case TOKEN_SEXPRESSION:
+        case CLISP_ATOM:
             copy_token->count = token->count;
             copy_token->tokens = malloc(sizeof(clisp_token_t*) * token->count);
             for (int i = 0; i < copy_token->count; i++) {

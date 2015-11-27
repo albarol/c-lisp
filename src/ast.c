@@ -47,12 +47,12 @@ clisp_ast_read_str(mpc_ast_t* t) {
 
 clisp_token_t*
 clisp_ast_eval(clisp_env_t* env, clisp_token_t* token) {
-    if (token->type == TOKEN_SYMBOL) {
+    if (token->type == CLISP_SYMBOL) {
         clisp_token_t* looked = clisp_env_get(env, token);
         clisp_token_del(token);
         return looked;
     }
-    if (token->type == TOKEN_SEXPRESSION) {
+    if (token->type == CLISP_ATOM) {
         return clisp_ast_eval_sexpr(env, token);
     }
     return token;
@@ -66,7 +66,7 @@ clisp_ast_eval_sexpr(clisp_env_t* env, clisp_token_t* token) {
     }
 
     for (int i = 0; i < token->count; i++) {
-        if (token->tokens[i]->type == TOKEN_ERROR) {
+        if (token->tokens[i]->type == CLISP_ERROR) {
             return clisp_token_take(token, i);
         }
     }
@@ -75,7 +75,7 @@ clisp_ast_eval_sexpr(clisp_env_t* env, clisp_token_t* token) {
     if (token->count == 1) { return clisp_token_take(token, 0); }
 
     clisp_token_t* func = clisp_token_pop(token, 0);
-    if (func->type != TOKEN_FUNCTION) {
+    if (func->type != CLISP_FUNCTION) {
         clisp_token_del(token);
         clisp_token_del(func);
         return clisp_token_error("First element is not a function");

@@ -44,7 +44,7 @@ clisp_builtin_math(clisp_env_t* env, clisp_token_t* token, char* op) {
     for (int i = 0; i < token->count; i++) {
         clisp_token_t* item = token->tokens[i];
 
-        if (item->type != TOKEN_NUMBER) {
+        if (item->type != CLISP_NUMBER) {
             clisp_token_del(token);
             return clisp_token_error("Cannot operate on non-number!");
         }
@@ -124,8 +124,8 @@ clisp_builtin_math_pow(clisp_env_t* env, clisp_token_t* token) {
 clisp_token_t*
 clisp_builtin_ord(clisp_env_t* env, clisp_token_t* token, char* op) {
     clisp_assert_count(token, 2);
-    clisp_assert_type(token, token->tokens[0]->type, TOKEN_NUMBER);
-    clisp_assert_type(token, token->tokens[1]->type, TOKEN_NUMBER);
+    clisp_assert_type(token, token->tokens[0]->type, CLISP_NUMBER);
+    clisp_assert_type(token, token->tokens[1]->type, CLISP_NUMBER);
 
     int result;
     if (strcmp(op, ">") == 0) {
@@ -200,13 +200,13 @@ clisp_builtin_cmp_ne(clisp_env_t* env, clisp_token_t* token) {
 clisp_token_t*
 clisp_builtin_cmp_if(clisp_env_t* env, clisp_token_t* token) {
     clisp_assert_count(token, 3);
-    clisp_assert_type(token, token->tokens[0]->type, TOKEN_NUMBER);
+    clisp_assert_type(token, token->tokens[0]->type, CLISP_NUMBER);
     clisp_assert_type(token, token->tokens[1]->type, TOKEN_QEXPRESSION);
     clisp_assert_type(token, token->tokens[2]->type, TOKEN_QEXPRESSION);
 
     clisp_token_t* new_token;
-    token->tokens[1]->type = TOKEN_SEXPRESSION;
-    token->tokens[2]->type = TOKEN_SEXPRESSION;
+    token->tokens[1]->type = CLISP_ATOM;
+    token->tokens[2]->type = CLISP_ATOM;
 
     if (token->tokens[0]->number) {
         new_token = clisp_ast_eval(env, clisp_token_pop(token, 1));
@@ -288,7 +288,7 @@ clisp_builtin_eval(clisp_env_t* env, clisp_token_t* token) {
     clisp_assert_type(token, child->type, TOKEN_QEXPRESSION)
 
     child = clisp_token_take(token, 0);
-    child->type = TOKEN_SEXPRESSION;
+    child->type = CLISP_ATOM;
     return clisp_ast_eval(env, child);
 }
 
@@ -303,7 +303,7 @@ clisp_builtin_var_set(clisp_env_t* env, clisp_token_t* token, char* function) {
     clisp_assert_type(token, child->type, TOKEN_QEXPRESSION);
 
     for (int i = 0; i < child->count; i++) {
-        clisp_assert(token, child->tokens[i]->type, TOKEN_SYMBOL)
+        clisp_assert(token, child->tokens[i]->type, CLISP_SYMBOL)
     }
 
     clisp_assert(token, child->count == token->count-1,
@@ -344,9 +344,9 @@ clisp_builtin_lambda(clisp_env_t* env, clisp_token_t* token) {
 
     for (int i = 0; i < token->tokens[0]->count; i++) {
         clisp_token_t* child = token->tokens[0]->tokens[i];
-        clisp_assert(token, child->type = TOKEN_SYMBOL,
+        clisp_assert(token, child->type = CLISP_SYMBOL,
                      "Cannot define non-symbol. Got: %s, Expected: %s",
-                     clisp_print_type_name(child->type), clisp_print_type_name(TOKEN_SYMBOL));
+                     clisp_print_type_name(child->type), clisp_print_type_name(CLISP_SYMBOL));
     }
 
     clisp_token_t* formals = clisp_token_pop(token, 0);
