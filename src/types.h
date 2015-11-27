@@ -36,9 +36,10 @@ struct clisp_chunk_t {
     union {
         float number;
         char* string;
+        clisp_builtin_t builtin;
     } value;
 
-    clisp_builtin_t builtin;
+
     clisp_env_t* env;
     clisp_chunk_t* formals;
     clisp_chunk_t* body;

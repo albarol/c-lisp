@@ -71,7 +71,7 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
-        clisp_chunk_t* result = chunk->builtin(clisp_env_new(), clisp_chunk_number(5));
+        clisp_chunk_t* result = chunk->value.builtin(clisp_env_new(), clisp_chunk_number(5));
         PT_ASSERT(result->value.number == 5);
 
         clisp_chunk_delete(chunk);
@@ -82,7 +82,7 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
-        clisp_chunk_t* result = chunk->builtin(clisp_env_new(), clisp_chunk_str("string"));
+        clisp_chunk_t* result = chunk->value.builtin(clisp_env_new(), clisp_chunk_str("string"));
         PT_ASSERT(strcmp(result->value.string, "string") == 0);
 
         clisp_chunk_delete(chunk);

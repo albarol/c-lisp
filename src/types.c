@@ -98,7 +98,7 @@ clisp_chunk_qexpr(void) {
 clisp_chunk_t*
 clisp_chunk_builtin(clisp_builtin_t function) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION_C);
-    chunk->builtin = function;
+    chunk->value.builtin = function;
     return chunk;
 }
 

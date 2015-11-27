@@ -8,7 +8,6 @@
 #include "types.h"
 
 
-clisp_chunk_t* clisp_token_function(clisp_builtin_t function);
 clisp_chunk_t* clisp_token_lambda(clisp_chunk_t* formals, clisp_chunk_t* body);
 clisp_chunk_t* clisp_token_call(clisp_env_t* env, clisp_chunk_t* function, clisp_chunk_t* args);
 

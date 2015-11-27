@@ -1,22 +1,15 @@
 
 #include "token.h"
 #include "builtin.h"
+#include "types.h"
 
-
-clisp_chunk_t*
-clisp_token_function(clisp_builtin_t function) {
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = CLISP_FUNCTION;
-    token->builtin = function;
-    return token;
-}
 
 clisp_chunk_t*
 clisp_token_lambda(clisp_chunk_t* formals, clisp_chunk_t* body) {
 
     clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
     token->type = CLISP_FUNCTION;
-    token->builtin = NULL;
+    token->value.builtin = NULL;
 
     token->env = clisp_env_new();
     token->formals = formals;
@@ -28,7 +21,7 @@ clisp_token_lambda(clisp_chunk_t* formals, clisp_chunk_t* body) {
 clisp_chunk_t*
 clisp_token_call(clisp_env_t* env, clisp_chunk_t* f, clisp_chunk_t* args) {
 
-    if (f->builtin) { return f->builtin(env, args); }
+    if (f->type == CLISP_FUNCTION_C) { return f->value.builtin(env, args); }
 
     int given = args->count;
     int total = f->formals->count;
@@ -80,13 +73,12 @@ clisp_token_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
         case CLISP_STRING:
             return (strcmp(first->value.string, second->value.string) == 0);
 
+        case CLISP_FUNCTION_C:
+            return first->value.builtin == second->value.builtin;
+
         case CLISP_FUNCTION:
-            if (first->builtin || second->builtin) {
-                return first->builtin == second->builtin;
-            } else {
-                return clisp_token_cmp(first->formals, second->formals)
-                       && clisp_token_cmp(first->body, second->body);
-            }
+            return clisp_token_cmp(first->formals, second->formals)
+                   && clisp_token_cmp(first->body, second->body);
 
         case TOKEN_QEXPRESSION:
         case CLISP_ATOM:
@@ -111,11 +103,9 @@ clisp_token_del(clisp_chunk_t* token) {
             break;
 
         case CLISP_FUNCTION:
-            if (!token->builtin) {
-                clisp_env_del(token->env);
-                clisp_token_del(token->formals);
-                clisp_token_del(token->body);
-            }
+            clisp_env_del(token->env);
+            clisp_token_del(token->formals);
+            clisp_token_del(token->body);
             break;
 
         case CLISP_ERROR:
@@ -190,15 +180,15 @@ clisp_token_copy(clisp_chunk_t* token) {
     copy_token->type = token->type;
 
     switch (token->type) {
+
+        case CLISP_FUNCTION_C:
+            copy_token->value.builtin = token->value.builtin;
+            break;
+
         case CLISP_FUNCTION:
-            if (token->builtin) {
-                copy_token->builtin = token->builtin;
-            } else {
-                copy_token->builtin = NULL;
-                copy_token->env = clisp_env_copy(token->env);
-                copy_token->formals = clisp_token_copy(token->formals);
-                copy_token->body = clisp_token_copy(token->body);
-            }
+            copy_token->env = clisp_env_copy(token->env);
+            copy_token->formals = clisp_token_copy(token->formals);
+            copy_token->body = clisp_token_copy(token->body);
             break;
 
         case CLISP_NUMBER:

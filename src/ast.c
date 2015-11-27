@@ -75,13 +75,13 @@ clisp_ast_eval_sexpr(clisp_env_t* env, clisp_chunk_t* token) {
     if (token->count == 1) { return clisp_token_take(token, 0); }
 
     clisp_chunk_t* func = clisp_token_pop(token, 0);
-    if (func->type != CLISP_FUNCTION) {
-        clisp_token_del(token);
+    if (func->type & (CLISP_FUNCTION|CLISP_FUNCTION_C)) {
+        clisp_chunk_t* result = clisp_token_call(env, func, token);
         clisp_token_del(func);
-        return clisp_chunk_error("First element is not a function");
+        return result;
     }
 
-    clisp_chunk_t* result = clisp_token_call(env, func, token);
+    clisp_token_del(token);
     clisp_token_del(func);
-    return result;
+    return clisp_chunk_error("First element is not a function");
 }

@@ -16,16 +16,15 @@ clisp_print_write(clisp_chunk_t* token) {
         case CLISP_STRING: clisp_print_write_str(token); break;
         case CLISP_ATOM: clisp_print_write_expr(token, '(', ')'); break;
         case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
+        case CLISP_FUNCTION_C:
+            printf("<function>");
+            break;
         case CLISP_FUNCTION:
-            if(token->builtin) {
-                printf("<function>");
-            } else {
-                printf("(\\ ");
-                clisp_print_write(token->formals);
-                putchar(' ');
-                clisp_print_write(token->body);
-                putchar(')');
-            }
+            printf("(\\ ");
+            clisp_print_write(token->formals);
+            putchar(' ');
+            clisp_print_write(token->body);
+            putchar(')');
             break;
     }
 }
