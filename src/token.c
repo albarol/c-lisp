@@ -11,9 +11,9 @@ clisp_token_lambda(clisp_chunk_t* formals, clisp_chunk_t* body) {
     token->type = CLISP_FUNCTION;
     token->value.builtin = NULL;
 
-    token->env = clisp_env_new();
-    token->formals = formals;
-    token->body = body;
+    token->value.func.env = clisp_env_new();
+    token->value.func.args = formals;
+    token->value.func.body = body;
 
     return token;
 }
@@ -24,31 +24,31 @@ clisp_token_call(clisp_env_t* env, clisp_chunk_t* f, clisp_chunk_t* args) {
     if (f->type == CLISP_FUNCTION_C) { return f->value.builtin(env, args); }
 
     int given = args->count;
-    int total = f->formals->count;
+    int total = f->value.func.args->count;
 
     while (args->count) {
 
-        if (f->formals->count == 0) {
+        if (f->value.func.args->count == 0) {
             clisp_token_del(args);
             return clisp_chunk_error("Function passed too many arguments. "
                                              "Got: %i, Expected: %i", given, total);
         }
 
-        clisp_chunk_t* symbol = clisp_token_pop(f->formals, 0);
+        clisp_chunk_t* symbol = clisp_token_pop(f->value.func.args, 0);
         clisp_chunk_t* token = clisp_token_pop(args, 0);
 
-        clisp_env_put(f->env, symbol, token);
+        clisp_env_put(f->value.func.env, symbol, token);
         clisp_token_del(symbol);
         clisp_token_del(token);
     }
 
     clisp_token_del(args);
 
-    if (f->formals->count == 0) {
+    if (f->value.func.args->count == 0) {
 
-        f->env->parent = env;
-        return clisp_builtin_eval(f->env,
-                clisp_token_append(clisp_chunk_sexpr(), clisp_token_copy(f->body)));
+        f->value.func.env->parent = env;
+        return clisp_builtin_eval(f->value.func.env,
+                clisp_token_append(clisp_chunk_sexpr(), clisp_token_copy(f->value.func.body)));
     } else {
         return clisp_token_copy(f);
     }
@@ -77,8 +77,8 @@ clisp_token_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
             return first->value.builtin == second->value.builtin;
 
         case CLISP_FUNCTION:
-            return clisp_token_cmp(first->formals, second->formals)
-                   && clisp_token_cmp(first->body, second->body);
+            return clisp_token_cmp(first->value.func.args, second->value.func.args)
+                   && clisp_token_cmp(first->value.func.body, second->value.func.body);
 
         case TOKEN_QEXPRESSION:
         case CLISP_ATOM:
@@ -103,9 +103,9 @@ clisp_token_del(clisp_chunk_t* token) {
             break;
 
         case CLISP_FUNCTION:
-            clisp_env_del(token->env);
-            clisp_token_del(token->formals);
-            clisp_token_del(token->body);
+            clisp_env_del(token->value.func.env);
+            clisp_token_del(token->value.func.args);
+            clisp_token_del(token->value.func.body);
             break;
 
         case CLISP_ERROR:
@@ -186,9 +186,9 @@ clisp_token_copy(clisp_chunk_t* token) {
             break;
 
         case CLISP_FUNCTION:
-            copy_token->env = clisp_env_copy(token->env);
-            copy_token->formals = clisp_token_copy(token->formals);
-            copy_token->body = clisp_token_copy(token->body);
+            copy_token->value.func.env = clisp_env_copy(token->value.func.env);
+            copy_token->value.func.args = clisp_token_copy(token->value.func.args);
+            copy_token->value.func.body = clisp_token_copy(token->value.func.body);
             break;
 
         case CLISP_NUMBER:

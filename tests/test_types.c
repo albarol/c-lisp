@@ -92,6 +92,8 @@ PT_SUITE(suite_types) {
         clisp_chunk_t* chunk = clisp_chunk_function(clisp_chunk_sexpr(), clisp_chunk_sexpr());
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION);
+        PT_ASSERT(chunk->value.func.args->count == 0);
+        PT_ASSERT(chunk->value.func.body->count == 0);
 
         clisp_chunk_delete(chunk);
     }

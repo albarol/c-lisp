@@ -19,8 +19,8 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
             break;
 
         case CLISP_FUNCTION:
-            clisp_chunk_delete(chunk->formals);
-            clisp_chunk_delete(chunk->body);
+            clisp_chunk_delete(chunk->value.func.args);
+            clisp_chunk_delete(chunk->value.func.body);
             break;
 
         case TOKEN_QEXPRESSION:
@@ -105,7 +105,7 @@ clisp_chunk_builtin(clisp_builtin_t function) {
 clisp_chunk_t*
 clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION);
-    chunk->formals = args;
-    chunk->body = body;
+    chunk->value.func.args = args;
+    chunk->value.func.body = body;
     return chunk;
 }

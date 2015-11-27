@@ -10,6 +10,9 @@
 #define clisp_assert_count(t, num) \
     clisp_assert(t, t->count == num, "Incorrect number of arguments. Got: %li, Expected: %li", token->count, num)
 
+#define clisp_assert_func_count_args(t, num) \
+    clisp_assert(t, t->value.func.count == num, "Incorrect number of arguments. Got: %li, Expected: %li", token->value.func.count, num)
+
 #define clisp_assert_type(t, current, expected) \
     clisp_assert(t, current == expected, "Incorrect type of argument. Got: %s, Expected: %s", clisp_print_type_name(current), clisp_print_type_name(expected))
 

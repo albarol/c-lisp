@@ -21,9 +21,9 @@ clisp_print_write(clisp_chunk_t* token) {
             break;
         case CLISP_FUNCTION:
             printf("(\\ ");
-            clisp_print_write(token->formals);
+            clisp_print_write(token->value.func.args);
             putchar(' ');
-            clisp_print_write(token->body);
+            clisp_print_write(token->value.func.body);
             putchar(')');
             break;
     }

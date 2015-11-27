@@ -26,7 +26,7 @@ typedef enum {
     CLISP_FUNCTION = 256,
     CLISP_FUNCTION_C = 512,
     CLISP_ATOM = 1024,
-    TOKEN_QEXPRESSION = 2048
+    TOKEN_QEXPRESSION = 2048,
 } clisp_chunk_type_t;
 
 
@@ -37,12 +37,16 @@ struct clisp_chunk_t {
         float number;
         char* string;
         clisp_builtin_t builtin;
+
+        struct {
+            clisp_env_t* env;
+            clisp_chunk_t* args;
+            clisp_chunk_t* body;
+        } func;
     } value;
 
 
-    clisp_env_t* env;
-    clisp_chunk_t* formals;
-    clisp_chunk_t* body;
+
 
     int count;
     clisp_chunk_t** tokens;
