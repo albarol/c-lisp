@@ -24,6 +24,7 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
             free(chunk->error);
             break;
 
+        case TOKEN_QEXPRESSION:
         case CLISP_ATOM:
             for (int i = 0; i < chunk->count; i++) {
                 clisp_chunk_delete(chunk->tokens[i]);
@@ -84,5 +85,20 @@ clisp_chunk_sexpr(void) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_ATOM);
     chunk->count = 0;
     chunk->tokens = NULL;
+    return chunk;
+}
+
+clisp_chunk_t*
+clisp_chunk_qexpr(void) {
+    clisp_chunk_t* chunk = clisp_chunk_new(TOKEN_QEXPRESSION);
+    chunk->count = 0;
+    chunk->tokens = NULL;
+    return chunk;
+}
+
+clisp_chunk_t*
+clisp_chunk_builtin(clisp_builtin_t function) {
+    clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION_C);
+    chunk->builtin = function;
     return chunk;
 }

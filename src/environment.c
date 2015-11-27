@@ -78,7 +78,7 @@ clisp_env_put(clisp_env_t* env, clisp_chunk_t* token_symbol, clisp_chunk_t* toke
 }
 
 void
-clisp_env_put_function(clisp_env_t* env, char* name, clisp_function_t function) {
+clisp_env_put_function(clisp_env_t* env, char* name, clisp_builtin_t function) {
     clisp_chunk_t* symbol = clisp_token_symbol(name);
     clisp_chunk_t* func = clisp_token_function(function);
     clisp_env_put(env, symbol, func);

@@ -11,7 +11,7 @@ struct clisp_env_t;
 typedef struct clisp_chunk_t clisp_chunk_t;
 typedef struct clisp_env_t clisp_env_t;
 
-typedef clisp_chunk_t* (*clisp_function_t)(clisp_env_t*, clisp_chunk_t*);
+typedef clisp_chunk_t* (* clisp_builtin_t)(clisp_env_t*, clisp_chunk_t*);
 
 
 typedef enum {
@@ -38,7 +38,7 @@ struct clisp_chunk_t {
     char* error;
     char* str;
 
-    clisp_function_t builtin;
+    clisp_builtin_t builtin;
     clisp_env_t* env;
     clisp_chunk_t* formals;
     clisp_chunk_t* body;
@@ -56,5 +56,6 @@ clisp_chunk_t* clisp_chunk_str(char* str);
 clisp_chunk_t* clisp_chunk_error(char* error, ...);
 clisp_chunk_t* clisp_chunk_sexpr(void);
 clisp_chunk_t* clisp_chunk_qexpr(void);
+clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function);
 
 #endif

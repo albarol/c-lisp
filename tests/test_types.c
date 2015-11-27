@@ -2,7 +2,13 @@
 #include "ptest.h"
 
 #include "../src/types.h"
+#include "../src/environment.h"
 
+
+clisp_chunk_t*
+fake_builtin(clisp_env_t* env, clisp_chunk_t* chunk) {
+    return chunk;
+}
 
 PT_SUITE(suite_types) {
 
@@ -47,6 +53,37 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(chunk->count == 0);
         PT_ASSERT(chunk->type == CLISP_ATOM);
+
+        clisp_chunk_delete(chunk);
+    }
+
+    PT_TEST(test_new_chunk_qexpr) {
+        clisp_chunk_t* chunk = clisp_chunk_qexpr();
+
+        PT_ASSERT(chunk->count == 0);
+        PT_ASSERT(chunk->type == TOKEN_QEXPRESSION);
+
+        clisp_chunk_delete(chunk);
+    }
+
+    PT_TEST(test_new_chunk_builtin_should_return_number) {
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
+
+        PT_ASSERT(chunk->type & (CLISP_FUNCTION_C|CLISP_FUNCTION));
+
+        clisp_chunk_t* result = chunk->builtin(clisp_env_new(), clisp_chunk_number(5));
+        PT_ASSERT(result->number == 5);
+
+        clisp_chunk_delete(chunk);
+    }
+
+    PT_TEST(test_new_chunk_builtin_should_return_str) {
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
+
+        PT_ASSERT(chunk->type & (CLISP_FUNCTION_C|CLISP_FUNCTION));
+
+        clisp_chunk_t* result = chunk->builtin(clisp_env_new(), clisp_chunk_str("string"));
+        PT_ASSERT(strcmp(result->str, "string") == 0);
 
         clisp_chunk_delete(chunk);
     }

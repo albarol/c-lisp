@@ -64,7 +64,7 @@ clisp_token_str(char* str) {
 }
 
 clisp_chunk_t*
-clisp_token_function(clisp_function_t function) {
+clisp_token_function(clisp_builtin_t function) {
     clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
     token->type = CLISP_FUNCTION;
     token->builtin = function;
