@@ -35,6 +35,7 @@ set(CLISP_SOURCES
     src/token.c
     src/utils.c
     src/types.c
+    src/env.c
 )
 
 set(CLISP_HEADERS

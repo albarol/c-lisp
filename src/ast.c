@@ -49,7 +49,7 @@ clisp_chunk_t*
 clisp_ast_eval(clisp_env_t* env, clisp_chunk_t* token) {
     if (token->type == CLISP_SYMBOL) {
         clisp_chunk_t* looked = clisp_env_get(env, token);
-        clisp_token_del(token);
+        clisp_chunk_delete(token);
         return looked;
     }
     if (token->type == CLISP_ATOM) {
@@ -77,11 +77,11 @@ clisp_ast_eval_sexpr(clisp_env_t* env, clisp_chunk_t* token) {
     clisp_chunk_t* func = clisp_token_pop(token, 0);
     if (func->type & (CLISP_FUNCTION|CLISP_FUNCTION_C)) {
         clisp_chunk_t* result = clisp_token_call(env, func, token);
-        clisp_token_del(func);
+        clisp_chunk_delete(func);
         return result;
     }
 
-    clisp_token_del(token);
-    clisp_token_del(func);
+    clisp_chunk_delete(token);
+    clisp_chunk_delete(func);
     return clisp_chunk_error("First element is not a function");
 }

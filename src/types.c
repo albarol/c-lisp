@@ -37,6 +37,47 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
 }
 
 clisp_chunk_t*
+clisp_chunk_copy(clisp_chunk_t* metadata) {
+    clisp_chunk_t* copy_token= malloc(sizeof(clisp_chunk_t));
+    copy_token->type = metadata->type;
+
+    switch (metadata->type) {
+
+        case CLISP_FUNCTION_C:
+            copy_token->value.builtin = metadata->value.builtin;
+            break;
+
+        case CLISP_FUNCTION:
+            copy_token->value.func.env = clisp_env_copy(metadata->value.func.env);
+            copy_token->value.func.args = clisp_chunk_copy(metadata->value.func.args);
+            copy_token->value.func.body = clisp_chunk_copy(metadata->value.func.body);
+            break;
+
+        case CLISP_NUMBER:
+            copy_token->value.number = metadata->value.number;
+            break;
+
+        case CLISP_ERROR:
+        case CLISP_SYMBOL:
+        case CLISP_STRING:
+            copy_token->value.string = malloc(strlen(metadata->value.string));
+            strcpy(copy_token->value.string, metadata->value.string);
+            break;
+
+
+        case TOKEN_QEXPRESSION:
+        case CLISP_ATOM:
+            copy_token->count = metadata->count;
+            copy_token->tokens = malloc(sizeof(clisp_chunk_t*) * metadata->count);
+            for (int i = 0; i < copy_token->count; i++) {
+                copy_token->tokens[i] = clisp_chunk_copy(metadata->tokens[i]);
+            }
+            break;
+    }
+    return copy_token;
+}
+
+clisp_chunk_t*
 clisp_chunk_number(float num) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_NUMBER);
     chunk->value.number = num;

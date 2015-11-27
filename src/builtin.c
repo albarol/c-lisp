@@ -44,7 +44,7 @@ clisp_builtin_math(clisp_env_t* env, clisp_chunk_t* token, char* op) {
         clisp_chunk_t* item = token->tokens[i];
 
         if (item->type != CLISP_NUMBER) {
-            clisp_token_del(token);
+            clisp_chunk_delete(token);
             return clisp_chunk_error("Cannot operate on non-number!");
         }
     }
@@ -71,18 +71,18 @@ clisp_builtin_math(clisp_env_t* env, clisp_chunk_t* token, char* op) {
         }
         if (strcmp(op, "/") == 0) {
             if (second->value.number == 0) {
-                clisp_token_del(first);
-                clisp_token_del(second);
+                clisp_chunk_delete(first);
+                clisp_chunk_delete(second);
                 first = clisp_chunk_error("Division By Zero!");
                 break;
             }
             first->value.number /= second->value.number;
         }
 
-        clisp_token_del(second);
+        clisp_chunk_delete(second);
     }
 
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
     return first;
 }
 
@@ -140,7 +140,7 @@ clisp_builtin_ord(clisp_env_t* env, clisp_chunk_t* token, char* op) {
         result = (token->tokens[0]->value.number <= token->tokens[1]->value.number);
     }
 
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
     return clisp_chunk_number(result);
 }
 
@@ -182,7 +182,7 @@ clisp_builtin_cmp(clisp_env_t* env, clisp_chunk_t* token, char* op) {
     if (strcmp(op, "!=") == 0) {
         result = !clisp_token_cmp(token->tokens[0], token->tokens[1]);
     }
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
     return clisp_chunk_number(result);
 }
 
@@ -213,7 +213,7 @@ clisp_builtin_cmp_if(clisp_env_t* env, clisp_chunk_t* token) {
         new_token = clisp_ast_eval(env, clisp_token_pop(token, 2));
     }
 
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
     return new_token;
 }
 
@@ -240,7 +240,7 @@ clisp_builtin_list_head(clisp_env_t* env, clisp_chunk_t* token) {
     list = clisp_token_take(token, 0);
 
     while (list->count > 1) {
-        clisp_token_del(clisp_token_pop(list, 1));
+        clisp_chunk_delete(clisp_token_pop(list, 1));
     }
     return list;
 }
@@ -256,7 +256,7 @@ clisp_builtin_list_tail(clisp_env_t* env, clisp_chunk_t* token) {
                  "Function 'tail' passed {}!");
 
     list = clisp_token_take(token, 0);
-    clisp_token_del(clisp_token_pop(list, 0));
+    clisp_chunk_delete(clisp_token_pop(list, 0));
     return list;
 }
 
@@ -274,7 +274,7 @@ clisp_builtin_list_join(clisp_env_t* env, clisp_chunk_t* token) {
         child = clisp_token_join(child, clisp_token_pop(token, 0));
     }
 
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
     return child;
 }
 
@@ -319,7 +319,7 @@ clisp_builtin_var_set(clisp_env_t* env, clisp_chunk_t* token, char* function) {
         }
     }
 
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
     return clisp_chunk_sexpr();
 }
 
@@ -350,7 +350,7 @@ clisp_builtin_lambda(clisp_env_t* env, clisp_chunk_t* token) {
 
     clisp_chunk_t* formals = clisp_token_pop(token, 0);
     clisp_chunk_t* body = clisp_token_pop(token, 0);
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
 
     return clisp_token_lambda(formals, body);
 }

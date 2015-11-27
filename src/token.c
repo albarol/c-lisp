@@ -29,7 +29,7 @@ clisp_token_call(clisp_env_t* env, clisp_chunk_t* f, clisp_chunk_t* args) {
     while (args->count) {
 
         if (f->value.func.args->count == 0) {
-            clisp_token_del(args);
+            clisp_chunk_delete(args);
             return clisp_chunk_error("Function passed too many arguments. "
                                              "Got: %i, Expected: %i", given, total);
         }
@@ -38,11 +38,11 @@ clisp_token_call(clisp_env_t* env, clisp_chunk_t* f, clisp_chunk_t* args) {
         clisp_chunk_t* token = clisp_token_pop(args, 0);
 
         clisp_env_put(f->value.func.env, symbol, token);
-        clisp_token_del(symbol);
-        clisp_token_del(token);
+        clisp_chunk_delete(symbol);
+        clisp_chunk_delete(token);
     }
 
-    clisp_token_del(args);
+    clisp_chunk_delete(args);
 
     if (f->value.func.args->count == 0) {
 
@@ -94,42 +94,6 @@ clisp_token_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
     return 0;
 }
 
-void
-clisp_token_del(clisp_chunk_t* token) {
-
-    switch (token->type) {
-
-        case CLISP_NUMBER:
-            break;
-
-        case CLISP_FUNCTION:
-            clisp_env_del(token->value.func.env);
-            clisp_token_del(token->value.func.args);
-            clisp_token_del(token->value.func.body);
-            break;
-
-        case CLISP_ERROR:
-            free(token->value.string);
-            break;
-
-        case CLISP_SYMBOL:
-            free(token->value.string);
-            break;
-
-        case CLISP_STRING:
-            free(token->value.string);
-            break;
-
-        case TOKEN_QEXPRESSION:
-        case CLISP_ATOM:
-            for (int i = 0; i < token->count; i++) {
-                clisp_token_del(token->tokens[i]);
-            }
-            break;
-    }
-
-    free(token);
-}
 
 clisp_chunk_t*
 clisp_token_append(clisp_chunk_t* super, clisp_chunk_t* child) {
@@ -157,7 +121,7 @@ clisp_token_pop(clisp_chunk_t* token, int position) {
 clisp_chunk_t*
 clisp_token_take(clisp_chunk_t* token, int position) {
     clisp_chunk_t* item = clisp_token_pop(token, position);
-    clisp_token_del(token);
+    clisp_chunk_delete(token);
     return item;
 }
 
@@ -168,7 +132,7 @@ clisp_token_join(clisp_chunk_t* first, clisp_chunk_t* second) {
         first = clisp_token_append(first, clisp_token_pop(second, 0));
     }
 
-    clisp_token_del(second);
+    clisp_chunk_delete(second);
     return first;
 }
 
