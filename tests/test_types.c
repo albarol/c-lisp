@@ -2,7 +2,6 @@
 #include "ptest.h"
 
 #include "../src/types.h"
-#include "../src/environment.h"
 
 
 clisp_chunk_t*

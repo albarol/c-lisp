@@ -28,23 +28,15 @@ set(CLISP_SOURCE_DIR ${CLISP_DIR}/src)
 
 set(CLISP_SOURCES
     ${MPC_DIR}/mpc.c
-    src/ast.c
-    src/builtin.c
-    src/environment.c
     src/print.c
-    src/token.c
     src/utils.c
     src/types.c
     src/env.c
 )
 
 set(CLISP_HEADERS
-    src/ast.h
-    src/builtin.h
-    src/environment.h
     src/error.h
     src/print.h
-    src/token.h
     src/utils.h
     src/types.h
 )
@@ -70,6 +62,7 @@ set(CLISP_TESTS
     ${PTEST_DIR}/ptest.c
     tests/test.c
     tests/test_types.c
+    tests/test_env.c
 )
 add_executable(clispTest ${CLISP_TESTS} ${CLISP_SOURCES} ${CLISP_HEADERS})
 

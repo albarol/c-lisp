@@ -19,6 +19,7 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
             break;
 
         case CLISP_FUNCTION:
+            clisp_env_delete(chunk->value.func.env);
             clisp_chunk_delete(chunk->value.func.args);
             clisp_chunk_delete(chunk->value.func.body);
             break;
@@ -146,6 +147,7 @@ clisp_chunk_builtin(clisp_builtin_t function) {
 clisp_chunk_t*
 clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION);
+    chunk->value.func.env = clisp_env_new();
     chunk->value.func.args = args;
     chunk->value.func.body = body;
     return chunk;

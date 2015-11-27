@@ -348,9 +348,9 @@ clisp_builtin_lambda(clisp_env_t* env, clisp_chunk_t* token) {
                      clisp_print_type_name(child->type), clisp_print_type_name(CLISP_SYMBOL));
     }
 
-    clisp_chunk_t* formals = clisp_token_pop(token, 0);
+    clisp_chunk_t* args = clisp_token_pop(token, 0);
     clisp_chunk_t* body = clisp_token_pop(token, 0);
     clisp_chunk_delete(token);
 
-    return clisp_token_lambda(formals, body);
+    return clisp_chunk_function(args, body);
 }

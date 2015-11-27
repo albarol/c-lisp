@@ -82,6 +82,9 @@ struct clisp_env_t {
 
 clisp_env_t* clisp_env_new(void);
 clisp_env_t* clisp_env_copy(clisp_env_t* env);
-void clisp_env_del(clisp_env_t* env);
+void clisp_env_delete(clisp_env_t* env);
+
+clisp_chunk_t* clisp_env_get(clisp_env_t* env, clisp_chunk_t* token);
+void clisp_env_put(clisp_env_t* env, clisp_chunk_t* symbol, clisp_chunk_t* value);
 
 #endif
