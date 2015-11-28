@@ -74,9 +74,50 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
                 copy_token->value.expr.chunks[i] = clisp_chunk_copy(metadata->value.expr.chunks[i]);
             }
             break;
+
+        default:
+            break;
     }
     return copy_token;
 }
+
+int
+clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
+
+    if (first->type != second->type) {
+        return 0;
+    }
+
+    switch (first->type) {
+
+        case CLISP_NUMBER:
+            return (first->value.number == second->value.number);
+
+        case CLISP_ERROR:
+        case CLISP_SYMBOL:
+        case CLISP_STRING:
+            return (strcmp(first->value.string, second->value.string) == 0);
+
+        case CLISP_FUNCTION_C:
+            return first->value.builtin == second->value.builtin;
+
+        case CLISP_FUNCTION:
+            return clisp_chunk_cmp(first->value.func.args, second->value.func.args)
+                   && clisp_chunk_cmp(first->value.func.body, second->value.func.body);
+
+        case TOKEN_QEXPRESSION:
+        case CLISP_ATOM:
+            if (first->value.expr.count != second->value.expr.count) { return 0; }
+            for (int i = 0; i < first->value.expr.count; i++) {
+                if (!clisp_chunk_cmp(first->value.expr.chunks[i], second->value.expr.chunks[i])) {
+                    return 0;
+                }
+            }
+            return 1;
+    }
+    return 0;
+}
+
 
 clisp_chunk_t*
 clisp_chunk_number(float num) {

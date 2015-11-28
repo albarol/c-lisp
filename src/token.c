@@ -5,28 +5,14 @@
 
 
 clisp_chunk_t*
-clisp_token_lambda(clisp_chunk_t* formals, clisp_chunk_t* body) {
-
-    clisp_chunk_t* token = malloc(sizeof(clisp_chunk_t));
-    token->type = CLISP_FUNCTION;
-    token->value.builtin = NULL;
-
-    token->value.func.env = clisp_env_new();
-    token->value.func.args = formals;
-    token->value.func.body = body;
-
-    return token;
-}
-
-clisp_chunk_t*
 clisp_token_call(clisp_env_t* env, clisp_chunk_t* f, clisp_chunk_t* args) {
 
     if (f->type == CLISP_FUNCTION_C) { return f->value.builtin(env, args); }
 
-    int given = args->count;
+    int given = args->value.expr.count;
     int total = f->value.func.args->count;
 
-    while (args->count) {
+    while (args->value.expr.count) {
 
         if (f->value.func.args->count == 0) {
             clisp_chunk_delete(args);
@@ -92,97 +78,4 @@ clisp_token_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
         break;
     }
     return 0;
-}
-
-
-clisp_chunk_t*
-clisp_token_append(clisp_chunk_t* super, clisp_chunk_t* child) {
-    super->count++;
-    super->tokens = realloc(super->tokens, sizeof(clisp_chunk_t*) * super->count);
-    super->tokens[super->count - 1] = child;
-    return super;
-}
-
-clisp_chunk_t*
-clisp_token_pop(clisp_chunk_t* token, int position) {
-
-    clisp_chunk_t* item = token->tokens[position];
-
-    memmove(&token->tokens[position], &token->tokens[position + 1],
-            sizeof(clisp_chunk_t*) * (token->count - position - 1));
-
-    token->count--;
-
-    token->tokens = realloc(token->tokens, sizeof(clisp_chunk_t*) * (token->count));
-    return item;
-}
-
-
-clisp_chunk_t*
-clisp_token_take(clisp_chunk_t* token, int position) {
-    clisp_chunk_t* item = clisp_token_pop(token, position);
-    clisp_chunk_delete(token);
-    return item;
-}
-
-
-clisp_chunk_t*
-clisp_token_join(clisp_chunk_t* first, clisp_chunk_t* second) {
-    while (second->count) {
-        first = clisp_token_append(first, clisp_token_pop(second, 0));
-    }
-
-    clisp_chunk_delete(second);
-    return first;
-}
-
-
-clisp_chunk_t*
-clisp_token_copy(clisp_chunk_t* token) {
-
-    clisp_chunk_t* copy_token= malloc(sizeof(clisp_chunk_t));
-    copy_token->type = token->type;
-
-    switch (token->type) {
-
-        case CLISP_FUNCTION_C:
-            copy_token->value.builtin = token->value.builtin;
-            break;
-
-        case CLISP_FUNCTION:
-            copy_token->value.func.env = clisp_env_copy(token->value.func.env);
-            copy_token->value.func.args = clisp_token_copy(token->value.func.args);
-            copy_token->value.func.body = clisp_token_copy(token->value.func.body);
-            break;
-
-        case CLISP_NUMBER:
-            copy_token->value.number = token->value.number;
-            break;
-
-        case CLISP_ERROR:
-            copy_token->value.string = malloc(strlen(token->value.string));
-            strcpy(copy_token->value.string, token->value.string);
-            break;
-
-        case CLISP_SYMBOL:
-            copy_token->value.string = malloc(strlen(token->value.string));
-            strcpy(copy_token->value.string, token->value.string);
-            break;
-
-        case CLISP_STRING:
-            copy_token->value.string = malloc(strlen(token->value.string));
-            strcpy(copy_token->value.string, token->value.string);
-            break;
-
-
-        case TOKEN_QEXPRESSION:
-        case CLISP_ATOM:
-            copy_token->count = token->count;
-            copy_token->tokens = malloc(sizeof(clisp_chunk_t*) * token->count);
-            for (int i = 0; i < copy_token->count; i++) {
-                copy_token->tokens[i] = clisp_token_copy(token->tokens[i]);
-            }
-            break;
-    }
-    return copy_token;
 }

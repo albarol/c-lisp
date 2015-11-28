@@ -130,4 +130,37 @@ PT_SUITE(suite_types) {
         clisp_chunk_delete(chunk);
         clisp_chunk_delete(copied);
     }
+
+    PT_TEST(test_cmp_chunk_number) {
+
+        clisp_chunk_t* first = clisp_chunk_number(5);
+        clisp_chunk_t* second = clisp_chunk_number(5);
+
+        PT_ASSERT(clisp_chunk_cmp(first, second));
+
+        clisp_chunk_delete(first);
+        clisp_chunk_delete(second);
+    }
+
+    PT_TEST(test_cmp_chunk_symbol) {
+
+        clisp_chunk_t* first = clisp_chunk_symbol("symbol");
+        clisp_chunk_t* second = clisp_chunk_symbol("symbol");
+
+        PT_ASSERT(clisp_chunk_cmp(first, second));
+
+        clisp_chunk_delete(first);
+        clisp_chunk_delete(second);
+    }
+
+    PT_TEST(test_cmp_two_different_chunks) {
+
+        clisp_chunk_t* first = clisp_chunk_symbol("symbol");
+        clisp_chunk_t* second = clisp_chunk_number(5);
+
+        PT_ASSERT(clisp_chunk_cmp(first, second) != 1);
+
+        clisp_chunk_delete(first);
+        clisp_chunk_delete(second);
+    }
 }

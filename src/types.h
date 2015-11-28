@@ -12,8 +12,6 @@ typedef struct clisp_chunk_t clisp_chunk_t;
 typedef struct clisp_env_t clisp_env_t;
 
 
-
-
 /*
  * Lisp definitions
  */
@@ -60,6 +58,7 @@ struct clisp_chunk_t {
 clisp_chunk_t* clisp_chunk_new(clisp_chunk_type_t type);
 void clisp_chunk_delete(clisp_chunk_t* chunk);
 clisp_chunk_t* clisp_chunk_copy(clisp_chunk_t* metadata);
+int clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second);
 
 clisp_chunk_t* clisp_chunk_number(float num);
 clisp_chunk_t* clisp_chunk_symbol(char* symbol);
@@ -77,8 +76,7 @@ clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
 clisp_chunk_t* clisp_expr_append(clisp_chunk_t* super, clisp_chunk_t* child);
 clisp_chunk_t* clisp_expr_pop(clisp_chunk_t* super, int position);
 clisp_chunk_t* clisp_expr_take(clisp_chunk_t* super, int position);
-
-
+clisp_chunk_t* clisp_expr_join(clisp_chunk_t* first, clisp_chunk_t* second);
 
 
 /*
