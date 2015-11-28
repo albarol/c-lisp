@@ -49,10 +49,12 @@ struct clisp_chunk_t {
             clisp_chunk_t* args;
             clisp_chunk_t* body;
         } func;
-    } value;
 
-    int count;
-    clisp_chunk_t** tokens;
+        struct {
+            int count;
+            clisp_chunk_t** chunks;
+        } expr;
+    } value;
 };
 
 clisp_chunk_t* clisp_chunk_new(clisp_chunk_type_t type);
@@ -67,6 +69,16 @@ clisp_chunk_t* clisp_chunk_sexpr(void);
 clisp_chunk_t* clisp_chunk_qexpr(void);
 clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function);
 clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
+
+
+/*
+ * Expression definitions
+ */
+clisp_chunk_t* clisp_expr_append(clisp_chunk_t* super, clisp_chunk_t* child);
+clisp_chunk_t* clisp_expr_pop(clisp_chunk_t* super, int position);
+clisp_chunk_t* clisp_expr_take(clisp_chunk_t* super, int position);
+
+
 
 
 /*

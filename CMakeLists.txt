@@ -32,6 +32,7 @@ set(CLISP_SOURCES
     src/utils.c
     src/types.c
     src/env.c
+    src/expr.c
 )
 
 set(CLISP_HEADERS
@@ -63,6 +64,7 @@ set(CLISP_TESTS
     tests/test.c
     tests/test_types.c
     tests/test_env.c
+    tests/test_expr.c
 )
 add_executable(clispTest ${CLISP_TESTS} ${CLISP_SOURCES} ${CLISP_HEADERS})
 

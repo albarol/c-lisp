@@ -37,17 +37,17 @@ clisp_print_writeln(clisp_chunk_t* token) {
 
 void
 clisp_print_write_expr(clisp_chunk_t* token, char open, char close) {
-    if (token->count == 0) {
+    if (token->value.expr.count == 0) {
         return;
     }
 
     putchar(open);
 
-    for (int i = 0; i < token->count; i++) {
+    for (int i = 0; i < token->value.expr.count; i++) {
 
-        clisp_print_write(token->tokens[i]);
+        clisp_print_write(token->value.expr.chunks[i]);
 
-        if (i != (token->count - 1)) {
+        if (i != (token->value.expr.count - 1)) {
             putchar(' ');
         }
     }

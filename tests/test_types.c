@@ -50,7 +50,7 @@ PT_SUITE(suite_types) {
     PT_TEST(test_new_chunk_sexpr) {
         clisp_chunk_t* chunk = clisp_chunk_sexpr();
 
-        PT_ASSERT(chunk->count == 0);
+        PT_ASSERT(chunk->value.expr.count == 0);
         PT_ASSERT(chunk->type == CLISP_ATOM);
 
         clisp_chunk_delete(chunk);
@@ -59,7 +59,7 @@ PT_SUITE(suite_types) {
     PT_TEST(test_new_chunk_qexpr) {
         clisp_chunk_t* chunk = clisp_chunk_qexpr();
 
-        PT_ASSERT(chunk->count == 0);
+        PT_ASSERT(chunk->value.expr.count == 0);
         PT_ASSERT(chunk->type == TOKEN_QEXPRESSION);
 
         clisp_chunk_delete(chunk);
@@ -91,9 +91,43 @@ PT_SUITE(suite_types) {
         clisp_chunk_t* chunk = clisp_chunk_function(clisp_chunk_sexpr(), clisp_chunk_sexpr());
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION);
-        PT_ASSERT(chunk->value.func.args->count == 0);
-        PT_ASSERT(chunk->value.func.body->count == 0);
+        PT_ASSERT(chunk->value.func.args->value.expr.count == 0);
+        PT_ASSERT(chunk->value.func.body->value.expr.count == 0);
 
         clisp_chunk_delete(chunk);
+    }
+
+    PT_TEST(test_copy_chunk_builtin) {
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
+        clisp_chunk_t* copied = clisp_chunk_copy(chunk);
+
+        clisp_chunk_t* result = copied->value.builtin(clisp_env_new(), clisp_chunk_number(5));
+        PT_ASSERT(result->value.number == 5);
+
+        clisp_chunk_delete(chunk);
+        clisp_chunk_delete(copied);
+        clisp_chunk_delete(result);
+    }
+
+    PT_TEST(test_copy_chunk_number) {
+
+        clisp_chunk_t* chunk = clisp_chunk_number(5);
+        clisp_chunk_t* copied = clisp_chunk_copy(chunk);
+
+        PT_ASSERT(copied->value.number == 5);
+
+        clisp_chunk_delete(chunk);
+        clisp_chunk_delete(copied);
+    }
+
+    PT_TEST(test_copy_chunk_symbol) {
+
+        clisp_chunk_t* chunk = clisp_chunk_symbol("symbol");
+        clisp_chunk_t* copied = clisp_chunk_copy(chunk);
+
+        PT_ASSERT_STR_EQ(copied->value.string, "symbol");
+
+        clisp_chunk_delete(chunk);
+        clisp_chunk_delete(copied);
     }
 }

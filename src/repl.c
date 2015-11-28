@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
     }
 
     mpc_cleanup(8, Comment, Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
-    clisp_env_del(env);
+    clisp_env_delete(env);
 
     return 0;
 }
