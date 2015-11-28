@@ -33,6 +33,11 @@ set(CLISP_SOURCES
     src/types.c
     src/env.c
     src/expr.c
+    src/builtin.c
+    src/builtin/comparison.c
+    src/builtin/list.c
+    src/builtin/math.c
+    src/builtin/ordering.c
 )
 
 set(CLISP_HEADERS
@@ -40,6 +45,7 @@ set(CLISP_HEADERS
     src/print.h
     src/utils.h
     src/types.h
+    src/builtin.h
 )
 
 #=============================#
@@ -65,6 +71,7 @@ set(CLISP_TESTS
     tests/test_types.c
     tests/test_env.c
     tests/test_expr.c
+    tests/test_builtin_math.c
 )
 add_executable(clispTest ${CLISP_TESTS} ${CLISP_SOURCES} ${CLISP_HEADERS})
 

@@ -8,7 +8,7 @@
       if (!(cond)) { clisp_chunk_t* error = clisp_chunk_error(fmt, ##__VA_ARGS__); clisp_chunk_delete(t); return error; }
 
 #define clisp_assert_count(t, num) \
-    clisp_assert(t, t->count == num, "Incorrect number of arguments. Got: %li, Expected: %li", token->count, num)
+    clisp_assert(t, t->value.expr.count == num, "Incorrect number of arguments. Got: %li, Expected: %li", t->value.expr.count, num)
 
 #define clisp_assert_func_count_args(t, num) \
     clisp_assert(t, t->value.func.count == num, "Incorrect number of arguments. Got: %li, Expected: %li", token->value.func.count, num)

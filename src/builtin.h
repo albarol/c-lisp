@@ -3,9 +3,8 @@
 
 #include <math.h>
 
-#include "token.h"
-#include "environment.h"
-#include "ast.h"
+#include "types.h"
+//#include "ast.h"
 #include "error.h"
 #include "print.h"
 
@@ -39,7 +38,7 @@ clisp_chunk_t* clisp_builtin_eval(clisp_env_t* env, clisp_chunk_t* token);
 
 clisp_chunk_t* clisp_builtin_var_set(clisp_env_t* env, clisp_chunk_t* token, char* function);
 clisp_chunk_t* clisp_builtin_define(clisp_env_t* env, clisp_chunk_t* token);
-clisp_chunk_t* clisp_builtin_assign(clisp_env_t* env, clisp_chunk_t* token);
+//clisp_chunk_t* clisp_builtin_assign(clisp_env_t* env, clisp_chunk_t* token);
 clisp_chunk_t* clisp_builtin_lambda(clisp_env_t* env, clisp_chunk_t* token);
 
 #endif
