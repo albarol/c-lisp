@@ -2,69 +2,57 @@
 #include "../builtin.h"
 
 clisp_chunk_t*
-clisp_builtin_list_create(clisp_env_t* env, clisp_chunk_t* token) {
-    token->type = TOKEN_QEXPRESSION;
-    return token;
+clisp_builtin_list_head(clisp_chunk_expr_t* expr) {
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert(chunk, chunk->value.list->count > 0, "List is empty")
+
+    while (chunk->value.list->count > 1) {
+        clisp_chunk_delete(clisp_expr_pop(chunk->value.list, 1));
+    }
+    return clisp_expr_take(chunk->value.list, 0);
 }
 
 clisp_chunk_t*
-clisp_builtin_list_head(clisp_env_t* env, clisp_chunk_t* chunk) {
-    clisp_assert_count(chunk, 1);
-
-    clisp_chunk_t* list = chunk->value.expr.chunks[0];
-    clisp_assert(chunk, list->type == TOKEN_QEXPRESSION,
-                 "Function 'head' passed incorrect types");
-    clisp_assert(chunk, list->value.expr.count != 0,
-                 "Function 'head' passed {}!");
-
-    list = clisp_expr_pop(chunk, 0);
-
-    while (list->value.expr.count > 1) {
-        clisp_chunk_delete(clisp_expr_pop(list, 1));
-    }
-    return list;
+clisp_builtin_list_tail(clisp_chunk_expr_t* expr) {
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert(chunk, chunk->value.list->count > 0, "List is empty")
+    clisp_chunk_delete(clisp_expr_pop(chunk->value.list, 0));
+    return chunk;
 }
 
 clisp_chunk_t*
-clisp_builtin_list_tail(clisp_env_t* env, clisp_chunk_t* chunk) {
-    clisp_assert_count(chunk, 1);
+clisp_builtin_list_join(clisp_chunk_expr_t* expr) {
+    clisp_expr_assert_count(expr, 2);
+    clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_LIST);
 
-    clisp_chunk_t* list = chunk->value.expr.chunks[0];
-    clisp_assert(chunk, list->type == TOKEN_QEXPRESSION,
-                 "Function 'tail' passed incorrect types");
-    clisp_assert(chunk, list->value.expr.count != 0,
-                 "Function 'tail' passed {}!");
+    clisp_chunk_t* first = clisp_expr_pop(expr, 0);
+    clisp_chunk_t* second = clisp_expr_pop(expr, 0);
 
-    list = clisp_expr_take(chunk, 0);
-    clisp_chunk_delete(clisp_expr_pop(list, 0));
-    return list;
+    if (second->type == CLISP_LIST) {
+        clisp_expr_join(first->value.list, second->value.list);
+    } else {
+        clisp_expr_append(first->value.list, second);
+    }
+    return first;
 }
 
 clisp_chunk_t*
-clisp_builtin_list_join(clisp_env_t* env, clisp_chunk_t* chunk) {
-
-    for (int i = 0; i < chunk->value.expr.count; i++) {
-        clisp_chunk_t* child = chunk->value.expr.chunks[i];
-        clisp_assert_type(chunk, child->type, TOKEN_QEXPRESSION);
+clisp_builtin_list_eq(clisp_chunk_expr_t* expr) {
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    int result = 0;
+    if (chunk->type == CLISP_LIST) {
+        result = 1;
     }
-
-    clisp_chunk_t* child = clisp_expr_pop(chunk, 0);
-
-    while (chunk->value.expr.count) {
-        child = clisp_expr_join(child, clisp_expr_pop(chunk, 0));
-    }
-
-    clisp_chunk_delete(chunk);
-    return child;
+    return clisp_chunk_bool(result);
 }
 
 
 clisp_chunk_t*
 clisp_builtin_eval(clisp_env_t* env, clisp_chunk_t* chunk) {
-    clisp_assert_count(chunk, 1);
+    clisp_chunk_assert_count(chunk, 1);
 
     clisp_chunk_t* child = chunk->value.expr.chunks[0];
-    clisp_assert_type(chunk, child->type, TOKEN_QEXPRESSION)
+    clisp_chunk_assert_type(chunk, child->type, TOKEN_QEXPRESSION)
 
     child = clisp_expr_take(chunk, 0);
     child->type = CLISP_ATOM;

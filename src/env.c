@@ -74,3 +74,13 @@ clisp_env_put(clisp_env_t* env, clisp_chunk_t* symbol, clisp_chunk_t* value) {
     env->symbols[env->count - 1] = malloc(strlen(symbol->value.string) + 1);
     strcpy(env->symbols[env->count - 1], symbol->value.string);
 }
+
+void
+clisp_env_put_builtin(clisp_env_t* env, char* symbol, clisp_builtin_t builtin) {
+    clisp_chunk_t* s = clisp_chunk_symbol(symbol);
+    clisp_chunk_t* b = clisp_chunk_builtin(builtin);
+
+    clisp_env_put(env, s, b);
+    clisp_chunk_delete(s);
+    clisp_chunk_delete(b);
+}

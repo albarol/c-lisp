@@ -18,6 +18,12 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
             free(chunk->value.string);
             break;
 
+        case CLISP_LIST:
+            if (chunk->value.list->count > 0) {
+                clisp_expr_delete(chunk->value.list);
+            }
+            break;
+
         case CLISP_FUNCTION:
             clisp_env_delete(chunk->value.func.env);
             clisp_chunk_delete(chunk->value.func.args);
@@ -36,6 +42,8 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
     }
     free(chunk);
 }
+
+
 
 clisp_chunk_t*
 clisp_chunk_copy(clisp_chunk_t* metadata) {
@@ -90,6 +98,7 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
 
     switch (first->type) {
 
+        case CLISP_BOOL:
         case CLISP_NUMBER:
             return (first->value.number == second->value.number);
 
@@ -98,8 +107,17 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
         case CLISP_STRING:
             return (strcmp(first->value.string, second->value.string) == 0);
 
+        case CLISP_LIST:
+            if (first->value.list->count != second->value.list->count) { return 0; }
+            for (int i = 0; i < first->value.list->count; i++) {
+                if (!clisp_chunk_cmp(first->value.list->chunks[i], second->value.list->chunks[i])) {
+                    return 0;
+                }
+            }
+            return 1;
+
         case CLISP_FUNCTION_C:
-            return first->value.builtin == second->value.builtin;
+            return first->value.builtin.body == second->value.builtin.body;
 
         case CLISP_FUNCTION:
             return clisp_chunk_cmp(first->value.func.args, second->value.func.args)
@@ -114,6 +132,9 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
                 }
             }
             return 1;
+
+        default:
+            break;
     }
     return 0;
 }
@@ -179,9 +200,26 @@ clisp_chunk_qexpr(void) {
 }
 
 clisp_chunk_t*
+clisp_chunk_list(void) {
+    clisp_chunk_t* chunk = clisp_chunk_new(CLISP_LIST);
+    chunk->value.list = malloc(sizeof(clisp_chunk_expr_t));
+    chunk->value.list->count = 0;
+    chunk->value.list->chunks = NULL;
+    return chunk;
+}
+
+clisp_chunk_t*
+clisp_chunk_bool(int num) {
+    clisp_chunk_t* chunk = clisp_chunk_new(CLISP_BOOL);
+    chunk->value.number = (num == 1) ? 1 : 0;
+    return chunk;
+}
+
+clisp_chunk_t*
 clisp_chunk_builtin(clisp_builtin_t function) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION_C);
-    chunk->value.builtin = function;
+    chunk->value.builtin.body = function;
+    chunk->value.builtin.expr = NULL;
     return chunk;
 }
 
@@ -191,5 +229,6 @@ clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body) {
     chunk->value.func.env = clisp_env_new();
     chunk->value.func.args = args;
     chunk->value.func.body = body;
+    chunk->value.func.count = args->value.expr.count;
     return chunk;
 }

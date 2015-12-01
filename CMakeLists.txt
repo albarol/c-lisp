@@ -38,6 +38,10 @@ set(CLISP_SOURCES
     src/builtin/list.c
     src/builtin/math.c
     src/builtin/ordering.c
+    src/builtin/conditionals.c
+    src/ast.c
+    src/ast/eval.c
+    src/ast/read.c
 )
 
 set(CLISP_HEADERS
@@ -45,7 +49,9 @@ set(CLISP_HEADERS
     src/print.h
     src/utils.h
     src/types.h
+    src/ast.h
     src/builtin.h
+    src/eval.h
 )
 
 #=============================#
@@ -71,7 +77,18 @@ set(CLISP_TESTS
     tests/test_types.c
     tests/test_env.c
     tests/test_expr.c
-    tests/test_builtin_math.c
+    tests/builtin/test_builtin_math.c
+    tests/builtin/test_builtin_list.c
+    tests/builtin/test_builtin_ordering.c
+    tests/builtin/test_builtin_comparison.c
+    tests/builtin/test_builtin_conditionals.c
+    tests/ast/test_ast.c
+    tests/ast/test_builtin_list.c
+    tests/ast/test_builtin_math.c
+    tests/ast/test_builtin_ordering.c
+    tests/ast/test_builtin_comparison.c
+    tests/ast/test_builtin_conditionals.c
+    tests/helper.c
 )
 add_executable(clispTest ${CLISP_TESTS} ${CLISP_SOURCES} ${CLISP_HEADERS})
 

@@ -8,8 +8,10 @@
 
 struct clisp_chunk_t;
 struct clisp_env_t;
+struct clisp_chunk_expr_t;
 typedef struct clisp_chunk_t clisp_chunk_t;
 typedef struct clisp_env_t clisp_env_t;
+typedef struct clisp_chunk_expr_t clisp_chunk_expr_t;
 
 
 /*
@@ -18,7 +20,7 @@ typedef struct clisp_env_t clisp_env_t;
 
 typedef enum {
     CLISP_NIL = 1,
-    CLISP_TRUE = 2,
+    CLISP_BOOL = 2,
     CLISP_FALSE = 4,
     CLISP_ERROR = 8,
     CLISP_NUMBER = 16,
@@ -28,11 +30,11 @@ typedef enum {
     CLISP_FUNCTION = 256,
     CLISP_FUNCTION_C = 512,
     CLISP_ATOM = 1024,
-    TOKEN_QEXPRESSION = 2048,
+    TOKEN_QEXPRESSION = 2048
 } clisp_chunk_type_t;
 
 
-typedef clisp_chunk_t* (* clisp_builtin_t)(clisp_env_t*, clisp_chunk_t*);
+typedef clisp_chunk_t* (* clisp_builtin_t)(clisp_chunk_expr_t* expr);
 
 struct clisp_chunk_t {
     clisp_chunk_type_t type;
@@ -40,12 +42,18 @@ struct clisp_chunk_t {
     union {
         float number;
         char* string;
-        clisp_builtin_t builtin;
+        clisp_chunk_expr_t* list;
+
+        struct { ;
+            clisp_builtin_t body;
+            clisp_chunk_expr_t* expr;
+        } builtin;
 
         struct {
             clisp_env_t* env;
             clisp_chunk_t* args;
             clisp_chunk_t* body;
+            int count;
         } func;
 
         struct {
@@ -55,8 +63,14 @@ struct clisp_chunk_t {
     } value;
 };
 
+struct clisp_chunk_expr_t {
+    int count;
+    clisp_chunk_t** chunks;
+};
+
 clisp_chunk_t* clisp_chunk_new(clisp_chunk_type_t type);
 void clisp_chunk_delete(clisp_chunk_t* chunk);
+
 clisp_chunk_t* clisp_chunk_copy(clisp_chunk_t* metadata);
 int clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second);
 
@@ -66,6 +80,8 @@ clisp_chunk_t* clisp_chunk_str(char* str);
 clisp_chunk_t* clisp_chunk_error(char* error, ...);
 clisp_chunk_t* clisp_chunk_sexpr(void);
 clisp_chunk_t* clisp_chunk_qexpr(void);
+clisp_chunk_t* clisp_chunk_list(void);
+clisp_chunk_t* clisp_chunk_bool(int num);
 clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function);
 clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
 
@@ -73,11 +89,13 @@ clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
 /*
  * Expression definitions
  */
-clisp_chunk_t* clisp_expr_append(clisp_chunk_t* super, clisp_chunk_t* child);
-clisp_chunk_t* clisp_expr_pop(clisp_chunk_t* super, int position);
-clisp_chunk_t* clisp_expr_take(clisp_chunk_t* super, int position);
-clisp_chunk_t* clisp_expr_join(clisp_chunk_t* first, clisp_chunk_t* second);
-
+clisp_chunk_expr_t* clisp_expr_new();
+clisp_chunk_expr_t* clisp_expr_append(clisp_chunk_expr_t* expr, clisp_chunk_t* child);
+clisp_chunk_t* clisp_expr_pop(clisp_chunk_expr_t* expr, int position);
+void clisp_expr_remove(clisp_chunk_expr_t* expr, int position);
+clisp_chunk_t* clisp_expr_take(clisp_chunk_expr_t* super, int position);
+clisp_chunk_expr_t* clisp_expr_join(clisp_chunk_expr_t* first, clisp_chunk_expr_t* second);
+void clisp_expr_delete(clisp_chunk_expr_t* expr);
 
 /*
  * Env definitions
@@ -96,5 +114,7 @@ void clisp_env_delete(clisp_env_t* env);
 
 clisp_chunk_t* clisp_env_get(clisp_env_t* env, clisp_chunk_t* token);
 void clisp_env_put(clisp_env_t* env, clisp_chunk_t* symbol, clisp_chunk_t* value);
+void clisp_env_put_builtin(clisp_env_t* env, char* symbol, clisp_builtin_t builtin);
+
 
 #endif

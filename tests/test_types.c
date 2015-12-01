@@ -5,8 +5,15 @@
 
 
 clisp_chunk_t*
-fake_builtin(clisp_env_t* env, clisp_chunk_t* chunk) {
-    return chunk;
+fake_builtin(clisp_chunk_expr_t* expr) {
+    return expr->chunks[0];
+}
+
+clisp_chunk_expr_t*
+fake_args(clisp_chunk_t* arg1) {
+    clisp_chunk_expr_t* expr = clisp_expr_new();
+    clisp_expr_append(expr, arg1);
+    return expr;
 }
 
 PT_SUITE(suite_types) {
@@ -70,7 +77,7 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
-        clisp_chunk_t* result = chunk->value.builtin(clisp_env_new(), clisp_chunk_number(5));
+        clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_number(5)));
         PT_ASSERT(result->value.number == 5);
 
         clisp_chunk_delete(chunk);
@@ -81,7 +88,7 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
-        clisp_chunk_t* result = chunk->value.builtin(clisp_env_new(), clisp_chunk_str("string"));
+        clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_str("string")));
         PT_ASSERT(strcmp(result->value.string, "string") == 0);
 
         clisp_chunk_delete(chunk);
@@ -101,7 +108,7 @@ PT_SUITE(suite_types) {
         clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
         clisp_chunk_t* copied = clisp_chunk_copy(chunk);
 
-        clisp_chunk_t* result = copied->value.builtin(clisp_env_new(), clisp_chunk_number(5));
+        clisp_chunk_t* result = copied->value.builtin.body(fake_args(clisp_chunk_number(5)));
         PT_ASSERT(result->value.number == 5);
 
         clisp_chunk_delete(chunk);

@@ -1,5 +1,6 @@
 
 #include "print.h"
+#include "types.h"
 
 void
 clisp_print_write(clisp_chunk_t* token) {
@@ -11,10 +12,18 @@ clisp_print_write(clisp_chunk_t* token) {
                 printf("%.2f", token->value.number);
             }
             break;
+        case CLISP_BOOL:
+            if (token->value.number == 1) {
+                printf("#t");
+            } else {
+                printf("#f");
+            }
+            break;
         case CLISP_ERROR: printf("Error: %s", token->value.string); break;
         case CLISP_SYMBOL: printf("%s", token->value.string); break;
         case CLISP_STRING: clisp_print_write_str(token); break;
         case CLISP_ATOM: clisp_print_write_expr(token, '(', ')'); break;
+        case CLISP_LIST: clisp_print_write_expr(token->value.list, '[', ']'); break;
         case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
         case CLISP_FUNCTION_C:
             printf("<function>");
@@ -36,24 +45,25 @@ clisp_print_writeln(clisp_chunk_t* token) {
 }
 
 void
-clisp_print_write_expr(clisp_chunk_t* token, char open, char close) {
-    if (token->value.expr.count == 0) {
+clisp_print_write_expr(clisp_chunk_expr_t* expr, char open, char close) {
+    if (expr->count == 0) {
         return;
     }
 
     putchar(open);
 
-    for (int i = 0; i < token->value.expr.count; i++) {
+    for (int i = 0; i < expr->count; i++) {
 
-        clisp_print_write(token->value.expr.chunks[i]);
+        clisp_print_write(expr->chunks[i]);
 
-        if (i != (token->value.expr.count - 1)) {
+        if (i != (expr->count - 1)) {
             putchar(' ');
         }
     }
 
     putchar(close);
 }
+
 
 void
 clisp_print_write_str(clisp_chunk_t* token) {
@@ -76,6 +86,8 @@ clisp_print_type_name(clisp_chunk_type_t type) {
         case CLISP_STRING: return "String";
         case CLISP_ATOM: return "S-Expression";
         case TOKEN_QEXPRESSION: return "Q-Expression";
+        case CLISP_LIST: return  "List";
+        case CLISP_BOOL: return "Boolean";
         default: return "Unknown";
     }
 }

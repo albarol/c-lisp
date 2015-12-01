@@ -1,20 +1,24 @@
 
-#include <mpc.h>
-#include <editline/readline.h>
-#include <editline/history.h>
+#include "helper.h"
 
-#include "types.h"
-#include "print.h"
-#include "eval.h"
-#include "builtin.h"
+clisp_env_t*
+create_basic_env() {
+    clisp_env_t* env = clisp_env_new();
+    clisp_builtin_load_functions(env);
+    clisp_env_put(env, clisp_chunk_symbol("five"), clisp_chunk_number(5));
+    return env;
+}
 
-static char input[2048];
+clisp_chunk_expr_t*
+create_expr_with_two_numbers(float first, float second) {
+    clisp_chunk_expr_t* expr = clisp_expr_new();
+    clisp_expr_append(expr, clisp_chunk_number(first));
+    clisp_expr_append(expr, clisp_chunk_number(second));
+    return expr;
+}
 
-int main(int argc, char** argv) {
-
-    puts("CLisp version 0.1.0\n");
-    puts("Press Ctrl+c to Exit\n");
-
+clisp_chunk_expr_t*
+read_entry(char* input, clisp_env_t* env) {
     mpc_parser_t* Comment = mpc_new("comment");
     mpc_parser_t* Boolean = mpc_new("boolean");
     mpc_parser_t* Number = mpc_new("number");
@@ -39,32 +43,9 @@ int main(int argc, char** argv) {
         lisp     : /^/ <expr>* /$/ ;                                                  \
     ", Comment, Boolean, Number, String, Symbol, List, Sexpr, Qexpr, Expr, Lisp);
 
+    mpc_result_t r;
+    mpc_parse("<stdin>", input, Lisp, &r);
 
-    clisp_env_t* env = clisp_env_new();
-    clisp_builtin_load_functions(env);
 
-    while (1) {
-
-        char* input = readline("clisp> ");
-        add_history(input);
-
-        mpc_result_t r;
-        if (mpc_parse("<stdin>", input, Lisp, &r)) {
-            clisp_chunk_expr_t* expr = clisp_read_ast(r.output, env);
-            clisp_chunk_t* result = clisp_eval_ast(expr, env);
-            clisp_print_writeln(result);
-            clisp_chunk_delete(result);
-            mpc_ast_delete(r.output);
-        } else {
-            mpc_err_print(r.output);
-            mpc_err_delete(r.output);
-        }
-
-        free(input);
-    }
-
-    mpc_cleanup(8, Comment, Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
-    clisp_env_delete(env);
-
-    return 0;
+    return clisp_read_ast(r.output, env);
 }
