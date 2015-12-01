@@ -22,9 +22,9 @@ clisp_print_write(clisp_chunk_t* token) {
         case CLISP_ERROR: printf("Error: %s", token->value.string); break;
         case CLISP_SYMBOL: printf("%s", token->value.string); break;
         case CLISP_STRING: clisp_print_write_str(token); break;
-        case CLISP_ATOM: clisp_print_write_expr(token, '(', ')'); break;
+        //case CLISP_ATOM: clisp_print_write_expr(token, '(', ')'); break;
         case CLISP_LIST: clisp_print_write_expr(token->value.list, '[', ']'); break;
-        case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
+        //case TOKEN_QEXPRESSION: clisp_print_write_expr(token, '{', '}'); break;
         case CLISP_FUNCTION_C:
             printf("<function>");
             break;
@@ -84,10 +84,11 @@ clisp_print_type_name(clisp_chunk_type_t type) {
         case CLISP_ERROR: return "Error";
         case CLISP_SYMBOL: return "Symbol";
         case CLISP_STRING: return "String";
-        case CLISP_ATOM: return "S-Expression";
-        case TOKEN_QEXPRESSION: return "Q-Expression";
+//        case CLISP_ATOM: return "S-Expression";
+//        case TOKEN_QEXPRESSION: return "Q-Expression";
         case CLISP_LIST: return  "List";
         case CLISP_BOOL: return "Boolean";
+        case CLISP_TYPE: return "Any type";
         default: return "Unknown";
     }
 }

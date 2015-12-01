@@ -39,7 +39,6 @@ set(CLISP_SOURCES
     src/builtin/math.c
     src/builtin/ordering.c
     src/builtin/conditionals.c
-    src/ast.c
     src/ast/eval.c
     src/ast/read.c
 )
@@ -51,7 +50,6 @@ set(CLISP_HEADERS
     src/types.h
     src/ast.h
     src/builtin.h
-    src/eval.h
 )
 
 #=============================#

@@ -5,7 +5,7 @@
 
 #include "types.h"
 #include "print.h"
-#include "eval.h"
+#include "ast.h"
 #include "builtin.h"
 
 static char input[2048];

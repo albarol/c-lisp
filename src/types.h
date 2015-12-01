@@ -21,16 +21,17 @@ typedef struct clisp_chunk_expr_t clisp_chunk_expr_t;
 typedef enum {
     CLISP_NIL = 1,
     CLISP_BOOL = 2,
-    CLISP_FALSE = 4,
-    CLISP_ERROR = 8,
-    CLISP_NUMBER = 16,
-    CLISP_SYMBOL = 32,
-    CLISP_STRING = 64,
-    CLISP_LIST = 128,
-    CLISP_FUNCTION = 256,
-    CLISP_FUNCTION_C = 512,
-    CLISP_ATOM = 1024,
-    TOKEN_QEXPRESSION = 2048
+    CLISP_NUMBER = 4,
+    CLISP_SYMBOL = 8,
+    CLISP_STRING = 16,
+    CLISP_LIST = 32,
+    CLISP_FUNCTION = 64,
+    CLISP_FUNCTION_C = 128,
+    CLISP_ERROR = 256,
+    CLISP_TYPE = CLISP_NIL | CLISP_BOOL |
+                 CLISP_NUMBER | CLISP_SYMBOL |
+                 CLISP_STRING | CLISP_LIST |
+                 CLISP_FUNCTION | CLISP_FUNCTION_C
 } clisp_chunk_type_t;
 
 
@@ -55,11 +56,6 @@ struct clisp_chunk_t {
             clisp_chunk_t* body;
             int count;
         } func;
-
-        struct {
-            int count;
-            clisp_chunk_t** chunks;
-        } expr;
     } value;
 };
 
@@ -78,8 +74,6 @@ clisp_chunk_t* clisp_chunk_number(float num);
 clisp_chunk_t* clisp_chunk_symbol(char* symbol);
 clisp_chunk_t* clisp_chunk_str(char* str);
 clisp_chunk_t* clisp_chunk_error(char* error, ...);
-clisp_chunk_t* clisp_chunk_sexpr(void);
-clisp_chunk_t* clisp_chunk_qexpr(void);
 clisp_chunk_t* clisp_chunk_list(void);
 clisp_chunk_t* clisp_chunk_bool(int num);
 clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function);

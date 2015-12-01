@@ -153,4 +153,16 @@ PT_SUITE(suite_ast) {
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);;
     }
+
+    PT_TEST(test_should_return_error_if_builtin_param_has_error) {
+        clisp_env_t* env = create_basic_env();
+        clisp_chunk_expr_t* ast = read_entry("(append (tail [1 2 3]) (head))", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(chunk->value.string,  "Incorrect type of argument. Got: Error, Expected: Any type");
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+    }
 }

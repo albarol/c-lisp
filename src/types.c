@@ -30,12 +30,12 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
             clisp_chunk_delete(chunk->value.func.body);
             break;
 
-        case TOKEN_QEXPRESSION:
-        case CLISP_ATOM:
-            for (int i = 0; i < chunk->value.expr.count; i++) {
-                clisp_chunk_delete(chunk->value.expr.chunks[i]);
-            }
-            break;
+//        case TOKEN_QEXPRESSION:
+//        case CLISP_ATOM:
+//            for (int i = 0; i < chunk->value.expr.count; i++) {
+//                clisp_chunk_delete(chunk->value.expr.chunks[i]);
+//            }
+//            break;
 
         default:
             break;
@@ -74,14 +74,14 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
             break;
 
 
-        case TOKEN_QEXPRESSION:
-        case CLISP_ATOM:
-            copy_token->value.expr.count = metadata->value.expr.count;
-            copy_token->value.expr.chunks = malloc(sizeof(clisp_chunk_t*) * metadata->value.expr.count);
-            for (int i = 0; i < copy_token->value.expr.count; i++) {
-                copy_token->value.expr.chunks[i] = clisp_chunk_copy(metadata->value.expr.chunks[i]);
-            }
-            break;
+//        case TOKEN_QEXPRESSION:
+//        case CLISP_ATOM:
+//            copy_token->value.expr.count = metadata->value.expr.count;
+//            copy_token->value.expr.chunks = malloc(sizeof(clisp_chunk_t*) * metadata->value.expr.count);
+//            for (int i = 0; i < copy_token->value.expr.count; i++) {
+//                copy_token->value.expr.chunks[i] = clisp_chunk_copy(metadata->value.expr.chunks[i]);
+//            }
+//            break;
 
         default:
             break;
@@ -123,15 +123,15 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
             return clisp_chunk_cmp(first->value.func.args, second->value.func.args)
                    && clisp_chunk_cmp(first->value.func.body, second->value.func.body);
 
-        case TOKEN_QEXPRESSION:
-        case CLISP_ATOM:
-            if (first->value.expr.count != second->value.expr.count) { return 0; }
-            for (int i = 0; i < first->value.expr.count; i++) {
-                if (!clisp_chunk_cmp(first->value.expr.chunks[i], second->value.expr.chunks[i])) {
-                    return 0;
-                }
-            }
-            return 1;
+//        case TOKEN_QEXPRESSION:
+//        case CLISP_ATOM:
+//            if (first->value.expr.count != second->value.expr.count) { return 0; }
+//            for (int i = 0; i < first->value.expr.count; i++) {
+//                if (!clisp_chunk_cmp(first->value.expr.chunks[i], second->value.expr.chunks[i])) {
+//                    return 0;
+//                }
+//            }
+//            return 1;
 
         default:
             break;
@@ -184,22 +184,6 @@ clisp_chunk_error(char* error, ...) {
 }
 
 clisp_chunk_t*
-clisp_chunk_sexpr(void) {
-    clisp_chunk_t* chunk = clisp_chunk_new(CLISP_ATOM);
-    chunk->value.expr.count = 0;
-    chunk->value.expr.chunks = NULL;
-    return chunk;
-}
-
-clisp_chunk_t*
-clisp_chunk_qexpr(void) {
-    clisp_chunk_t* chunk = clisp_chunk_new(TOKEN_QEXPRESSION);
-    chunk->value.expr.count = 0;
-    chunk->value.expr.chunks = NULL;
-    return chunk;
-}
-
-clisp_chunk_t*
 clisp_chunk_list(void) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_LIST);
     chunk->value.list = malloc(sizeof(clisp_chunk_expr_t));
@@ -229,6 +213,6 @@ clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body) {
     chunk->value.func.env = clisp_env_new();
     chunk->value.func.args = args;
     chunk->value.func.body = body;
-    chunk->value.func.count = args->value.expr.count;
+    //chunk->value.func.count = args->value.expr.count;
     return chunk;
 }

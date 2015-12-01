@@ -54,24 +54,6 @@ PT_SUITE(suite_types) {
         clisp_chunk_delete(chunk);
     }
 
-    PT_TEST(test_new_chunk_sexpr) {
-        clisp_chunk_t* chunk = clisp_chunk_sexpr();
-
-        PT_ASSERT(chunk->value.expr.count == 0);
-        PT_ASSERT(chunk->type == CLISP_ATOM);
-
-        clisp_chunk_delete(chunk);
-    }
-
-    PT_TEST(test_new_chunk_qexpr) {
-        clisp_chunk_t* chunk = clisp_chunk_qexpr();
-
-        PT_ASSERT(chunk->value.expr.count == 0);
-        PT_ASSERT(chunk->type == TOKEN_QEXPRESSION);
-
-        clisp_chunk_delete(chunk);
-    }
-
     PT_TEST(test_new_chunk_builtin_should_return_number) {
         clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
 
@@ -94,15 +76,15 @@ PT_SUITE(suite_types) {
         clisp_chunk_delete(chunk);
     }
 
-    PT_TEST(test_new_chunk_function) {
-        clisp_chunk_t* chunk = clisp_chunk_function(clisp_chunk_sexpr(), clisp_chunk_sexpr());
-
-        PT_ASSERT(chunk->type == CLISP_FUNCTION);
-        PT_ASSERT(chunk->value.func.args->value.expr.count == 0);
-        PT_ASSERT(chunk->value.func.body->value.expr.count == 0);
-
-        clisp_chunk_delete(chunk);
-    }
+//    PT_TEST(test_new_chunk_function) {
+//        clisp_chunk_t* chunk = clisp_chunk_function(clisp_chunk_sexpr(), clisp_chunk_sexpr());
+//
+//        PT_ASSERT(chunk->type == CLISP_FUNCTION);
+//        PT_ASSERT(chunk->value.func.args->value.expr.count == 0);
+//        PT_ASSERT(chunk->value.func.body->value.expr.count == 0);
+//
+//        clisp_chunk_delete(chunk);
+//    }
 
     PT_TEST(test_copy_chunk_builtin) {
         clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);

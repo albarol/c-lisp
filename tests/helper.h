@@ -2,7 +2,7 @@
 #define __CLISP_TESTS_HELPER__
 
 
-#include "../src/eval.h"
+#include "../src/ast.h"
 #include "../src/builtin.h"
 
 
