@@ -4,6 +4,8 @@
 clisp_chunk_t*
 clisp_builtin_math(clisp_chunk_expr_t* expr, char* op) {
 
+    clisp_expr_assert(expr, 1 <= expr->count <= 2,
+                      "Incorrect number of Arguments. Got: %li, Expected: %s", expr->count, "1 or 2");
     clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_NUMBER);
     clisp_expr_assert_type(expr, expr->chunks[1]->type, CLISP_NUMBER);
 
@@ -13,6 +15,8 @@ clisp_builtin_math(clisp_chunk_expr_t* expr, char* op) {
         first->value.number = -first->value.number;
     }
     else {
+        clisp_expr_assert(expr, expr->count == 1,
+                          "Incorrect number of Arguments. Got: 1, Expected: 2");
         clisp_chunk_t* second = clisp_expr_pop(expr, 0);
 
         if (strcmp(op, "+") == 0) { first->value.number += second->value.number; }

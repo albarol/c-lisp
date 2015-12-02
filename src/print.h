@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <mpc.h>
 
-#include "token.h"
+#include "types.h"
 #include "utils.h"
 
 void clisp_print_write(clisp_chunk_t* token);

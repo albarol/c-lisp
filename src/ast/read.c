@@ -5,7 +5,6 @@
 clisp_chunk_expr_t*
 clisp_read_ast(mpc_ast_t* ast, clisp_env_t* env) {
 
-
     clisp_chunk_expr_t* expr = clisp_expr_new();
 
     if (strcmp(ast->tag, ">") == 0) { return clisp_read_ast(ast->children[1], env); }
@@ -77,5 +76,3 @@ clisp_read_sexpr(mpc_ast_t* ast, clisp_env_t* env) {
     }
     return clisp_eval_ast(expr, env);
 }
-
-

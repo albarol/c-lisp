@@ -139,7 +139,7 @@ PT_SUITE(suite_ast) {
         PT_ASSERT_STR_EQ(chunk->value.list->chunks[1]->value.string, "2");
 
         clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
+        clisp_expr_delete(ast);
     }
 
     PT_TEST(test_should_return_error_when_function_not_found) {

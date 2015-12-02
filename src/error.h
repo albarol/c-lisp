@@ -1,7 +1,7 @@
 #ifndef __CLISP_ERROR__
 #define __CLISP_ERROR__
 
-#include "token.h"
+#include "types.h"
 #include "print.h"
 
 #define clisp_chunk_assert(t, cond, fmt, ...) \
