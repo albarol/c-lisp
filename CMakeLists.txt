@@ -5,13 +5,12 @@ cmake_minimum_required(VERSION 2.6)
 #=============================#
 project (clisp C)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --std=c11")
-set(EXE_NAME "clisp")
 
 # define folders
 set(MPC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/mpc")
 set(PTEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/ptest")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake/packages/")
-set(EXECUTABLE_OUTPUT_PATH ${CLISP_DIR}/build)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 #=============================#
 #     Dependencies            #
@@ -55,14 +54,12 @@ set(CLISP_HEADERS
 #     Setup Output            #
 #=============================#
 
-add_executable(${EXE_NAME} ${CLISP_SOURCES} ${CLISP_HEADERS} src/repl.c)
+add_executable(clisp ${CLISP_SOURCES} ${CLISP_HEADERS} src/repl.c)
 
 if(UNIX)
-  target_link_libraries(${EXE_NAME} m)
-  target_link_libraries(${EXE_NAME} edit)
+  target_link_libraries(clisp m)
+  target_link_libraries(clisp edit)
 endif(UNIX)
-
-link_directories(${CLISP_DIR}/ext/mpc)
 
 #=============================#
 #     Setup Tests             #
@@ -93,5 +90,3 @@ if(UNIX)
     target_link_libraries(clispTest m)
     target_link_libraries(clispTest edit)
 endif(UNIX)
-
-link_directories(${PTEST_DIR})

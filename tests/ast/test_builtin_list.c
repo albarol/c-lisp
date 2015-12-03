@@ -67,7 +67,7 @@ PT_SUITE(suite_ast_builtin_list) {
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
-        PT_ASSERT(chunk->value.number == 1);
+        PT_ASSERT(chunk->value.boolean == 1);
 
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);
@@ -80,7 +80,7 @@ PT_SUITE(suite_ast_builtin_list) {
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
-        PT_ASSERT(chunk->value.number == 0);
+        PT_ASSERT(chunk->value.boolean == 0);
 
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);

@@ -1,7 +1,7 @@
 
 #include "ptest.h"
 
-#include "../src/types.h"
+#include "types.h"
 
 
 PT_SUITE(suite_env) {

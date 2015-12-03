@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 struct clisp_chunk_t;
 struct clisp_env_t;
@@ -42,13 +43,13 @@ struct clisp_chunk_t {
     clisp_chunk_type_t type;
 
     union {
+        bool boolean;
         float number;
         char* string;
         clisp_expr_t* list;
 
         struct { ;
             clisp_builtin_t body;
-            clisp_expr_t* expr;
             char* name;
         } builtin;
 
@@ -70,14 +71,14 @@ clisp_chunk_t* clisp_chunk_new(clisp_chunk_type_t type);
 void clisp_chunk_delete(clisp_chunk_t* chunk);
 
 clisp_chunk_t* clisp_chunk_copy(clisp_chunk_t* metadata);
-int clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second);
+bool clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second);
 
 clisp_chunk_t* clisp_chunk_number(float num);
 clisp_chunk_t* clisp_chunk_symbol(char* symbol);
 clisp_chunk_t* clisp_chunk_str(char* str);
 clisp_chunk_t* clisp_chunk_error(char* error, ...);
 clisp_chunk_t* clisp_chunk_list(void);
-clisp_chunk_t* clisp_chunk_bool(int num);
+clisp_chunk_t* clisp_chunk_bool(bool value);
 clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function, char* name);
 clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
 clisp_chunk_t* clisp_chunk_expr();

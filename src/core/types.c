@@ -1,4 +1,3 @@
-
 #include "types.h"
 
 clisp_chunk_t*
@@ -18,6 +17,7 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
             free(chunk->value.string);
             break;
 
+        case CLISP_EXPR:
         case CLISP_LIST:
             if (chunk->value.list->count > 0) {
                 clisp_expr_delete(chunk->value.list);
@@ -29,13 +29,6 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
             clisp_chunk_delete(chunk->value.func.args);
             clisp_chunk_delete(chunk->value.func.body);
             break;
-
-//        case TOKEN_QEXPRESSION:
-//        case CLISP_ATOM:
-//            for (int i = 0; i < chunk->value.expr.count; i++) {
-//                clisp_chunk_delete(chunk->value.expr.chunks[i]);
-//            }
-//            break;
 
         default:
             break;
@@ -52,8 +45,14 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
 
     switch (metadata->type) {
 
+        case CLISP_BOOL:
+            chunk->value.boolean = metadata->value.boolean;
+            break;
+
         case CLISP_FUNCTION_C:
-            chunk->value.builtin = metadata->value.builtin;
+            chunk->value.builtin.body = metadata->value.builtin.body;
+            chunk->value.builtin.name = malloc(strlen(metadata->value.builtin.name) + 1);
+            strcpy(chunk->value.builtin.name, metadata->value.builtin.name);
             break;
 
         case CLISP_FUNCTION:
@@ -69,7 +68,7 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
         case CLISP_ERROR:
         case CLISP_SYMBOL:
         case CLISP_STRING:
-            chunk->value.string = malloc(strlen(metadata->value.string));
+            chunk->value.string = malloc(strlen(metadata->value.string) + 1);
             strcpy(chunk->value.string, metadata->value.string);
             break;
 
@@ -87,16 +86,18 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
     return chunk;
 }
 
-int
+bool
 clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
 
     if (first->type != second->type) {
-        return 0;
+        return false;
     }
 
     switch (first->type) {
 
         case CLISP_BOOL:
+            return (first->value.boolean == second->value.boolean);
+
         case CLISP_NUMBER:
             return (first->value.number == second->value.number);
 
@@ -110,10 +111,10 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
             if (first->value.list->count != second->value.list->count) { return 0; }
             for (int i = 0; i < first->value.list->count; i++) {
                 if (!clisp_chunk_cmp(first->value.list->chunks[i], second->value.list->chunks[i])) {
-                    return 0;
+                    return false;
                 }
             }
-            return 1;
+            return true;
 
         case CLISP_FUNCTION_C:
             return first->value.builtin.body == second->value.builtin.body;
@@ -122,20 +123,10 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
             return clisp_chunk_cmp(first->value.func.args, second->value.func.args)
                    && clisp_chunk_cmp(first->value.func.body, second->value.func.body);
 
-//        case TOKEN_QEXPRESSION:
-//        case CLISP_ATOM:
-//            if (first->value.expr.count != second->value.expr.count) { return 0; }
-//            for (int i = 0; i < first->value.expr.count; i++) {
-//                if (!clisp_chunk_cmp(first->value.expr.chunks[i], second->value.expr.chunks[i])) {
-//                    return 0;
-//                }
-//            }
-//            return 1;
-
         default:
             break;
     }
-    return 0;
+    return false;
 }
 
 
@@ -192,9 +183,9 @@ clisp_chunk_list(void) {
 }
 
 clisp_chunk_t*
-clisp_chunk_bool(int num) {
+clisp_chunk_bool(bool value) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_BOOL);
-    chunk->value.number = (num == 1) ? 1 : 0;
+    chunk->value.boolean = value;
     return chunk;
 }
 
@@ -202,7 +193,6 @@ clisp_chunk_t*
 clisp_chunk_builtin(clisp_builtin_t function, char* name) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION_C);
     chunk->value.builtin.body = function;
-    chunk->value.builtin.expr = NULL;
     chunk->value.builtin.name = malloc(strlen(name) + 1);
     strcpy(chunk->value.builtin.name, name);
     return chunk;

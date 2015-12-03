@@ -2,7 +2,6 @@
 #include "ptest.h"
 
 #include "../helper.h"
-#include "../../src/types.h"
 
 PT_SUITE(suite_ast_builtin_conditionals) {
 
@@ -45,6 +44,27 @@ PT_SUITE(suite_ast_builtin_conditionals) {
         clisp_chunk_t* result = clisp_eval_ast(ast_result, env);
         PT_ASSERT(result->type == CLISP_NUMBER);
         PT_ASSERT(result->value.number == 3);
+
+        clisp_chunk_delete(result);
+        clisp_expr_delete(ast_result);
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_def_should_permits_recursive_call) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(def (fact n) (if (== n 0) (1) (* n (fact (- n 1)))))", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_FUNCTION);
+        PT_ASSERT(chunk->value.func.args->value.list->count == 1);
+        PT_ASSERT_STR_EQ(env->symbols[env->count - 1], "fact");
+
+        clisp_expr_t* ast_result = read_entry("(fact 3)", env);
+        clisp_chunk_t* result = clisp_eval_ast(ast_result, env);
+        PT_ASSERT(result->type == CLISP_NUMBER);
+        PT_ASSERT(result->value.number == 6);
 
         clisp_chunk_delete(result);
         clisp_expr_delete(ast_result);

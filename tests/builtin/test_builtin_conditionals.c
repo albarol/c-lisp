@@ -1,8 +1,6 @@
 #include "ptest.h"
 
-#include "../../src/builtin.h"
 #include "../helper.h"
-#include "../../src/types.h"
 
 PT_SUITE(suite_builtin_conditionals) {
 

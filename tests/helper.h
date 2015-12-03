@@ -2,8 +2,9 @@
 #define __CLISP_TESTS_HELPER__
 
 
-#include "../src/ast.h"
-#include "../src/builtin.h"
+#include "types.h"
+#include "ast.h"
+#include "builtin.h"
 
 clisp_env_t* create_basic_env();
 clisp_expr_t* create_expr_with_two_numbers(float first, float second);

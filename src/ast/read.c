@@ -5,15 +5,17 @@
 clisp_expr_t*
 clisp_read_ast(mpc_ast_t* ast) {
 
+    if (strcmp(ast->tag, ">") == 0) { return clisp_read_ast(ast->children[1]); }
+
     clisp_expr_t* expr = clisp_expr_new();
 
-    if (strcmp(ast->tag, ">") == 0) { return clisp_read_ast(ast->children[1]); }
     if (strstr(ast->tag, "number")) { clisp_expr_append(expr, clisp_read_number(ast)); }
     if (strstr(ast->tag, "symbol")) { clisp_expr_append(expr, clisp_chunk_symbol(ast->contents)); }
     if (strstr(ast->tag, "string")) { clisp_expr_append(expr, clisp_read_string(ast)); }
     if (strstr(ast->tag, "boolean")) { clisp_expr_append(expr, clisp_read_bool(ast)); }
     if (strstr(ast->tag, "list")) { clisp_expr_append(expr, clisp_read_list(ast)); }
     if (strstr(ast->tag, "sexpr")) { clisp_expr_append(expr, clisp_read_sexpr(ast)); }
+
     return expr;
 }
 
@@ -53,8 +55,6 @@ clisp_read_list(mpc_ast_t* ast) {
    clisp_chunk_t* chunk = clisp_chunk_list();
 
     for (int i = 0; i < ast->children_num; i++) {
-        if (strcmp(ast->children[i]->contents, "(") == 0) { continue; }
-        if (strcmp(ast->children[i]->contents, ")") == 0) { continue; }
         if (strcmp(ast->children[i]->contents, "[") == 0) { continue; }
         if (strcmp(ast->children[i]->contents, "]") == 0) { continue; }
         if (strcmp(ast->children[i]->tag, "regex") == 0) { continue; }

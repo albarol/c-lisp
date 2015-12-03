@@ -31,7 +31,7 @@ read_entry(char* input, clisp_env_t* env) {
 
 
     mpca_lang(MPCA_LANG_DEFAULT, "                                                    \
-        comment  : /\;(\\\\.|[^\"])*/;                                                \
+        comment  : /;(\\\\.|[^\"])*/;                                                \
         boolean  : /(#t|#f)/;                                                         \
         number   : /-?[0-9]+(\\.[0-9]+)?/;                                            \
         string   : /\"(\\\\.|[^\"])*\"/ ;                                             \
