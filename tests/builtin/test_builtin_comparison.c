@@ -1,6 +1,5 @@
 #include "ptest.h"
 
-#include "../../src/builtin.h"
 #include "../helper.h"
 
 PT_SUITE(suite_builtin_comparison) {

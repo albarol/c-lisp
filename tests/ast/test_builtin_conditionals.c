@@ -2,7 +2,6 @@
 #include "ptest.h"
 
 #include "../helper.h"
-#include "../../src/types.h"
 
 PT_SUITE(suite_ast_builtin_conditionals) {
 

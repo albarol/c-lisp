@@ -1,7 +1,7 @@
 
 #include "ptest.h"
 
-#include "../../src/builtin.h"
+#include "builtin.h"
 
 
 clisp_expr_t*
