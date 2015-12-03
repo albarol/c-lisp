@@ -12,7 +12,7 @@ static char input[2048];
 
 int main(int argc, char** argv) {
 
-    puts("CLisp version 0.1.0\n");
+    puts("CLisp version 0.2.0\n");
     puts("Press Ctrl+c to Exit\n");
 
     mpc_parser_t* Comment = mpc_new("comment");
@@ -22,7 +22,6 @@ int main(int argc, char** argv) {
     mpc_parser_t* Symbol = mpc_new("symbol");
     mpc_parser_t* List = mpc_new("list");
     mpc_parser_t* Sexpr = mpc_new("sexpr");
-    mpc_parser_t* Qexpr = mpc_new("qexpr");
     mpc_parser_t* Expr = mpc_new("expr");
     mpc_parser_t* Lisp = mpc_new("lisp");
 
@@ -35,9 +34,9 @@ int main(int argc, char** argv) {
         symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&\\^\\%\\?]+/ ;                           \
         list     : '[' <expr>* ']' ;                                                  \
         sexpr    : '(' <expr>* ')' ;                                                  \
-        expr     : <comment> | <boolean> | <list> | <number> | <symbol> | <string> | <sexpr> | <qexpr> ;   \
+        expr     : <comment> | <boolean> | <list> | <number> | <symbol> | <string> | <sexpr> ;   \
         lisp     : /^/ <expr>* /$/ ;                                                  \
-    ", Comment, Boolean, Number, String, Symbol, List, Sexpr, Qexpr, Expr, Lisp);
+    ", Comment, Boolean, Number, String, Symbol, List, Sexpr, Expr, Lisp);
 
 
     clisp_env_t* env = clisp_env_new();
@@ -50,7 +49,7 @@ int main(int argc, char** argv) {
 
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Lisp, &r)) {
-            clisp_chunk_expr_t* expr = clisp_read_ast(r.output, env);
+            clisp_expr_t* expr = clisp_read_ast(r.output);
             clisp_chunk_t* result = clisp_eval_ast(expr, env);
             clisp_print_writeln(result);
             clisp_chunk_delete(result);
@@ -63,7 +62,7 @@ int main(int argc, char** argv) {
         free(input);
     }
 
-    mpc_cleanup(8, Comment, Number, String, Symbol, Sexpr, Qexpr, Expr, Lisp);
+    mpc_cleanup(8, Comment, Number, String, Symbol, Sexpr, Expr, Lisp);
     clisp_env_delete(env);
 
     return 0;

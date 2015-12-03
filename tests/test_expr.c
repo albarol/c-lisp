@@ -6,7 +6,7 @@
 PT_SUITE(suite_expr) {
 
     PT_TEST(test_append_chunk_in_expr) {
-        clisp_chunk_expr_t* expr = clisp_expr_new();
+        clisp_expr_t* expr = clisp_expr_new();
 
         clisp_expr_append(expr, clisp_chunk_symbol("x"));
 
@@ -17,7 +17,7 @@ PT_SUITE(suite_expr) {
     }
 
     PT_TEST(test_pop_chunk_in_expr) {
-        clisp_chunk_expr_t* expr = clisp_expr_new();
+        clisp_expr_t* expr = clisp_expr_new();
 
         clisp_expr_append(expr, clisp_chunk_symbol("x"));
         clisp_chunk_t* symbol = clisp_expr_pop(expr, 0);
@@ -30,7 +30,7 @@ PT_SUITE(suite_expr) {
     }
 
     PT_TEST(test_take_chunk_in_expr) {
-        clisp_chunk_expr_t* expr = clisp_expr_new();
+        clisp_expr_t* expr = clisp_expr_new();
 
         clisp_expr_append(expr, clisp_chunk_symbol("x"));
         clisp_chunk_t* symbol = clisp_expr_take(expr, 0);
@@ -41,8 +41,8 @@ PT_SUITE(suite_expr) {
     }
 
     PT_TEST(test_join_two_chunks) {
-        clisp_chunk_expr_t* first = clisp_expr_new();
-        clisp_chunk_expr_t* second = clisp_expr_new();
+        clisp_expr_t* first = clisp_expr_new();
+        clisp_expr_t* second = clisp_expr_new();
         clisp_expr_append(second, clisp_chunk_symbol("x"));
 
         first = clisp_expr_join(first, second);
@@ -55,7 +55,7 @@ PT_SUITE(suite_expr) {
     }
 
     PT_TEST(test_remove_element_from_expr) {
-        clisp_chunk_expr_t* expr = clisp_expr_new();
+        clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, clisp_chunk_symbol("x"));
         clisp_expr_remove(expr, 0);
 

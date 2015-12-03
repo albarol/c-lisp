@@ -5,13 +5,13 @@
 
 
 clisp_chunk_t*
-fake_builtin(clisp_chunk_expr_t* expr) {
+fake_builtin(clisp_expr_t* expr, clisp_env_t* env) {
     return expr->chunks[0];
 }
 
-clisp_chunk_expr_t*
+clisp_expr_t*
 fake_args(clisp_chunk_t* arg1) {
-    clisp_chunk_expr_t* expr = clisp_expr_new();
+    clisp_expr_t* expr = clisp_expr_new();
     clisp_expr_append(expr, arg1);
     return expr;
 }
@@ -55,25 +55,29 @@ PT_SUITE(suite_types) {
     }
 
     PT_TEST(test_new_chunk_builtin_should_return_number) {
-        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
+        clisp_env_t* env = clisp_env_new();
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, "");
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
-        clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_number(5)));
+        clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_number(5)), env);
         PT_ASSERT(result->value.number == 5);
 
         clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
     }
 
     PT_TEST(test_new_chunk_builtin_should_return_str) {
-        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
+        clisp_env_t* env = clisp_env_new();
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, "");
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
-        clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_str("string")));
+        clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_str("string")), env);
         PT_ASSERT(strcmp(result->value.string, "string") == 0);
 
         clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
     }
 
 //    PT_TEST(test_new_chunk_function) {
@@ -87,15 +91,17 @@ PT_SUITE(suite_types) {
 //    }
 
     PT_TEST(test_copy_chunk_builtin) {
-        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin);
+        clisp_env_t* env = clisp_env_new();
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, "");
         clisp_chunk_t* copied = clisp_chunk_copy(chunk);
 
-        clisp_chunk_t* result = copied->value.builtin.body(fake_args(clisp_chunk_number(5)));
+        clisp_chunk_t* result = copied->value.builtin.body(fake_args(clisp_chunk_number(5)), env);
         PT_ASSERT(result->value.number == 5);
 
         clisp_chunk_delete(chunk);
         clisp_chunk_delete(copied);
         clisp_chunk_delete(result);
+        clisp_env_delete(env);
     }
 
     PT_TEST(test_copy_chunk_number) {

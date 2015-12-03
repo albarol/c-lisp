@@ -7,7 +7,7 @@ PT_SUITE(suite_ast_builtin_comparison) {
 
     PT_TEST(test_compare_eq_returns_false) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(== 2 1)", env);
+        clisp_expr_t* ast = read_entry("(== 2 1)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -20,7 +20,7 @@ PT_SUITE(suite_ast_builtin_comparison) {
 
     PT_TEST(test_compare_eq_returns_true) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(== 2 2)", env);
+        clisp_expr_t* ast = read_entry("(== 2 2)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -33,7 +33,7 @@ PT_SUITE(suite_ast_builtin_comparison) {
 
     PT_TEST(test_compare_eq_using_lists_returns_true) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(== [1 2 3] [1 2 3])", env);
+        clisp_expr_t* ast = read_entry("(== [1 2 3] [1 2 3])", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -46,7 +46,7 @@ PT_SUITE(suite_ast_builtin_comparison) {
 
     PT_TEST(test_compare_ne_returns_true) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(!= 2 1)", env);
+        clisp_expr_t* ast = read_entry("(!= 2 1)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -59,7 +59,7 @@ PT_SUITE(suite_ast_builtin_comparison) {
 
     PT_TEST(test_compare_ne_returns_false) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(!= 2 2)", env);
+        clisp_expr_t* ast = read_entry("(!= 2 2)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -72,7 +72,7 @@ PT_SUITE(suite_ast_builtin_comparison) {
 
     PT_TEST(test_different_types_returns_false) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(== 2 \"2\")", env);
+        clisp_expr_t* ast = read_entry("(== 2 \"2\")", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -85,7 +85,7 @@ PT_SUITE(suite_ast_builtin_comparison) {
 
     PT_TEST(test_throws_error_invalid_params) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(==)", env);
+        clisp_expr_t* ast = read_entry("(==)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);

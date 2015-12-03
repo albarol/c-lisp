@@ -47,46 +47,44 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
 
 clisp_chunk_t*
 clisp_chunk_copy(clisp_chunk_t* metadata) {
-    clisp_chunk_t* copy_token= malloc(sizeof(clisp_chunk_t));
-    copy_token->type = metadata->type;
+    clisp_chunk_t* chunk = malloc(sizeof(clisp_chunk_t));
+    chunk->type = metadata->type;
 
     switch (metadata->type) {
 
         case CLISP_FUNCTION_C:
-            copy_token->value.builtin = metadata->value.builtin;
+            chunk->value.builtin = metadata->value.builtin;
             break;
 
         case CLISP_FUNCTION:
-            copy_token->value.func.env = clisp_env_copy(metadata->value.func.env);
-            copy_token->value.func.args = clisp_chunk_copy(metadata->value.func.args);
-            copy_token->value.func.body = clisp_chunk_copy(metadata->value.func.body);
+            chunk->value.func.env = clisp_env_copy(metadata->value.func.env);
+            chunk->value.func.args = clisp_chunk_copy(metadata->value.func.args);
+            chunk->value.func.body = clisp_chunk_copy(metadata->value.func.body);
             break;
 
         case CLISP_NUMBER:
-            copy_token->value.number = metadata->value.number;
+            chunk->value.number = metadata->value.number;
             break;
 
         case CLISP_ERROR:
         case CLISP_SYMBOL:
         case CLISP_STRING:
-            copy_token->value.string = malloc(strlen(metadata->value.string));
-            strcpy(copy_token->value.string, metadata->value.string);
+            chunk->value.string = malloc(strlen(metadata->value.string));
+            strcpy(chunk->value.string, metadata->value.string);
             break;
 
-
-//        case TOKEN_QEXPRESSION:
-//        case CLISP_ATOM:
-//            copy_token->value.expr.count = metadata->value.expr.count;
-//            copy_token->value.expr.chunks = malloc(sizeof(clisp_chunk_t*) * metadata->value.expr.count);
-//            for (int i = 0; i < copy_token->value.expr.count; i++) {
-//                copy_token->value.expr.chunks[i] = clisp_chunk_copy(metadata->value.expr.chunks[i]);
-//            }
-//            break;
-
-        default:
+        case CLISP_LIST:
+        case CLISP_EXPR:
+            chunk->value.list = clisp_expr_new();
+            chunk->value.list->count = metadata->value.list->count;
+            chunk->value.list->chunks = malloc(sizeof(clisp_chunk_t*) * metadata->value.list->count);
+            for (int i = 0; i < chunk->value.list->count; i++) {
+                chunk->value.list->chunks[i] = clisp_chunk_copy(metadata->value.list->chunks[i]);
+            }
             break;
+        default: break;
     }
-    return copy_token;
+    return chunk;
 }
 
 int
@@ -107,6 +105,7 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
         case CLISP_STRING:
             return (strcmp(first->value.string, second->value.string) == 0);
 
+        case CLISP_EXPR:
         case CLISP_LIST:
             if (first->value.list->count != second->value.list->count) { return 0; }
             for (int i = 0; i < first->value.list->count; i++) {
@@ -186,7 +185,7 @@ clisp_chunk_error(char* error, ...) {
 clisp_chunk_t*
 clisp_chunk_list(void) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_LIST);
-    chunk->value.list = malloc(sizeof(clisp_chunk_expr_t));
+    chunk->value.list = malloc(sizeof(clisp_expr_t));
     chunk->value.list->count = 0;
     chunk->value.list->chunks = NULL;
     return chunk;
@@ -200,10 +199,12 @@ clisp_chunk_bool(int num) {
 }
 
 clisp_chunk_t*
-clisp_chunk_builtin(clisp_builtin_t function) {
+clisp_chunk_builtin(clisp_builtin_t function, char* name) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION_C);
     chunk->value.builtin.body = function;
     chunk->value.builtin.expr = NULL;
+    chunk->value.builtin.name = malloc(strlen(name) + 1);
+    strcpy(chunk->value.builtin.name, name);
     return chunk;
 }
 
@@ -213,6 +214,14 @@ clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body) {
     chunk->value.func.env = clisp_env_new();
     chunk->value.func.args = args;
     chunk->value.func.body = body;
-    //chunk->value.func.count = args->value.expr.count;
+    return chunk;
+}
+
+clisp_chunk_t*
+clisp_chunk_expr() {
+    clisp_chunk_t* chunk = clisp_chunk_new(CLISP_EXPR);
+    chunk->value.list = malloc(sizeof(clisp_expr_t));
+    chunk->value.list->count = 0;
+    chunk->value.list->chunks = NULL;
     return chunk;
 }

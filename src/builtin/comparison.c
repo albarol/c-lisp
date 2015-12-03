@@ -1,8 +1,8 @@
 
-#include "../builtin.h"
+#include "builtin.h"
 
 clisp_chunk_t*
-clisp_builtin_cmp(clisp_chunk_expr_t* expr, char* op) {
+clisp_builtin_cmp(clisp_expr_t* expr, clisp_env_t* env, char* op) {
     clisp_expr_assert_count(expr, 2);
 
     clisp_chunk_t* first = clisp_expr_pop(expr, 0);
@@ -22,11 +22,11 @@ clisp_builtin_cmp(clisp_chunk_expr_t* expr, char* op) {
 }
 
 clisp_chunk_t*
-clisp_builtin_cmp_eq(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_cmp(expr, "==");
+clisp_builtin_cmp_eq(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_cmp(expr, env, "==");
 }
 
 clisp_chunk_t*
-clisp_builtin_cmp_ne(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_cmp(expr, "!=");
+clisp_builtin_cmp_ne(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_cmp(expr, env, "!=");
 }

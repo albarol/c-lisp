@@ -8,10 +8,9 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} --std=c11")
 set(EXE_NAME "clisp")
 
 # define folders
-set(CLISP_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
-set(MPC_DIR "${CLISP_DIR}/ext/mpc")
-set(PTEST_DIR "${CLISP_DIR}/ext/ptest")
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CLISP_DIR}/CMake/packages/")
+set(MPC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/mpc")
+set(PTEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/ptest")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake/packages/")
 set(EXECUTABLE_OUTPUT_PATH ${CLISP_DIR}/build)
 
 #=============================#
@@ -20,36 +19,36 @@ set(EXECUTABLE_OUTPUT_PATH ${CLISP_DIR}/build)
 find_package(edit REQUIRED)
 include_directories(${MPC_DIR})
 include_directories(${PTEST_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 #=============================#
 #     Setup Source            #
 #=============================#
-set(CLISP_SOURCE_DIR ${CLISP_DIR}/src)
-
 set(CLISP_SOURCES
     ${MPC_DIR}/mpc.c
-    src/print.c
-    src/utils.c
-    src/types.c
-    src/env.c
-    src/expr.c
+    src/ast/eval.c
+    src/ast/read.c
     src/builtin.c
     src/builtin/comparison.c
     src/builtin/list.c
     src/builtin/math.c
     src/builtin/ordering.c
     src/builtin/conditionals.c
-    src/ast/eval.c
-    src/ast/read.c
+    src/core/print.c
+    src/core/utils.c
+    src/core/types.c
+    src/core/env.c
+    src/core/expr.c
+
 )
 
 set(CLISP_HEADERS
-    src/error.h
-    src/print.h
-    src/utils.h
-    src/types.h
-    src/ast.h
-    src/builtin.h
+    include/ast.h
+    include/builtin.h
+    include/error.h
+    include/print.h
+    include/types.h
+    include/utils.h
 )
 
 #=============================#

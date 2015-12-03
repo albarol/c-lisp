@@ -18,12 +18,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "tail", clisp_builtin_list_tail);
     clisp_env_put_builtin(env, "append", clisp_builtin_list_join);
     clisp_env_put_builtin(env, "list?", clisp_builtin_list_eq);
-//
-//    clisp_env_put_function(env, "eval", clisp_builtin_eval);
-//    clisp_env_put_function(env, "def", clisp_builtin_define);
-//    clisp_env_put_function(env, "=", clisp_builtin_assign);
-//    clisp_env_put_function(env, "\\",  clisp_builtin_lambda);
-//
+
     clisp_env_put_builtin(env, ">",  clisp_builtin_ord_gt);
     clisp_env_put_builtin(env, ">=",  clisp_builtin_ord_gte);
     clisp_env_put_builtin(env, "<",  clisp_builtin_ord_lt);
@@ -33,6 +28,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "!=",  clisp_builtin_cmp_ne);
 
     clisp_env_put_builtin(env, "if",  clisp_builtin_cond_if);
+    clisp_env_put_builtin(env, "def", clisp_builtin_cond_def);
 }
 
 

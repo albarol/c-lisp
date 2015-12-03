@@ -2,9 +2,9 @@
 #include "types.h"
 
 
-clisp_chunk_expr_t*
+clisp_expr_t*
 clisp_expr_new() {
-    clisp_chunk_expr_t* expr = malloc(sizeof(clisp_chunk_expr_t));
+    clisp_expr_t* expr = malloc(sizeof(clisp_expr_t));
     expr->count = 0;
     expr->chunks = NULL;
     return expr;
@@ -12,14 +12,14 @@ clisp_expr_new() {
 
 
 void
-clisp_expr_delete(clisp_chunk_expr_t* expr) {
+clisp_expr_delete(clisp_expr_t* expr) {
     for (int i = 0; i < expr->count; i++)
         clisp_chunk_delete(expr->chunks[i]);
     free(expr);
 }
 
-clisp_chunk_expr_t*
-clisp_expr_append(clisp_chunk_expr_t* expr, clisp_chunk_t* child) {
+clisp_expr_t*
+clisp_expr_append(clisp_expr_t* expr, clisp_chunk_t* child) {
     expr->count++;
     expr->chunks = realloc(expr->chunks, sizeof(clisp_chunk_t*) * expr->count);
     expr->chunks[expr->count - 1] = child;
@@ -27,7 +27,7 @@ clisp_expr_append(clisp_chunk_expr_t* expr, clisp_chunk_t* child) {
 }
 
 void
-clisp_expr_remove(clisp_chunk_expr_t* expr, int position) {
+clisp_expr_remove(clisp_expr_t* expr, int position) {
 
     clisp_chunk_t* item = expr->chunks[position];
 
@@ -42,7 +42,7 @@ clisp_expr_remove(clisp_chunk_expr_t* expr, int position) {
 
 
 clisp_chunk_t*
-clisp_expr_pop(clisp_chunk_expr_t* expr, int position) {
+clisp_expr_pop(clisp_expr_t* expr, int position) {
 
     clisp_chunk_t* item = expr->chunks[position];
 
@@ -55,14 +55,14 @@ clisp_expr_pop(clisp_chunk_expr_t* expr, int position) {
 }
 
 clisp_chunk_t*
-clisp_expr_take(clisp_chunk_expr_t* expr, int position) {
+clisp_expr_take(clisp_expr_t* expr, int position) {
     clisp_chunk_t* item = clisp_expr_pop(expr, position);
     clisp_expr_delete(expr);
     return item;
 }
 
-clisp_chunk_expr_t*
-clisp_expr_join(clisp_chunk_expr_t* first, clisp_chunk_expr_t* second) {
+clisp_expr_t*
+clisp_expr_join(clisp_expr_t* first, clisp_expr_t* second) {
     while (second->count) {
         first = clisp_expr_append(first, clisp_expr_pop(second, 0));
     }

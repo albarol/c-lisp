@@ -9,15 +9,15 @@ create_basic_env() {
     return env;
 }
 
-clisp_chunk_expr_t*
+clisp_expr_t*
 create_expr_with_two_numbers(float first, float second) {
-    clisp_chunk_expr_t* expr = clisp_expr_new();
+    clisp_expr_t* expr = clisp_expr_new();
     clisp_expr_append(expr, clisp_chunk_number(first));
     clisp_expr_append(expr, clisp_chunk_number(second));
     return expr;
 }
 
-clisp_chunk_expr_t*
+clisp_expr_t*
 read_entry(char* input, clisp_env_t* env) {
     mpc_parser_t* Comment = mpc_new("comment");
     mpc_parser_t* Boolean = mpc_new("boolean");
@@ -26,7 +26,6 @@ read_entry(char* input, clisp_env_t* env) {
     mpc_parser_t* Symbol = mpc_new("symbol");
     mpc_parser_t* List = mpc_new("list");
     mpc_parser_t* Sexpr = mpc_new("sexpr");
-    mpc_parser_t* Qexpr = mpc_new("qexpr");
     mpc_parser_t* Expr = mpc_new("expr");
     mpc_parser_t* Lisp = mpc_new("lisp");
 
@@ -39,13 +38,13 @@ read_entry(char* input, clisp_env_t* env) {
         symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&\\^\\%\\?]+/ ;                           \
         list     : '[' <expr>* ']' ;                                                  \
         sexpr    : '(' <expr>* ')' ;                                                  \
-        expr     : <comment> | <boolean> | <list> | <number> | <symbol> | <string> | <sexpr> | <qexpr> ;   \
+        expr     : <comment> | <boolean> | <list> | <number> | <symbol> | <string> | <sexpr> ;   \
         lisp     : /^/ <expr>* /$/ ;                                                  \
-    ", Comment, Boolean, Number, String, Symbol, List, Sexpr, Qexpr, Expr, Lisp);
+    ", Comment, Boolean, Number, String, Symbol, List, Sexpr, Expr, Lisp);
 
     mpc_result_t r;
     mpc_parse("<stdin>", input, Lisp, &r);
 
 
-    return clisp_read_ast(r.output, env);
+    return clisp_read_ast(r.output);
 }

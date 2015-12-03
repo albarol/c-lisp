@@ -7,7 +7,7 @@ PT_SUITE(suite_ast_builtin_list) {
 
     PT_TEST(test_join_two_lists) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(append [1 2 3 4] [5 6 7])", env);
+        clisp_expr_t* ast = read_entry("(append [1 2 3 4] [5 6 7])", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_LIST);
@@ -20,7 +20,7 @@ PT_SUITE(suite_ast_builtin_list) {
 
     PT_TEST(test_get_head_element) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(head [5 6 7])", env);
+        clisp_expr_t* ast = read_entry("(head [5 6 7])", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -33,7 +33,7 @@ PT_SUITE(suite_ast_builtin_list) {
 
     PT_TEST(test_get_tail_from_list) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(tail [5 6 7])", env);
+        clisp_expr_t* ast = read_entry("(tail [5 6 7])", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_LIST);
@@ -48,7 +48,7 @@ PT_SUITE(suite_ast_builtin_list) {
 
     PT_TEST(test_join_using_functions) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(append (tail [4 5 6 7]) (head [1 2 3 4]))", env);
+        clisp_expr_t* ast = read_entry("(append (tail [4 5 6 7]) (head [1 2 3 4]))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_LIST);
@@ -63,7 +63,7 @@ PT_SUITE(suite_ast_builtin_list) {
 
     PT_TEST(test_list_eq_returns_true) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(list? [1 2 3 4])", env);
+        clisp_expr_t* ast = read_entry("(list? [1 2 3 4])", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -76,7 +76,7 @@ PT_SUITE(suite_ast_builtin_list) {
 
     PT_TEST(test_list_eq_returns_false) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(list? #t)", env);
+        clisp_expr_t* ast = read_entry("(list? #t)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);

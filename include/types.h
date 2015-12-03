@@ -8,10 +8,10 @@
 
 struct clisp_chunk_t;
 struct clisp_env_t;
-struct clisp_chunk_expr_t;
+struct clisp_expr_t;
 typedef struct clisp_chunk_t clisp_chunk_t;
 typedef struct clisp_env_t clisp_env_t;
-typedef struct clisp_chunk_expr_t clisp_chunk_expr_t;
+typedef struct clisp_expr_t clisp_expr_t;
 
 
 /*
@@ -28,6 +28,7 @@ typedef enum {
     CLISP_FUNCTION = 64,
     CLISP_FUNCTION_C = 128,
     CLISP_ERROR = 256,
+    CLISP_EXPR = 512,
     CLISP_TYPE = CLISP_NIL | CLISP_BOOL |
                  CLISP_NUMBER | CLISP_SYMBOL |
                  CLISP_STRING | CLISP_LIST |
@@ -35,7 +36,7 @@ typedef enum {
 } clisp_chunk_type_t;
 
 
-typedef clisp_chunk_t* (* clisp_builtin_t)(clisp_chunk_expr_t* expr);
+typedef clisp_chunk_t* (* clisp_builtin_t)(clisp_expr_t* expr, clisp_env_t* env);
 
 struct clisp_chunk_t {
     clisp_chunk_type_t type;
@@ -43,11 +44,12 @@ struct clisp_chunk_t {
     union {
         float number;
         char* string;
-        clisp_chunk_expr_t* list;
+        clisp_expr_t* list;
 
         struct { ;
             clisp_builtin_t body;
-            clisp_chunk_expr_t* expr;
+            clisp_expr_t* expr;
+            char* name;
         } builtin;
 
         struct {
@@ -59,7 +61,7 @@ struct clisp_chunk_t {
     } value;
 };
 
-struct clisp_chunk_expr_t {
+struct clisp_expr_t {
     int count;
     clisp_chunk_t** chunks;
 };
@@ -76,20 +78,21 @@ clisp_chunk_t* clisp_chunk_str(char* str);
 clisp_chunk_t* clisp_chunk_error(char* error, ...);
 clisp_chunk_t* clisp_chunk_list(void);
 clisp_chunk_t* clisp_chunk_bool(int num);
-clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function);
+clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function, char* name);
 clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
+clisp_chunk_t* clisp_chunk_expr();
 
 
 /*
  * Expression definitions
  */
-clisp_chunk_expr_t* clisp_expr_new();
-clisp_chunk_expr_t* clisp_expr_append(clisp_chunk_expr_t* expr, clisp_chunk_t* child);
-clisp_chunk_t* clisp_expr_pop(clisp_chunk_expr_t* expr, int position);
-void clisp_expr_remove(clisp_chunk_expr_t* expr, int position);
-clisp_chunk_t* clisp_expr_take(clisp_chunk_expr_t* super, int position);
-clisp_chunk_expr_t* clisp_expr_join(clisp_chunk_expr_t* first, clisp_chunk_expr_t* second);
-void clisp_expr_delete(clisp_chunk_expr_t* expr);
+clisp_expr_t* clisp_expr_new();
+clisp_expr_t* clisp_expr_append(clisp_expr_t* expr, clisp_chunk_t* child);
+clisp_chunk_t* clisp_expr_pop(clisp_expr_t* expr, int position);
+void clisp_expr_remove(clisp_expr_t* expr, int position);
+clisp_chunk_t* clisp_expr_take(clisp_expr_t* super, int position);
+clisp_expr_t* clisp_expr_join(clisp_expr_t* first, clisp_expr_t* second);
+void clisp_expr_delete(clisp_expr_t* expr);
 
 /*
  * Env definitions
@@ -99,7 +102,7 @@ struct clisp_env_t {
     clisp_env_t* parent;
     int count;
     char** symbols;
-    clisp_chunk_t** tokens;
+    clisp_chunk_t** chunks;
 };
 
 clisp_env_t* clisp_env_new(void);

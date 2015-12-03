@@ -1,8 +1,8 @@
 
-#include "../builtin.h"
+#include "builtin.h"
 
 clisp_chunk_t*
-clisp_builtin_math(clisp_chunk_expr_t* expr, char* op) {
+clisp_builtin_math(clisp_expr_t* expr, clisp_env_t* env, char* op) {
 
     clisp_expr_assert(expr, 1 <= expr->count <= 2,
                       "Incorrect number of Arguments. Got: %li, Expected: %s", expr->count, "1 or 2");
@@ -47,31 +47,31 @@ clisp_builtin_math(clisp_chunk_expr_t* expr, char* op) {
 
 
 clisp_chunk_t*
-clisp_builtin_math_add(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_math(expr, "+");
+clisp_builtin_math_add(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_math(expr, env, "+");
 }
 
 clisp_chunk_t*
-clisp_builtin_math_sub(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_math(expr, "-");
+clisp_builtin_math_sub(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_math(expr, env, "-");
 }
 
 clisp_chunk_t*
-clisp_builtin_math_mul(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_math(expr, "*");
+clisp_builtin_math_mul(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_math(expr, env, "*");
 }
 
 clisp_chunk_t*
-clisp_builtin_math_div(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_math(expr, "/");
+clisp_builtin_math_div(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_math(expr, env, "/");
 }
 
 clisp_chunk_t*
-clisp_builtin_math_mod(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_math(expr, "%");
+clisp_builtin_math_mod(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_math(expr, env, "%");
 }
 
 clisp_chunk_t*
-clisp_builtin_math_pow(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_math(expr, "^");
+clisp_builtin_math_pow(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_math(expr, env, "^");
 }

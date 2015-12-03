@@ -1,8 +1,8 @@
 
-#include "../builtin.h"
+#include "builtin.h"
 
 clisp_chunk_t*
-clisp_builtin_ord(clisp_chunk_expr_t* expr, char* op) {
+clisp_builtin_ord(clisp_expr_t* expr, clisp_env_t* env, char* op) {
     clisp_expr_assert_count(expr, 2);
     clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_NUMBER);
     clisp_expr_assert_type(expr, expr->chunks[1]->type, CLISP_NUMBER);
@@ -30,21 +30,21 @@ clisp_builtin_ord(clisp_chunk_expr_t* expr, char* op) {
 }
 
 clisp_chunk_t*
-clisp_builtin_ord_gt(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_ord(expr, ">");
+clisp_builtin_ord_gt(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_ord(expr, env, ">");
 }
 
 clisp_chunk_t*
-clisp_builtin_ord_lt(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_ord(expr, "<");
+clisp_builtin_ord_lt(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_ord(expr, env, "<");
 }
 
 clisp_chunk_t*
-clisp_builtin_ord_gte(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_ord(expr, ">=");
+clisp_builtin_ord_gte(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_ord(expr, env, ">=");
 }
 
 clisp_chunk_t*
-clisp_builtin_ord_lte(clisp_chunk_expr_t* expr) {
-    return clisp_builtin_ord(expr, "<=");
+clisp_builtin_ord_lte(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_ord(expr, env, "<=");
 }

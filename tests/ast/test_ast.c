@@ -8,7 +8,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_get_chunk_number) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("5", env);
+        clisp_expr_t* ast = read_entry("5", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -21,7 +21,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_get_chunk_symbol) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("five", env);
+        clisp_expr_t* ast = read_entry("five", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -34,7 +34,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_get_chunk_string) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("\"string\"", env);
+        clisp_expr_t* ast = read_entry("\"string\"", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_STRING);
@@ -47,7 +47,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_get_chunk_boolean_true) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("#t", env);
+        clisp_expr_t* ast = read_entry("#t", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -60,7 +60,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_get_chunk_boolean_false) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("#f", env);
+        clisp_expr_t* ast = read_entry("#f", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
@@ -74,7 +74,7 @@ PT_SUITE(suite_ast) {
     PT_TEST(test_get_chunk_expr) {
         clisp_env_t* env = create_basic_env();
 
-        clisp_chunk_expr_t* ast = read_entry("(+ 1 2)", env);
+        clisp_expr_t* ast = read_entry("(+ 1 2)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -88,7 +88,7 @@ PT_SUITE(suite_ast) {
     PT_TEST(test_get_complex_expr) {
         clisp_env_t* env = create_basic_env();
 
-        clisp_chunk_expr_t* ast = read_entry("(+ 1 (+ 2 1))", env);
+        clisp_expr_t* ast = read_entry("(+ 1 (+ 2 1))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -102,7 +102,7 @@ PT_SUITE(suite_ast) {
     PT_TEST(test_get_expr_using_symbol) {
         clisp_env_t* env = create_basic_env();
 
-        clisp_chunk_expr_t* ast = read_entry("(+ five (+ 2 1))", env);
+        clisp_expr_t* ast = read_entry("(+ five (+ 2 1))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -116,7 +116,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_get_chunk_list_of_numbers) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("[1 2 3 4]", env);
+        clisp_expr_t* ast = read_entry("[1 2 3 4]", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_LIST);
@@ -130,7 +130,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_get_chunk_list_of_strings) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("[\"1\" \"2\"]", env);
+        clisp_expr_t* ast = read_entry("[\"1\" \"2\"]", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_LIST);
@@ -144,7 +144,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_should_return_error_when_function_not_found) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(join [1 2 3] [1 2 3])", env);
+        clisp_expr_t* ast = read_entry("(join [1 2 3] [1 2 3])", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
@@ -156,7 +156,7 @@ PT_SUITE(suite_ast) {
 
     PT_TEST(test_should_return_error_if_builtin_param_has_error) {
         clisp_env_t* env = create_basic_env();
-        clisp_chunk_expr_t* ast = read_entry("(append (tail [1 2 3]) (head))", env);
+        clisp_expr_t* ast = read_entry("(append (tail [1 2 3]) (head))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);

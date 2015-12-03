@@ -1,19 +1,19 @@
 
-#include "../ast.h"
+#include "ast.h"
 
 
-clisp_chunk_expr_t*
-clisp_read_ast(mpc_ast_t* ast, clisp_env_t* env) {
+clisp_expr_t*
+clisp_read_ast(mpc_ast_t* ast) {
 
-    clisp_chunk_expr_t* expr = clisp_expr_new();
+    clisp_expr_t* expr = clisp_expr_new();
 
-    if (strcmp(ast->tag, ">") == 0) { return clisp_read_ast(ast->children[1], env); }
+    if (strcmp(ast->tag, ">") == 0) { return clisp_read_ast(ast->children[1]); }
     if (strstr(ast->tag, "number")) { clisp_expr_append(expr, clisp_read_number(ast)); }
     if (strstr(ast->tag, "symbol")) { clisp_expr_append(expr, clisp_chunk_symbol(ast->contents)); }
     if (strstr(ast->tag, "string")) { clisp_expr_append(expr, clisp_read_string(ast)); }
     if (strstr(ast->tag, "boolean")) { clisp_expr_append(expr, clisp_read_bool(ast)); }
-    if (strstr(ast->tag, "list")) { clisp_expr_append(expr, clisp_read_list(ast, env)); }
-    if (strstr(ast->tag, "sexpr")) { clisp_expr_append(expr, clisp_read_sexpr(ast, env)); }
+    if (strstr(ast->tag, "list")) { clisp_expr_append(expr, clisp_read_list(ast)); }
+    if (strstr(ast->tag, "sexpr")) { clisp_expr_append(expr, clisp_read_sexpr(ast)); }
     return expr;
 }
 
@@ -49,7 +49,7 @@ clisp_read_bool(mpc_ast_t* ast) {
 }
 
 clisp_chunk_t*
-clisp_read_list(mpc_ast_t* ast, clisp_env_t* env) {
+clisp_read_list(mpc_ast_t* ast) {
    clisp_chunk_t* chunk = clisp_chunk_list();
 
     for (int i = 0; i < ast->children_num; i++) {
@@ -58,21 +58,21 @@ clisp_read_list(mpc_ast_t* ast, clisp_env_t* env) {
         if (strcmp(ast->children[i]->contents, "[") == 0) { continue; }
         if (strcmp(ast->children[i]->contents, "]") == 0) { continue; }
         if (strcmp(ast->children[i]->tag, "regex") == 0) { continue; }
-        clisp_expr_join(chunk->value.list, clisp_read_ast(ast->children[i], env));
+        clisp_expr_join(chunk->value.list, clisp_read_ast(ast->children[i]));
     }
     return chunk;
 }
 
 clisp_chunk_t*
-clisp_read_sexpr(mpc_ast_t* ast, clisp_env_t* env) {
+clisp_read_sexpr(mpc_ast_t* ast) {
 
-    clisp_chunk_expr_t* expr = clisp_expr_new();
+    clisp_chunk_t* expr = clisp_chunk_expr();
 
     for (int i = 0; i < ast->children_num; i++) {
         if (strcmp(ast->children[i]->contents, "(") == 0) { continue; }
         if (strcmp(ast->children[i]->contents, ")") == 0) { continue; }
         if (strcmp(ast->children[i]->tag, "regex") == 0) { continue; }
-        clisp_expr_join(expr, clisp_read_ast(ast->children[i], env));
+        clisp_expr_join(expr->value.list, clisp_read_ast(ast->children[i]));
     }
-    return clisp_eval_ast(expr, env);
+    return expr;
 }
