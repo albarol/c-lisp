@@ -16,5 +16,4 @@ clisp_chunk_t* clisp_read_bool(mpc_ast_t* ast);
 clisp_chunk_t* clisp_read_list(mpc_ast_t* ast);
 clisp_chunk_t* clisp_read_sexpr(mpc_ast_t* ast);
 
-
 #endif

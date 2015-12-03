@@ -13,7 +13,7 @@ clisp_print_write(clisp_chunk_t* token) {
             }
             break;
         case CLISP_BOOL:
-            if (token->value.number == 1) {
+            if (token->value.boolean == 1) {
                 printf("#t");
             } else {
                 printf("#f");

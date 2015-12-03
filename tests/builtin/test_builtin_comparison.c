@@ -12,7 +12,7 @@ PT_SUITE(suite_builtin_comparison) {
         clisp_chunk_t* result = clisp_builtin_ord_gt(expr, env);
 
         PT_ASSERT(result->type == CLISP_BOOL);
-        PT_ASSERT(result->value.number == 1);
+        PT_ASSERT(result->value.boolean == 1);
 
         clisp_chunk_delete(result);
         clisp_env_delete(env);
@@ -24,7 +24,7 @@ PT_SUITE(suite_builtin_comparison) {
         clisp_chunk_t* result = clisp_builtin_ord_gt(expr, env);
 
         PT_ASSERT(result->type == CLISP_BOOL);
-        PT_ASSERT(result->value.number == 0);
+        PT_ASSERT(result->value.boolean == 0);
 
         clisp_chunk_delete(result);
         clisp_env_delete(env);
@@ -36,7 +36,7 @@ PT_SUITE(suite_builtin_comparison) {
         clisp_chunk_t* result = clisp_builtin_ord_gte(expr, env);
 
         PT_ASSERT(result->type == CLISP_BOOL);
-        PT_ASSERT(result->value.number == 1);
+        PT_ASSERT(result->value.boolean == 1);
 
         clisp_chunk_delete(result);
         clisp_env_delete(env);
@@ -48,7 +48,7 @@ PT_SUITE(suite_builtin_comparison) {
         clisp_chunk_t* result = clisp_builtin_ord_lt(expr, env);
 
         PT_ASSERT(result->type == CLISP_BOOL);
-        PT_ASSERT(result->value.number == 1);
+        PT_ASSERT(result->value.boolean == 1);
 
         clisp_chunk_delete(result);
         clisp_env_delete(env);
@@ -60,7 +60,7 @@ PT_SUITE(suite_builtin_comparison) {
         clisp_chunk_t* result = clisp_builtin_ord_lte(expr, env);
 
         PT_ASSERT(result->type == CLISP_BOOL);
-        PT_ASSERT(result->value.number == 1);
+        PT_ASSERT(result->value.boolean == 1);
 
         clisp_chunk_delete(result);
         clisp_env_delete(env);

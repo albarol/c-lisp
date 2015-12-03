@@ -51,6 +51,7 @@ clisp_expr_pop(clisp_expr_t* expr, int position) {
 
     expr->count--;
     expr->chunks = realloc(expr->chunks, sizeof(clisp_chunk_t*) * (expr->count));
+
     return item;
 }
 

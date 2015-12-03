@@ -1,12 +1,10 @@
 
-#include "ast.h"
-
+#include <ast.h>
 
 clisp_chunk_t*
 clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_chunk_t* chunk = clisp_expr_pop(expr, 0);
-
     if (chunk->type == CLISP_SYMBOL) {
         chunk = clisp_env_get(env, chunk);
     }
@@ -17,11 +15,14 @@ clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
         if (strcmp(chunk->value.builtin.name, "def") == 0) {
             return clisp_eval_ast_conditionals(chunk, expr, env);
         }
+        else if (strcmp(chunk->value.builtin.name, "if") == 0) {
+            return clisp_eval_ast_conditionals(chunk, expr, env);
+        }
         return clisp_eval_ast_builtin(chunk, expr, env);
     } else if (chunk->type == CLISP_FUNCTION) {
         return clisp_eval_ast_function(chunk, expr, env);
-
     }
+
     return chunk;
 }
 
@@ -32,6 +33,8 @@ clisp_eval_ast_builtin(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t* env
         clisp_expr_append(params, clisp_eval_ast(expr, env));
     }
     clisp_chunk_t* result = func->value.builtin.body(params, env);
+
+    clisp_expr_delete(expr);
     return result;
 }
 
@@ -52,6 +55,9 @@ clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* e
 
     for (int i = 0; i < chunk->value.func.args->value.list->count; i++) {
         clisp_chunk_t* param = clisp_expr_pop(expr, 0);
+        if (param->type == CLISP_EXPR) {
+            param = clisp_eval_ast(param->value.list, env);
+        }
         clisp_env_put(chunk->value.func.env, chunk->value.func.args->value.list->chunks[i], param);
     }
     chunk->value.func.env->parent = env;
