@@ -1,3 +1,6 @@
+* 0.4.0
+    Add support to `exit` function
+
 * 0.3.0
     Add support to `repr` function
 

@@ -12,7 +12,7 @@ static char input[2048];
 
 int main(int argc, char** argv) {
 
-    puts("CLisp version 0.2.1\n");
+    puts("CLisp version 0.5.0\n");
     puts("Press Ctrl+c to Exit\n");
 
     mpc_parser_t* Comment = mpc_new("comment");
