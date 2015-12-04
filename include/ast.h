@@ -5,8 +5,8 @@
 #include "mpc.h"
 
 clisp_chunk_t* clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env);
-clisp_chunk_t* clisp_eval_ast_builtin(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t* env);
-clisp_chunk_t* clisp_eval_ast_conditionals(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_eval_ast_builtin_eager(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_eval_ast_builtin_lazy(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* env);
 
 clisp_expr_t* clisp_read_ast(mpc_ast_t* ast);

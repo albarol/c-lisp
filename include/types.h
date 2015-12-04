@@ -36,6 +36,10 @@ typedef enum {
                  CLISP_FUNCTION | CLISP_FUNCTION_C
 } clisp_chunk_type_t;
 
+typedef enum {
+    CLISP_FUNCTION_LAZY = 1,
+    CLISP_FUNCTION_EAGER = 2
+} clisp_function_type;
 
 typedef clisp_chunk_t* (* clisp_builtin_t)(clisp_expr_t* expr, clisp_env_t* env);
 
@@ -50,7 +54,7 @@ struct clisp_chunk_t {
 
         struct { ;
             clisp_builtin_t body;
-            char* name;
+            clisp_function_type ftype;
         } builtin;
 
         struct {
@@ -73,13 +77,14 @@ void clisp_chunk_delete(clisp_chunk_t* chunk);
 clisp_chunk_t* clisp_chunk_copy(clisp_chunk_t* metadata);
 bool clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second);
 
+clisp_chunk_t* clisp_chunk_nil();
 clisp_chunk_t* clisp_chunk_number(float num);
 clisp_chunk_t* clisp_chunk_symbol(char* symbol);
 clisp_chunk_t* clisp_chunk_str(char* str);
 clisp_chunk_t* clisp_chunk_error(char* error, ...);
 clisp_chunk_t* clisp_chunk_list(void);
 clisp_chunk_t* clisp_chunk_bool(bool value);
-clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function, char* name);
+clisp_chunk_t* clisp_chunk_builtin(clisp_builtin_t function, clisp_function_type ftype);
 clisp_chunk_t* clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body);
 clisp_chunk_t* clisp_chunk_expr();
 
@@ -112,7 +117,7 @@ void clisp_env_delete(clisp_env_t* env);
 
 clisp_chunk_t* clisp_env_get(clisp_env_t* env, clisp_chunk_t* token);
 void clisp_env_put(clisp_env_t* env, clisp_chunk_t* symbol, clisp_chunk_t* value);
-void clisp_env_put_builtin(clisp_env_t* env, char* symbol, clisp_builtin_t builtin);
+void clisp_env_put_builtin(clisp_env_t* env, char* symbol, clisp_builtin_t builtin, clisp_function_type type);
 
 
 #endif

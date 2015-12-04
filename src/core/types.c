@@ -1,3 +1,4 @@
+#include <types.h>
 #include "types.h"
 
 clisp_chunk_t*
@@ -51,8 +52,7 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
 
         case CLISP_FUNCTION_C:
             chunk->value.builtin.body = metadata->value.builtin.body;
-            chunk->value.builtin.name = malloc(strlen(metadata->value.builtin.name) + 1);
-            strcpy(chunk->value.builtin.name, metadata->value.builtin.name);
+            chunk->value.builtin.ftype = metadata->value.builtin.ftype;
             break;
 
         case CLISP_FUNCTION:
@@ -131,6 +131,12 @@ clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second) {
 
 
 clisp_chunk_t*
+clisp_chunk_nil() {
+    clisp_chunk_t* chunk = clisp_chunk_new(CLISP_NIL);
+    return chunk;
+}
+
+clisp_chunk_t*
 clisp_chunk_number(float num) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_NUMBER);
     chunk->value.number = num;
@@ -190,11 +196,10 @@ clisp_chunk_bool(bool value) {
 }
 
 clisp_chunk_t*
-clisp_chunk_builtin(clisp_builtin_t function, char* name) {
+clisp_chunk_builtin(clisp_builtin_t function, clisp_function_type ftype) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_FUNCTION_C);
+    chunk->value.builtin.ftype = ftype;
     chunk->value.builtin.body = function;
-    chunk->value.builtin.name = malloc(strlen(name) + 1);
-    strcpy(chunk->value.builtin.name, name);
     return chunk;
 }
 
