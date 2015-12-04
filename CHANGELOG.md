@@ -1,3 +1,6 @@
+* 0.3.0
+    Add support to `repr` function
+
 * 0.2.1
     Bugfix - Defined functions can be called recursively
 
