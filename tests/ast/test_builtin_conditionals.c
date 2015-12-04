@@ -72,4 +72,16 @@ PT_SUITE(suite_ast_builtin_conditionals) {
         clisp_expr_delete(ast);
         clisp_env_delete(env);
     }
+
+    PT_TEST(test_for_to_call_function_many_times) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(for (i [1 2 3 4]) (display i))", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_NIL);
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+        clisp_env_delete(env);
+    }
 }
