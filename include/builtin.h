@@ -35,6 +35,7 @@ clisp_chunk_t* clisp_builtin_list_eq(clisp_expr_t* expr, clisp_env_t* env);
 
 clisp_chunk_t* clisp_builtin_cond_if(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_cond_def(clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_builtin_cond_for(clisp_expr_t* expr, clisp_env_t* env);
 
 
 clisp_chunk_t* clisp_builtin_magic_display(clisp_expr_t* expr, clisp_env_t* env);

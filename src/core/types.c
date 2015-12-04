@@ -1,5 +1,4 @@
 #include <types.h>
-#include "types.h"
 
 clisp_chunk_t*
 clisp_chunk_new(clisp_chunk_type_t type) {
