@@ -37,11 +37,7 @@ clisp_chunk_t* clisp_builtin_cond_if(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_cond_def(clisp_expr_t* expr, clisp_env_t* env);
 
 
-clisp_chunk_t* clisp_builtin_eval(clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_builtin_magic_repr(clisp_expr_t* expr, clisp_env_t* env);
 
-//clisp_chunk_t* clisp_builtin_var_set(clisp_env_t* env, clisp_chunk_t* token, char* function);
-//clisp_chunk_t* clisp_builtin_define(clisp_env_t* env, clisp_chunk_t* token);
-////clisp_chunk_t* clisp_builtin_assign(clisp_env_t* env, clisp_chunk_t* token);
-//clisp_chunk_t* clisp_builtin_lambda(clisp_env_t* env, clisp_chunk_t* token);
 
 #endif

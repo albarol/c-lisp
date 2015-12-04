@@ -1,7 +1,7 @@
 
-#include "ptest.h"
+#include <ptest.h>
 
-#include "types.h"
+#include <types.h>
 
 
 clisp_chunk_t*
@@ -56,7 +56,7 @@ PT_SUITE(suite_types) {
 
     PT_TEST(test_new_chunk_builtin_should_return_number) {
         clisp_env_t* env = clisp_env_new();
-        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, "");
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, CLISP_FUNCTION_EAGER);
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
@@ -69,7 +69,7 @@ PT_SUITE(suite_types) {
 
     PT_TEST(test_new_chunk_builtin_should_return_str) {
         clisp_env_t* env = clisp_env_new();
-        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, "");
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, CLISP_FUNCTION_EAGER);
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION_C);
 
@@ -80,19 +80,19 @@ PT_SUITE(suite_types) {
         clisp_env_delete(env);
     }
 
-//    PT_TEST(test_new_chunk_function) {
-//        clisp_chunk_t* chunk = clisp_chunk_function(clisp_chunk_sexpr(), clisp_chunk_sexpr());
-//
-//        PT_ASSERT(chunk->type == CLISP_FUNCTION);
-//        PT_ASSERT(chunk->value.func.args->value.expr.count == 0);
-//        PT_ASSERT(chunk->value.func.body->value.expr.count == 0);
-//
-//        clisp_chunk_delete(chunk);
-//    }
+    PT_TEST(test_new_chunk_function) {
+        clisp_chunk_t* chunk = clisp_chunk_function(clisp_chunk_expr(), clisp_chunk_expr());
+
+        PT_ASSERT(chunk->type == CLISP_FUNCTION);
+        PT_ASSERT(chunk->value.func.args->value.list->count == 0);
+        PT_ASSERT(chunk->value.func.body->value.list->count == 0);
+
+        clisp_chunk_delete(chunk);
+    }
 
     PT_TEST(test_copy_chunk_builtin) {
         clisp_env_t* env = clisp_env_new();
-        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, "");
+        clisp_chunk_t* chunk = clisp_chunk_builtin(fake_builtin, CLISP_FUNCTION_EAGER);
         clisp_chunk_t* copied = clisp_chunk_copy(chunk);
 
         clisp_chunk_t* result = copied->value.builtin.body(fake_args(clisp_chunk_number(5)), env);

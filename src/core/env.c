@@ -76,9 +76,9 @@ clisp_env_put(clisp_env_t* env, clisp_chunk_t* symbol, clisp_chunk_t* value) {
 }
 
 void
-clisp_env_put_builtin(clisp_env_t* env, char* symbol, clisp_builtin_t builtin) {
+clisp_env_put_builtin(clisp_env_t* env, char* symbol, clisp_builtin_t builtin, clisp_function_type type) {
     clisp_chunk_t* s = clisp_chunk_symbol(symbol);
-    clisp_chunk_t* b = clisp_chunk_builtin(builtin, symbol);
+    clisp_chunk_t* b = clisp_chunk_builtin(builtin, type);
 
     clisp_env_put(env, s, b);
     clisp_chunk_delete(s);

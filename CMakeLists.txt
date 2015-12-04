@@ -31,6 +31,7 @@ set(CLISP_SOURCES
     src/builtin/comparison.c
     src/builtin/list.c
     src/builtin/math.c
+    src/builtin/magic.c
     src/builtin/ordering.c
     src/builtin/conditionals.c
     src/core/print.c
@@ -76,6 +77,7 @@ set(CLISP_TESTS
     tests/builtin/test_builtin_ordering.c
     tests/builtin/test_builtin_comparison.c
     tests/builtin/test_builtin_conditionals.c
+    tests/builtin/test_builtin_magic.c
     tests/ast/test_ast.c
     tests/ast/test_builtin_list.c
     tests/ast/test_builtin_math.c
