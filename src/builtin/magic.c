@@ -1,6 +1,5 @@
 
 #include <builtin.h>
-#include <print.h>
 
 clisp_chunk_t*
 clisp_builtin_magic_repr(clisp_expr_t* expr, clisp_env_t* env) {
@@ -15,4 +14,10 @@ clisp_builtin_magic_repr(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_print_write(chunk);
     clisp_chunk_delete(chunk);
     return clisp_chunk_nil();
+}
+
+clisp_chunk_t*
+clisp_builtin_magic_exit(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 0);
+    exit(0);
 }
