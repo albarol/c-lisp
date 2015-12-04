@@ -38,6 +38,6 @@ clisp_chunk_t* clisp_builtin_cond_def(clisp_expr_t* expr, clisp_env_t* env);
 
 
 clisp_chunk_t* clisp_builtin_magic_repr(clisp_expr_t* expr, clisp_env_t* env);
-
+clisp_chunk_t* clisp_builtin_magic_exit(clisp_expr_t* expr, clisp_env_t* env);
 
 #endif
