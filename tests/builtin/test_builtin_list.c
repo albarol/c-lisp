@@ -1,4 +1,4 @@
-
+#include <types.h>
 #include "ptest.h"
 
 #include "builtin.h"
@@ -73,6 +73,130 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT_STR_EQ(tail->value.string, "List is empty");
 
         clisp_chunk_delete(tail);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_check_if_list_is_empty) {
+        clisp_env_t* env = clisp_env_new();
+        char *argv[] = {"item1", "item2", "item3"};
+        clisp_expr_t* chunk = create_list(argv, 3);
+
+        clisp_chunk_t* result = clisp_builtin_list_empty(chunk, env);
+
+        PT_ASSERT(result->type == CLISP_BOOL);
+        PT_ASSERT(result->value.boolean == false);
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_empty_throws_empty_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* chunk = clisp_expr_new();
+
+        clisp_chunk_t* result = clisp_builtin_list_empty(chunk, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_empty_throws_invalid_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, clisp_chunk_number(5));
+
+        clisp_chunk_t* result = clisp_builtin_list_empty(expr, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: List");
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+
+    PT_TEST(test_get_length_of_list) {
+        clisp_env_t* env = clisp_env_new();
+        char *argv[] = {"item1", "item2", "item3"};
+        clisp_expr_t* chunk = create_list(argv, 3);
+
+        clisp_chunk_t* result = clisp_builtin_list_length(chunk, env);
+
+        PT_ASSERT(result->type == CLISP_NUMBER);
+        PT_ASSERT(result->value.number == 3);
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_get_length_throws_empty_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* chunk = clisp_expr_new();
+
+        clisp_chunk_t* result = clisp_builtin_list_length(chunk, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_get_length_throws_invalid_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, clisp_chunk_number(5));
+
+        clisp_chunk_t* result = clisp_builtin_list_length(expr, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: List");
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_create_list) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, clisp_chunk_number(5));
+
+        clisp_chunk_t* result = clisp_builtin_list_create(expr, env);
+
+        PT_ASSERT(result->type == CLISP_LIST);
+        PT_ASSERT(result->value.list->count == 1);
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_create_throws_empty_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* chunk = clisp_expr_new();
+
+        clisp_chunk_t* result = clisp_builtin_list_create(chunk, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: > 0");
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_create_throws_invalid_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, clisp_chunk_nil());
+
+        clisp_chunk_t* result = clisp_builtin_list_create(expr, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Type: Nil is not supported");
+
+        clisp_chunk_delete(result);
         clisp_env_delete(env);
     }
 }

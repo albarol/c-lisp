@@ -1,4 +1,4 @@
-
+#include <types.h>
 #include "ptest.h"
 
 #include "../helper.h"
@@ -81,6 +81,32 @@ PT_SUITE(suite_ast_builtin_list) {
 
         PT_ASSERT(chunk->type == CLISP_BOOL);
         PT_ASSERT(chunk->value.boolean == 0);
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_if_list_is_empty) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(empty? [1 2 3])", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_BOOL);
+        PT_ASSERT(chunk->value.boolean == false);
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_length_of_list) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(length [1 2 4 5])", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_NUMBER);
+        PT_ASSERT(chunk->value.number == 4);
 
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);

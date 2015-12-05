@@ -165,4 +165,16 @@ PT_SUITE(suite_ast) {
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);
     }
+
+    PT_TEST(test_should_run_function_with_empty_sexpr) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(list ())", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(chunk->value.string,  "Incorrect type of argument. Type: Nil is not supported");
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+    }
 }
