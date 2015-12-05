@@ -24,8 +24,8 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "<",  clisp_builtin_ord_lt, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, "<=",  clisp_builtin_ord_lte, CLISP_FUNCTION_EAGER);
 
-    clisp_env_put_builtin(env, "==",  clisp_builtin_cmp_eq, CLISP_FUNCTION_EAGER);
-    clisp_env_put_builtin(env, "!=",  clisp_builtin_cmp_ne, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "eq",  clisp_builtin_cmp_eq, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "ne",  clisp_builtin_cmp_ne, CLISP_FUNCTION_EAGER);
 
     clisp_env_put_builtin(env, "if",  clisp_builtin_cond_if, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "def", clisp_builtin_cond_def, CLISP_FUNCTION_LAZY);

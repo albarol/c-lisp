@@ -7,7 +7,7 @@ PT_SUITE(suite_ast_builtin_conditionals) {
 
     PT_TEST(test_if_returns_first_expr) {
         clisp_env_t* env = create_basic_env();
-        clisp_expr_t* ast = read_entry("(if (== 2 2) (+ 2 3) (+ 2 2))", env);
+        clisp_expr_t* ast = read_entry("(if (eq 2 2) (+ 2 3) (+ 2 2))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -20,7 +20,7 @@ PT_SUITE(suite_ast_builtin_conditionals) {
 
     PT_TEST(test_if_returns_second_expr) {
         clisp_env_t* env = create_basic_env();
-        clisp_expr_t* ast = read_entry("(if (!= 2 2) (+ 2 3) (+ 2 2))", env);
+        clisp_expr_t* ast = read_entry("(if (ne 2 2) (+ 2 3) (+ 2 2))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
@@ -54,7 +54,7 @@ PT_SUITE(suite_ast_builtin_conditionals) {
 
     PT_TEST(test_def_should_permits_recursive_call) {
         clisp_env_t* env = create_basic_env();
-        clisp_expr_t* ast = read_entry("(def (fact n) (if (== n 0) (1) (* n (fact (- n 1)))))", env);
+        clisp_expr_t* ast = read_entry("(def (fact n) (if (eq n 0) (1) (* n (fact (- n 1)))))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION);
