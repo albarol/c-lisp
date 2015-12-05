@@ -1,23 +1,26 @@
 
 #include <ast.h>
-#include <types.h>
+
 
 clisp_chunk_t*
 clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_chunk_t* chunk = clisp_expr_pop(expr, 0);
+
     if (chunk->type == CLISP_SYMBOL) {
         chunk = clisp_env_get(env, chunk);
     }
 
     if (chunk->type == CLISP_EXPR) {
         return clisp_eval_ast(chunk->value.list, env);
-    } else if(chunk->type == CLISP_FUNCTION_C) {
+    }
+    else if (chunk->type == CLISP_FUNCTION_C) {
         if (chunk->value.builtin.ftype == CLISP_FUNCTION_LAZY) {
             return clisp_eval_ast_builtin_lazy(chunk, expr, env);
         }
         return clisp_eval_ast_builtin_eager(chunk, expr, env);
-    } else if (chunk->type == CLISP_FUNCTION) {
+    }
+    else if (chunk->type == CLISP_FUNCTION) {
         return clisp_eval_ast_function(chunk, expr, env);
     }
 

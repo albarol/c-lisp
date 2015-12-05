@@ -18,6 +18,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "tail", clisp_builtin_list_tail, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, "append", clisp_builtin_list_join, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, "list?", clisp_builtin_list_eq, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "length", clisp_builtin_list_length, CLISP_FUNCTION_EAGER);
 
     clisp_env_put_builtin(env, ">",  clisp_builtin_ord_gt, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, ">=",  clisp_builtin_ord_gte, CLISP_FUNCTION_EAGER);
