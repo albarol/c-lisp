@@ -1,5 +1,22 @@
-#include <types.h>
-#include "builtin.h"
+
+#include <builtin.h>
+
+clisp_chunk_t*
+clisp_builtin_list_create(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert(expr, expr->count > 0,
+                      "Incorrect number of arguments. Got: 0, Expected: > 0");
+
+    int valid_types = CLISP_BOOL|CLISP_SYMBOL|
+                      CLISP_NUMBER|CLISP_LIST|CLISP_STRING;
+    for (int i = 0; i < expr->count; i++) {
+        clisp_expr_assert(expr, (expr->chunks[i]->type & valid_types) > 0,
+                          "Incorrect type of argument. Type: %s is not supported", clisp_print_type_name(expr->chunks[i]->type));
+    }
+
+    clisp_chunk_t* chunk = clisp_chunk_list();
+    clisp_expr_join(chunk->value.list, expr);
+    return chunk;
+}
 
 clisp_chunk_t*
 clisp_builtin_list_head(clisp_expr_t* expr, clisp_env_t* env) {

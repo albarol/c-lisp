@@ -78,7 +78,7 @@ clisp_print_write_str(clisp_chunk_t* token) {
 char*
 clisp_print_type_name(clisp_chunk_type_t type) {
     switch (type) {
-        case CLISP_NIL: "Nil";
+        case CLISP_NIL: return "Nil";
         case CLISP_FUNCTION_C:
         case CLISP_FUNCTION:
             return "Function";

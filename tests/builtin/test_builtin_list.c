@@ -158,4 +158,45 @@ PT_SUITE(suite_builtin_list) {
         clisp_chunk_delete(result);
         clisp_env_delete(env);
     }
+
+    PT_TEST(test_create_list) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, clisp_chunk_number(5));
+
+        clisp_chunk_t* result = clisp_builtin_list_create(expr, env);
+
+        PT_ASSERT(result->type == CLISP_LIST);
+        PT_ASSERT(result->value.list->count == 1);
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_create_throws_empty_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* chunk = clisp_expr_new();
+
+        clisp_chunk_t* result = clisp_builtin_list_create(chunk, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: > 0");
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_create_throws_invalid_args) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, clisp_chunk_nil());
+
+        clisp_chunk_t* result = clisp_builtin_list_create(expr, env);
+
+        PT_ASSERT(result->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Type: Nil is not supported");
+
+        clisp_chunk_delete(result);
+        clisp_env_delete(env);
+    }
 }

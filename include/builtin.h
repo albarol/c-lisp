@@ -33,6 +33,7 @@ clisp_chunk_t* clisp_builtin_list_join(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_list_eq(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_list_length(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_list_empty(clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_builtin_list_create(clisp_expr_t* expr, clisp_env_t* env);
 
 
 clisp_chunk_t* clisp_builtin_cond_if(clisp_expr_t* expr, clisp_env_t* env);
