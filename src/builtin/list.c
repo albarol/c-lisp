@@ -41,12 +41,17 @@ clisp_builtin_list_join(clisp_expr_t* expr, clisp_env_t* env) {
 
 clisp_chunk_t*
 clisp_builtin_list_eq(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
-    int result = 0;
-    if (chunk->type == CLISP_LIST) {
-        result = 1;
-    }
-    return clisp_chunk_bool(result);
+    return clisp_chunk_bool(chunk->type == CLISP_LIST);
+}
+
+clisp_chunk_t*
+clisp_builtin_list_empty(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+    clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_LIST);
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    return clisp_chunk_bool(chunk->value.list->count == 0);
 }
 
 clisp_chunk_t*
