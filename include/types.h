@@ -93,7 +93,8 @@ clisp_chunk_t* clisp_chunk_expr();
  * Expression definitions
  */
 clisp_expr_t* clisp_expr_new();
-clisp_expr_t* clisp_expr_append(clisp_expr_t* expr, clisp_chunk_t* child);
+clisp_expr_t* clisp_expr_create(clisp_chunk_t* chunk);
+        clisp_expr_t* clisp_expr_append(clisp_expr_t* expr, clisp_chunk_t* child);
 clisp_chunk_t* clisp_expr_pop(clisp_expr_t* expr, int position);
 void clisp_expr_remove(clisp_expr_t* expr, int position);
 clisp_chunk_t* clisp_expr_take(clisp_expr_t* super, int position);

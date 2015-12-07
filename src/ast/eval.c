@@ -1,5 +1,7 @@
 
 #include <ast.h>
+#include <types.h>
+#include <print.h>
 
 
 clisp_chunk_t*
@@ -51,7 +53,7 @@ clisp_eval_ast_builtin_lazy(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t
 clisp_chunk_t*
 clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_t* call = clisp_expr_new();
-    clisp_expr_append(call, chunk->value.func.body);
+    chunk->value.func.env->parent = env;
 
     if (chunk->value.func.args->value.list->count != expr->count) {
         return clisp_chunk_error("Incorrect number of arguments. Got: %li, Expected: %li",
@@ -60,11 +62,21 @@ clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* e
 
     for (int i = 0; i < chunk->value.func.args->value.list->count; i++) {
         clisp_chunk_t* param = clisp_expr_pop(expr, 0);
-        if (param->type == CLISP_EXPR) {
-            param = clisp_eval_ast(param->value.list, env);
+
+        while ((param->type & (CLISP_EXPR|CLISP_SYMBOL)) > 0) {
+
+            if (param->type == CLISP_EXPR) {
+                param = clisp_eval_ast(param->value.list, chunk->value.func.env);
+            } else if (param->type == CLISP_SYMBOL) {
+                clisp_expr_t* param_expr = clisp_expr_create(param);
+                param = clisp_eval_ast(param_expr, chunk->value.func.env);
+                clisp_expr_delete(param_expr);
+            }
         }
+
         clisp_env_put(chunk->value.func.env, chunk->value.func.args->value.list->chunks[i], param);
     }
-    chunk->value.func.env->parent = env;
+
+    clisp_expr_append(call, chunk->value.func.body);
     return clisp_eval_ast(call, chunk->value.func.env);
 }

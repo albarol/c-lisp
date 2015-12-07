@@ -177,4 +177,28 @@ PT_SUITE(suite_ast) {
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);
     }
+
+    PT_TEST(test_one_function_should_call_another) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(def (a t) t)", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        clisp_expr_delete(ast);
+        clisp_chunk_delete(chunk);
+
+        ast = read_entry("(def (b t) (a t))", env);
+        chunk = clisp_eval_ast(ast, env);
+
+        clisp_expr_delete(ast);
+        clisp_chunk_delete(chunk);
+
+        ast = read_entry("(b 1)", env);
+        chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_NUMBER);
+        PT_ASSERT(chunk->value.number == 1);
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+    }
 }
