@@ -10,6 +10,13 @@ clisp_expr_new() {
     return expr;
 }
 
+clisp_expr_t*
+clisp_expr_create(clisp_chunk_t* chunk) {
+    clisp_expr_t* expr = clisp_expr_new();
+    clisp_expr_append(expr, chunk);
+    return expr;
+}
+
 
 void
 clisp_expr_delete(clisp_expr_t* expr) {
