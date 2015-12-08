@@ -4,7 +4,7 @@
 #include "builtin.h"
 
 clisp_chunk_t*
-clisp_builtin_cond_if(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_conditional_if(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 3);
 
     clisp_chunk_t* cond = clisp_expr_pop(expr, 0);
@@ -26,7 +26,7 @@ clisp_builtin_cond_if(clisp_expr_t* expr, clisp_env_t* env) {
 }
 
 clisp_chunk_t*
-clisp_builtin_cond_def(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_conditional_def(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 2);
 
     clisp_chunk_t* args = clisp_expr_pop(expr, 0);
@@ -43,7 +43,7 @@ clisp_builtin_cond_def(clisp_expr_t* expr, clisp_env_t* env) {
 }
 
 clisp_chunk_t*
-clisp_builtin_cond_for(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_conditional_for(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 2);
 
     clisp_chunk_t* error = NULL;
@@ -89,4 +89,52 @@ cleanup:
     } else {
         return clisp_chunk_nil();
     }
+}
+
+clisp_chunk_t*
+clisp_builtin_conditional_cond(clisp_expr_t* expr, clisp_env_t* env) {
+
+    clisp_chunk_t* call = NULL;
+    clisp_chunk_t* error = NULL;
+
+    while(expr->count) {
+        clisp_chunk_t* tree = clisp_expr_pop(expr, 0);
+        clisp_chunk_t* cond = NULL;
+
+        if (tree->type != CLISP_EXPR) {
+            error = clisp_chunk_error("Invalid expression. It should be ((Boolean) Type)");
+            goto cleanup;
+        }
+
+        cond = clisp_expr_pop(tree->value.list, 0);
+        if (cond->type == CLISP_EXPR) {
+            cond = clisp_eval_ast(cond->value.list, env);
+        }
+
+        if (cond->type != CLISP_BOOL) {
+            error = clisp_chunk_error("Invalid argument type. Got: %s, Expected: %s",
+                                      clisp_print_type_name(cond->type), clisp_print_type_name(CLISP_BOOL));
+            goto cleanup;
+        }
+
+        if (cond->value.boolean) {
+            call = tree->value.list->chunks[1];
+            break;
+        }
+
+        cleanup:
+            if (cond != NULL) {
+                clisp_chunk_delete(cond);
+            }
+            clisp_chunk_delete(tree);
+    }
+
+    clisp_expr_delete(expr);
+    if (call != NULL) {
+        return clisp_eval_ast(clisp_expr_create(call), env);
+    }
+    else if (error != NULL) {
+        return error;
+    }
+    return clisp_chunk_nil();
 }

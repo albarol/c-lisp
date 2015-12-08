@@ -88,6 +88,7 @@ clisp_print_type_name(clisp_chunk_type_t type) {
         case CLISP_STRING: return "String";
         case CLISP_LIST: return  "List";
         case CLISP_BOOL: return "Boolean";
+        case CLISP_EXPR: return "Expression";
         case CLISP_TYPE: return "Any type";
         default: return "Unkown";
     }
