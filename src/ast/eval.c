@@ -1,13 +1,12 @@
 
 #include <ast.h>
 #include <types.h>
-#include <print.h>
-
 
 clisp_chunk_t*
 clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
 
     if (expr->count < 1) {
+        clisp_expr_delete(expr);
         return clisp_chunk_nil();
     }
 
@@ -68,9 +67,7 @@ clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* e
             if (param->type == CLISP_EXPR) {
                 param = clisp_eval_ast(param->value.list, chunk->value.func.env);
             } else if (param->type == CLISP_SYMBOL) {
-                clisp_expr_t* param_expr = clisp_expr_create(param);
-                param = clisp_eval_ast(param_expr, chunk->value.func.env);
-                clisp_expr_delete(param_expr);
+                param = clisp_env_get(chunk->value.func.env, param);
             }
         }
 
