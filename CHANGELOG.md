@@ -5,6 +5,10 @@ Changelog
 -----
 * Add `for` command
 * Change `repr` to `display`
+* Change `==` and `!=` operators
+* Add `empty?`, `list` and `length` commands
+* Add `cond` command
+* Add lambda expressions
 
 0.4.0
 -----
