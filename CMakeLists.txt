@@ -12,6 +12,13 @@ set(PTEST_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ext/ptest")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake/packages/")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
+# define compile rules
+OPTION(WITH_PRELUDE "Prelude." ON)
+IF(WITH_PRELUDE)
+    add_definitions(-DHAVE_PRELUDE)
+    execute_process(COMMAND "xxd -i ${CMAKE_CURRENT_SOURCE_DIR}/stl/prelude.clisp > /tmp/prelude.c" OUTPUT_VARIABLE STL_PRELUDE)
+ENDIF(WITH_PRELUDE)
+
 #=============================#
 #     Dependencies            #
 #=============================#
@@ -40,8 +47,10 @@ set(CLISP_SOURCES
     src/core/types.c
     src/core/env.c
     src/core/expr.c
-
 )
+IF(WITH_PRELUDE)
+    set(CLISP_SOURCES ${CLISP_SOURCES} /tmp/prelude.c)
+ENDIF(WITH_PRELUDE)
 
 set(CLISP_HEADERS
     include/ast.h
@@ -50,6 +59,7 @@ set(CLISP_HEADERS
     include/print.h
     include/types.h
     include/utils.h
+    include/stl.h
 )
 
 #=============================#
@@ -58,10 +68,9 @@ set(CLISP_HEADERS
 
 add_executable(clisp ${CLISP_SOURCES} ${CLISP_HEADERS} src/repl.c)
 
-if(UNIX)
-  target_link_libraries(clisp m)
-  target_link_libraries(clisp edit)
-endif(UNIX)
+target_link_libraries(clisp m)
+target_link_libraries(clisp edit)
+
 
 #=============================#
 #     Setup Tests             #

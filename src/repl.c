@@ -7,13 +7,38 @@
 #include "print.h"
 #include "ast.h"
 #include "builtin.h"
+#include "stl.h"
 
 static char input[2048];
 
+
+void REPL(char* input, mpc_parser_t* parser, clisp_env_t* env, int loading) {
+    mpc_result_t r;
+    if (mpc_parse("<stdin>", input, parser, &r)) {
+        clisp_expr_t* expr = clisp_read_ast(r.output);
+        clisp_chunk_t* result = clisp_eval_ast(expr, env);
+        if (loading == 0)
+            clisp_print_writeln(result);
+        clisp_chunk_delete(result);
+        mpc_ast_delete(r.output);
+    } else {
+        mpc_err_print(r.output);
+        mpc_err_delete(r.output);
+    }
+}
+
+
 int main(int argc, char** argv) {
 
-    puts("CLisp version 0.5.0\n");
-    puts("Press Ctrl+c to Exit\n");
+    puts("Welcome to CLisp, version 0.5.0\n");
+    puts("Press Ctrl+c to Exit");
+
+#ifdef HAVE_PRELUDE
+    printf("\nLoaded libraries\n");
+    printf("  * prelude.clisp\n");
+#endif
+    putchar('\n');
+
 
     mpc_parser_t* Comment = mpc_new("comment");
     mpc_parser_t* Boolean = mpc_new("boolean");
@@ -42,23 +67,18 @@ int main(int argc, char** argv) {
     clisp_env_t* env = clisp_env_new();
     clisp_builtin_load_functions(env);
 
+#ifdef HAVE_PRELUDE
+    char* lines = strtok(stl_prelude_clisp, "\n");
+    while (lines != NULL) {
+        REPL(lines, Lisp, env, 1);
+        lines = strtok (NULL, "\n");
+    }
+#endif
+
     while (1) {
-
-        char* input = readline("clisp> ");
+        char* input = readline("> ");
         add_history(input);
-
-        mpc_result_t r;
-        if (mpc_parse("<stdin>", input, Lisp, &r)) {
-            clisp_expr_t* expr = clisp_read_ast(r.output);
-            clisp_chunk_t* result = clisp_eval_ast(expr, env);
-            clisp_print_writeln(result);
-            clisp_chunk_delete(result);
-            mpc_ast_delete(r.output);
-        } else {
-            mpc_err_print(r.output);
-            mpc_err_delete(r.output);
-        }
-
+        REPL(input, Lisp, env, 0);
         free(input);
     }
 
