@@ -11,6 +11,8 @@ void suite_builtin_ordering(void);
 void suite_builtin_comparison(void);
 void suite_builtin_conditionals(void);
 void suite_builtin_magic(void);
+void suite_builtin_types(void);
+
 
 void suite_ast(void);
 void suite_ast_builtin_list(void);
@@ -31,6 +33,7 @@ int main(int argc, char** argv) {
     pt_add_suite(suite_builtin_comparison);
     pt_add_suite(suite_builtin_conditionals);
     pt_add_suite(suite_builtin_magic);
+    pt_add_suite(suite_builtin_types);
 
     pt_add_suite(suite_ast);
     pt_add_suite(suite_ast_builtin_list);
