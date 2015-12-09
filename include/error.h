@@ -22,5 +22,4 @@
 #define clisp_expr_assert_type(t, current, expected) \
     clisp_expr_assert(t, (current & expected) != 0, "Incorrect type of argument. Got: %s, Expected: %s", clisp_print_type_name(current), clisp_print_type_name(expected))
 
-
 #endif

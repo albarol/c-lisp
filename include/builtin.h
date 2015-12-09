@@ -3,6 +3,7 @@
 
 #include <math.h>
 
+#include "ast.h"
 #include "types.h"
 #include "error.h"
 #include "print.h"
