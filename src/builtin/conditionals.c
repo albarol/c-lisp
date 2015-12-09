@@ -143,14 +143,14 @@ clisp_builtin_conditional_cond(clisp_expr_t* expr, clisp_env_t* env) {
 
 
 clisp_chunk_t*
-clisp_builtin_conditional_fn(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_conditional_lambda(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_expr_assert_count(expr, 2);
 
     clisp_chunk_t* args = clisp_expr_pop(expr, 0);
     clisp_chunk_t* body = clisp_expr_take(expr, 0);
 
-    if (args->type != CLISP_EXPR) {
+    if ((args->type & (CLISP_EXPR|CLISP_NIL)) == 0) {
         clisp_chunk_delete(args);
         clisp_chunk_delete(body);
         return clisp_chunk_error("Invalid argument type. Got: %s, Expected: Expression", clisp_print_type_name(args->type));

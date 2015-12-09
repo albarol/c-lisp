@@ -1,4 +1,4 @@
-
+#include <types.h>
 #include "ptest.h"
 
 #include "../helper.h"
@@ -80,6 +80,40 @@ PT_SUITE(suite_ast_builtin_conditionals) {
 
         PT_ASSERT(chunk->type == CLISP_NIL);
 
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_cond_should_execute_first_true_statement) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(cond ((> 3 4) 1) ((> 3 1) 3) (#t 2))", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_NUMBER);
+        PT_ASSERT(chunk->value.number == 3);
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_lambda_high_order_function) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(def (map f n) (f n))", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_FUNCTION);
+        PT_ASSERT(chunk->value.func.args->value.list->count == 2);
+        PT_ASSERT_STR_EQ(env->symbols[env->count - 1], "map");
+
+        clisp_expr_t* ast_result = read_entry("(map (fn (t) (+ t 1)) 3)", env);
+        clisp_chunk_t* result = clisp_eval_ast(ast_result, env);
+        PT_ASSERT(result->type == CLISP_NUMBER);
+        PT_ASSERT(result->value.number == 4);
+
+        clisp_chunk_delete(result);
+        clisp_expr_delete(ast_result);
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);
         clisp_env_delete(env);

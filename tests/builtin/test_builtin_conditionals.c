@@ -204,4 +204,53 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_chunk_delete(chunk);
         clisp_env_delete(env);
     }
+
+    PT_TEST(test_lambda_expression) {
+        clisp_env_t* env = clisp_env_new();
+
+        clisp_chunk_t* args = clisp_chunk_expr();
+        clisp_chunk_t* body = clisp_chunk_expr();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, args);
+        clisp_expr_append(expr, body);
+
+        clisp_chunk_t* chunk = clisp_builtin_conditional_lambda(expr, env);
+
+        PT_ASSERT(chunk->type == CLISP_FUNCTION);
+
+        clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_lambda_throws_error_invalid_number_of_args) {
+        clisp_env_t* env = clisp_env_new();
+
+        clisp_chunk_t* args = clisp_chunk_expr();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, args);
+
+        clisp_chunk_t* chunk = clisp_builtin_conditional_lambda(expr, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+
+        clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_lambda_throws_error_invalid_arg_type) {
+        clisp_env_t* env = clisp_env_new();
+
+        clisp_chunk_t* args = clisp_chunk_number(1);
+        clisp_chunk_t* body = clisp_chunk_expr();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, args);
+        clisp_expr_append(expr, body);
+
+        clisp_chunk_t* chunk = clisp_builtin_conditional_lambda(expr, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+
+        clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
+    }
 }
