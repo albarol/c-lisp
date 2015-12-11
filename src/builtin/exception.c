@@ -1,8 +1,8 @@
 
-#include <builtin.h>
+#include <builtin/exception.h>
 
 clisp_chunk_t*
-clisp_builtin_type_error(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_exception_error(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 1);
 
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);

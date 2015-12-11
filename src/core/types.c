@@ -169,8 +169,8 @@ clisp_chunk_error(char* error, ...) {
     va_list args;
     va_start(args, error);
 
-    chunk->value.string = malloc(512);
-    vsnprintf(chunk->value.string, 511, error, args);
+    chunk->value.string = malloc(1024);
+    vsnprintf(chunk->value.string, 1023, error, args);
 
     chunk->value.string = realloc(chunk->value.string, strlen(chunk->value.string) + 1);
     va_end(args);

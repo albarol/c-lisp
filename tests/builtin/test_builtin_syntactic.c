@@ -3,7 +3,7 @@
 
 #include "../helper.h"
 
-PT_SUITE(suite_builtin_conditionals) {
+PT_SUITE(suite_builtin_syntactic) {
 
     PT_TEST(test_if_returns_first_expr) {
         clisp_env_t* env = clisp_env_new();
@@ -11,7 +11,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_append(expr, clisp_chunk_bool(1));
         clisp_expr_append(expr, clisp_chunk_number(3));
         clisp_expr_append(expr, clisp_chunk_number(4));
-        clisp_chunk_t* chunk = clisp_builtin_conditional_if(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_if(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 3);
@@ -26,7 +26,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_append(expr, clisp_chunk_bool(0));
         clisp_expr_append(expr, clisp_chunk_number(3));
         clisp_expr_append(expr, clisp_chunk_number(4));
-        clisp_chunk_t* chunk = clisp_builtin_conditional_if(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_if(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 4);
@@ -51,7 +51,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, args);
         clisp_expr_append(expr, body);
-        clisp_chunk_t* chunk = clisp_builtin_conditional_def(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_def(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION);
         PT_ASSERT(chunk->value.func.args->value.list->count == 2);
@@ -76,7 +76,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, iterator);
         clisp_expr_append(expr, body);
-        clisp_chunk_t* chunk = clisp_builtin_conditional_for(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_for(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_NIL);
 
@@ -99,7 +99,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, iterator);
         clisp_expr_append(expr, body);
-        clisp_chunk_t* chunk = clisp_builtin_conditional_for(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_for(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
@@ -121,7 +121,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, iterator);
         clisp_expr_append(expr, body);
-        clisp_chunk_t* chunk = clisp_builtin_conditional_for(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_for(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
@@ -141,7 +141,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, iterator);
         clisp_expr_append(expr, body);
-        clisp_chunk_t* chunk = clisp_builtin_conditional_for(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_for(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
@@ -163,7 +163,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, first);
         clisp_expr_append(expr, second);
-        clisp_chunk_t* chunk = clisp_builtin_conditional_cond(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_cond(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 2);
@@ -178,7 +178,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, clisp_chunk_bool(false));
         clisp_expr_append(expr, clisp_chunk_number(1));
-        clisp_chunk_t* chunk = clisp_builtin_conditional_cond(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_cond(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Invalid expression. It should be ((Boolean) Type)");
@@ -196,7 +196,7 @@ PT_SUITE(suite_builtin_conditionals) {
 
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, first);
-        clisp_chunk_t* chunk = clisp_builtin_conditional_cond(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_cond(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Invalid argument type. Got: Number, Expected: Boolean");
@@ -214,7 +214,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_append(expr, args);
         clisp_expr_append(expr, body);
 
-        clisp_chunk_t* chunk = clisp_builtin_conditional_lambda(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_lambda(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION);
 
@@ -229,7 +229,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, args);
 
-        clisp_chunk_t* chunk = clisp_builtin_conditional_lambda(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_lambda(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
@@ -246,7 +246,7 @@ PT_SUITE(suite_builtin_conditionals) {
         clisp_expr_append(expr, args);
         clisp_expr_append(expr, body);
 
-        clisp_chunk_t* chunk = clisp_builtin_conditional_lambda(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_lambda(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 

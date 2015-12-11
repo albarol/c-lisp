@@ -13,7 +13,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/CMake/pa
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build)
 
 # define compile rules
-OPTION(WITH_PRELUDE "Prelude." ON)
+OPTION(WITH_PRELUDE "Prelude." OFF)
 IF(WITH_PRELUDE)
     add_definitions(-DHAVE_PRELUDE)
     execute_process(COMMAND "xxd -i ${CMAKE_CURRENT_SOURCE_DIR}/stl/prelude.clisp > /tmp/prelude.c" OUTPUT_VARIABLE STL_PRELUDE)
@@ -35,13 +35,15 @@ set(CLISP_SOURCES
     src/ast/eval.c
     src/ast/read.c
     src/builtin.c
-    src/builtin/comparison.c
+    src/builtin/bool.c
+    src/builtin/exception.c
+    src/builtin/io.c
     src/builtin/list.c
-    src/builtin/math.c
     src/builtin/magic.c
-    src/builtin/ordering.c
-    src/builtin/conditionals.c
-    src/builtin/types.c
+    src/builtin/math.c
+    src/builtin/number.c
+    src/builtin/string.c
+    src/builtin/syntactic.c
     src/core/print.c
     src/core/utils.c
     src/core/types.c
@@ -84,11 +86,11 @@ set(CLISP_TESTS
     tests/test_expr.c
     tests/builtin/test_builtin_math.c
     tests/builtin/test_builtin_list.c
-    tests/builtin/test_builtin_ordering.c
-    tests/builtin/test_builtin_comparison.c
-    tests/builtin/test_builtin_conditionals.c
-    tests/builtin/test_builtin_magic.c
-    tests/builtin/test_builtin_types.c
+    tests/builtin/test_builtin_number.c
+    tests/builtin/test_builtin_bool.c
+    tests/builtin/test_builtin_syntactic.c
+    tests/builtin/test_builtin_io.c
+    tests/builtin/test_builtin_exception.c
     tests/ast/test_ast.c
     tests/ast/test_builtin_list.c
     tests/ast/test_builtin_math.c

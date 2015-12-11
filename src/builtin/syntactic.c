@@ -1,10 +1,10 @@
 
 
-#include <builtin.h>
-#include <types.h>
+#include <builtin/syntactic.h>
+
 
 clisp_chunk_t*
-clisp_builtin_conditional_if(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_syntactic_if(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 3);
 
     clisp_chunk_t* cond = clisp_expr_pop(expr, 0);
@@ -26,7 +26,7 @@ clisp_builtin_conditional_if(clisp_expr_t* expr, clisp_env_t* env) {
 }
 
 clisp_chunk_t*
-clisp_builtin_conditional_def(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_syntactic_def(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 2);
 
     clisp_chunk_t* args = clisp_expr_pop(expr, 0);
@@ -45,7 +45,7 @@ clisp_builtin_conditional_def(clisp_expr_t* expr, clisp_env_t* env) {
 }
 
 clisp_chunk_t*
-clisp_builtin_conditional_for(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_syntactic_for(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 2);
 
     clisp_chunk_t* error = NULL;
@@ -94,7 +94,7 @@ cleanup:
 }
 
 clisp_chunk_t*
-clisp_builtin_conditional_cond(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_syntactic_cond(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_chunk_t* call = NULL;
     clisp_chunk_t* error = NULL;
@@ -143,7 +143,7 @@ clisp_builtin_conditional_cond(clisp_expr_t* expr, clisp_env_t* env) {
 
 
 clisp_chunk_t*
-clisp_builtin_conditional_lambda(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_syntactic_lambda(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_expr_assert_count(expr, 2);
 

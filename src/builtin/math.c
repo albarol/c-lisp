@@ -1,5 +1,6 @@
 
-#include "builtin.h"
+#include <builtin/math.h>
+#include <types.h>
 
 clisp_chunk_t*
 clisp_builtin_math(clisp_expr_t* expr, clisp_env_t* env, char* op) {
@@ -74,4 +75,129 @@ clisp_builtin_math_mod(clisp_expr_t* expr, clisp_env_t* env) {
 clisp_chunk_t*
 clisp_builtin_math_pow(clisp_expr_t* expr, clisp_env_t* env) {
     return clisp_builtin_math(expr, env, "^");
+}
+
+clisp_chunk_t*
+clisp_builtin_math_round(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(roundf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_floor(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(floorf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+
+clisp_chunk_t* clisp_builtin_math_ceil(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(ceilf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_sqrt(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(sqrtf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_log(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(log10f(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_log10(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(logf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_sin(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(sinf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_cos(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(cosf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_tan(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_NUMBER);
+
+    clisp_chunk_t* result = clisp_chunk_number(tanf(chunk->value.number));
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_math_pi(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 0);
+    clisp_expr_delete(expr);
+
+    return clisp_chunk_number(3.141592653589793f);
 }
