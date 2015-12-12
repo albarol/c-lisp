@@ -1,10 +1,9 @@
-; Logical
-(def (not a) (if (a) #f #t))
-(def (and a b) (if (a) (if (b) #t #f) #f))
-(def (or a b) (if (a) #t (if (b) #t #f)))
-(def (xor a b) (if (and a b) #f (or a b)))
-
 ; Math
+(def (pi) 3.1415)
+(def (add1 z) (+ z 1))
+(def (sub1 z) (- z 1))
+(def (abs x) (if (< x 0) (* x -1) x))
+(def (sign x) (cond ((positive? x) 1) ((negative? x) -1) (#t 0)))
 (def (double b) (^ b 2))
 (def (triple b) (^ b 3))
 (def (fib n) (cond ((< n 0) 0) ((eq n 1) 1) (#t (+ (fib (- n 1)) (fib (- n 2))))))
@@ -19,7 +18,8 @@
 (def (map f xs) (if (empty? xs) [] (append (list (f (head xs))) (map f (tail xs)))))
 (def (fold f acc xs) (cond ((empty? xs) acc) (#t (fold f (f acc (head xs)) (tail xs)))))
 (def (reduce f xs) (if (empty? xs) (head xs) (fold f (head xs) (tail xs))))
-(def (filter f xs) (if (empty? xs) [] (if (f (head xs)) (append (list (head xs)) (filter f (tail xs))) (filter f (tail xs)))))
+(def (filter f xs) (cond ((empty? xs) []) ((f (head xs)) (append (list (head xs)) (filter f (tail xs)))) (#t (filter f (tail xs))))))
+(def (for-each f xs) (when (#t (f (head xs))) (#t (for-each f (tail xs)))))
 
 (def (flatten xs) (cond ((empty? xs) []) ((list? (head xs)) (append (flatten (head xs)) (flatten (tail xs)))) (#t (append (list (head xs)) (flatten (tail xs))))))
 (def (zip xs ys) (cond ((empty? xs) []) ((empty? ys) []) (#t (append (list (list (head xs) (head ys))) (zip (tail xs) (tail ys))))))
@@ -27,7 +27,7 @@
 (def (range s e) (cond ((> s e) []) (#t (append (list s) (range (+ s 1) e)))))
 (def (repeat t n) (map (fn (a) t) (range 1 n)))
 (def (all xs) (if (empty? xs) #f (fold and (head xs) (tail xs))))
-(def (any xs) (if (empty? xs) #f (fold or (head xs) (tail xs))))z
+(def (any xs) (if (empty? xs) #f (fold or (head xs) (tail xs))))
 
 (def (takeWhile f xs) (cond ((empty? xs) []) ((f (head xs)) (append (list (head xs)) (takeWhile f (tail xs)))) (#t [])))
 (def (dropWhile f xs) (cond ((empty? xs) []) ((f (head xs)) (append [] (dropWhile f (tail xs)))) (#t (append (list (head xs)) (dropWhile f (tail xs))))))
@@ -39,3 +39,7 @@
 
 (def (sum xs) (reduce (fn (acc v) (+ acc v)) xs))
 (def (multiply xs) (reduce (fn (acc v) (* acc v)) xs))
+(def (max xs) (reduce (fn (acc v) (if (>= acc v) acc v))))
+(def (min xs) (reduce (fn (acc v) (if (<= acc v) acc v))))
+
+(def (remove v xs) (filter (fn (t) (ne t v)) xs))

@@ -1,0 +1,5 @@
+; Assert
+(def (check-eq? f s m) (cond ((ne f s) (error m )))
+(def (check-not-eq? f s m) (cond ((eq f s) (error m))))
+(def (check-true c m) (cond ((ne c #t) (error m))))
+(def (check-false c m) (cond ((ne c #f) (error m))))

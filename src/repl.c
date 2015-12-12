@@ -1,13 +1,16 @@
 
 #include <mpc.h>
 #include <editline/readline.h>
-#include <editline/history.h>
 
 #include "types.h"
 #include "print.h"
 #include "ast.h"
 #include "builtin.h"
+
+#ifdef HAVE_PRELUDE
 #include "stl.h"
+#endif
+
 
 static char input[2048];
 

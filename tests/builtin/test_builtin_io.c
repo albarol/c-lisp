@@ -2,13 +2,13 @@
 
 #include "../helper.h"
 
-PT_SUITE(suite_builtin_magic) {
+PT_SUITE(suite_builtin_io) {
 
     PT_TEST(test_show_repr_of_type) {
         clisp_env_t* env = clisp_env_new();
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, clisp_chunk_bool(1));
-        clisp_chunk_t* chunk = clisp_builtin_magic_display(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_io_display(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_NIL);
 
@@ -21,7 +21,7 @@ PT_SUITE(suite_builtin_magic) {
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, clisp_chunk_bool(0));
         clisp_expr_append(expr, clisp_chunk_number(3));
-        clisp_chunk_t* chunk = clisp_builtin_magic_display(expr, env);
+        clisp_chunk_t* chunk = clisp_builtin_io_display(expr, env);
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect number of arguments. Got: 2, Expected: 1");

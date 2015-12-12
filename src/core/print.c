@@ -6,11 +6,7 @@ void
 clisp_print_write(clisp_chunk_t* token) {
     switch(token->type) {
         case CLISP_NUMBER:
-            if (clisp_utils_isint(token->value.number)) {
-                printf("%.0f", token->value.number);
-            } else {
-                printf("%.2f", token->value.number);
-            }
+            printf("%g", token->value.number);
             break;
         case CLISP_BOOL:
             if (token->value.boolean == 1) {
