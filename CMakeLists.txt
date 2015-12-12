@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
 
 #=============================#
 #      Setup Project          #
@@ -15,8 +15,10 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build)
 # define compile rules
 OPTION(WITH_PRELUDE "Prelude." OFF)
 IF(WITH_PRELUDE)
+    set (PRELUDE_SOURCE ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/prelude.c)
     add_definitions(-DHAVE_PRELUDE)
-    execute_process(COMMAND "xxd -i ${CMAKE_CURRENT_SOURCE_DIR}/stl/prelude.clisp > /tmp/prelude.c" OUTPUT_VARIABLE STL_PRELUDE)
+    add_custom_command(OUTPUT ${PRELUDE_SOURCE}
+        COMMAND xxd -i stl/prelude.clisp > ${PRELUDE_SOURCE})
 ENDIF(WITH_PRELUDE)
 
 #=============================#
@@ -51,7 +53,7 @@ set(CLISP_SOURCES
     src/core/expr.c
 )
 IF(WITH_PRELUDE)
-    set(CLISP_SOURCES ${CLISP_SOURCES} /tmp/prelude.c)
+    set(CLISP_SOURCES ${CLISP_SOURCES} ${PRELUDE_SOURCE})
 ENDIF(WITH_PRELUDE)
 
 set(CLISP_HEADERS
@@ -69,7 +71,6 @@ set(CLISP_HEADERS
 #=============================#
 
 add_executable(clisp ${CLISP_SOURCES} ${CLISP_HEADERS} src/repl.c)
-
 target_link_libraries(clisp m)
 target_link_libraries(clisp edit)
 
@@ -100,9 +101,7 @@ set(CLISP_TESTS
     tests/unit/ast/test_builtin_conditionals.c
     tests/unit/helper.c
 )
-add_executable(clispTest ${CLISP_TESTS} ${CLISP_SOURCES} ${CLISP_HEADERS})
 
-if(UNIX)
-    target_link_libraries(clispTest m)
-    target_link_libraries(clispTest edit)
-endif(UNIX)
+add_executable(clispTest ${CLISP_TESTS} ${CLISP_SOURCES} ${CLISP_HEADERS})
+target_link_libraries(clispTest m)
+target_link_libraries(clispTest edit)
