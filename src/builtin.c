@@ -100,5 +100,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "def", clisp_builtin_syntactic_def, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "for", clisp_builtin_syntactic_for, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "cond", clisp_builtin_syntactic_cond, CLISP_FUNCTION_LAZY);
+    clisp_env_put_builtin(env, "when", clisp_builtin_syntactic_when, CLISP_FUNCTION_LAZY);
+    clisp_env_put_builtin(env, "unless", clisp_builtin_syntactic_unless, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "fn", clisp_builtin_syntactic_lambda, CLISP_FUNCTION_LAZY);
 }
