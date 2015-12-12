@@ -141,6 +141,8 @@ clisp_builtin_syntactic_cond(clisp_expr_t* expr, clisp_env_t* env) {
     return clisp_chunk_nil();
 }
 
+//(for-each [1 2 3 4] (fn (t) (display (+ t 1))
+
 
 clisp_chunk_t*
 clisp_builtin_syntactic_lambda(clisp_expr_t* expr, clisp_env_t* env) {

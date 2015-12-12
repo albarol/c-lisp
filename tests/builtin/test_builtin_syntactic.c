@@ -1,11 +1,15 @@
-#include <types.h>
+
 #include "ptest.h"
 
+#include <types.h>
 #include "../helper.h"
 
 PT_SUITE(suite_builtin_syntactic) {
 
-    PT_TEST(test_if_returns_first_expr) {
+    /**
+     * Test if
+     */
+    PT_TEST(test_syntactic_if_returns_first_expr) {
         clisp_env_t* env = clisp_env_new();
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, clisp_chunk_bool(1));
@@ -20,7 +24,7 @@ PT_SUITE(suite_builtin_syntactic) {
         clisp_env_delete(env);
     }
 
-    PT_TEST(test_if_returns_first_expr) {
+    PT_TEST(test_syntactic_if_returns_first_expr) {
         clisp_env_t* env = clisp_env_new();
         clisp_expr_t* expr = clisp_expr_new();
         clisp_expr_append(expr, clisp_chunk_bool(0));
@@ -35,7 +39,37 @@ PT_SUITE(suite_builtin_syntactic) {
         clisp_env_delete(env);
     }
 
-    PT_TEST(test_def_returns_function) {
+    PT_TEST(test_syntactic_if_throws_arg_count) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_if(expr, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect number of arguments. Got: 0, Expected: 3");
+
+        clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_syntactic_if_throws_arg_type) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, clisp_chunk_number(3));
+        clisp_expr_append(expr, clisp_chunk_number(3));
+        clisp_expr_append(expr, clisp_chunk_number(4));
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_if(expr, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect type of argument. Got: Number, Expected: Boolean");
+
+        clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
+    }
+
+    /**
+     * Test def
+     */
+    PT_TEST(test_syntactic_def_returns_function) {
         clisp_env_t* env = clisp_env_new();
 
         clisp_chunk_t* args = clisp_chunk_expr();
@@ -60,6 +94,45 @@ PT_SUITE(suite_builtin_syntactic) {
         clisp_env_delete(env);
     }
 
+    PT_TEST(test_syntactic_def_throws_arg_count) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_def(expr, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect number of arguments. Got: 0, Expected: 2");
+
+        clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
+    }
+
+    PT_TEST(test_syntactic_def_throws_arg_type) {
+        clisp_env_t* env = clisp_env_new();
+        clisp_chunk_t* args = clisp_chunk_expr();
+        clisp_expr_append(args->value.list, clisp_chunk_symbol("sum"));
+        clisp_expr_append(args->value.list, clisp_chunk_number(5));
+        clisp_expr_append(args->value.list, clisp_chunk_symbol("b"));
+
+        clisp_chunk_t* body = clisp_chunk_expr();
+        clisp_expr_append(body->value.list, clisp_chunk_symbol("+"));
+        clisp_expr_append(body->value.list, clisp_chunk_symbol("a"));
+        clisp_expr_append(body->value.list, clisp_chunk_symbol("b"));
+
+        clisp_expr_t* expr = clisp_expr_new();
+        clisp_expr_append(expr, args);
+        clisp_expr_append(expr, body);
+        clisp_chunk_t* chunk = clisp_builtin_syntactic_def(expr, env);
+
+        PT_ASSERT(chunk->type == CLISP_ERROR);
+        PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect type of argument. Got: Number, Expected: Symbol");
+
+        clisp_chunk_delete(chunk);
+        clisp_env_delete(env);
+    }
+
+    /**
+     * Test for
+     */
     PT_TEST(test_for_should_call_func_many_times) {
         clisp_env_t* env = clisp_env_new();
 
@@ -149,6 +222,9 @@ PT_SUITE(suite_builtin_syntactic) {
         clisp_env_delete(env);
     }
 
+    /**
+     * Test cond
+     */
     PT_TEST(test_cond_should_execute_one_expression) {
         clisp_env_t* env = clisp_env_new();
 
@@ -205,6 +281,9 @@ PT_SUITE(suite_builtin_syntactic) {
         clisp_env_delete(env);
     }
 
+    /**
+     * Test lambda
+     */
     PT_TEST(test_lambda_expression) {
         clisp_env_t* env = clisp_env_new();
 

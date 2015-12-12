@@ -6,7 +6,6 @@
 #include <types.h>
 #include <error.h>
 
-clisp_chunk_t* clisp_builtin_math(clisp_expr_t* expr, clisp_env_t* env, char* op);
 clisp_chunk_t* clisp_builtin_math_add(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_sub(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_mul(clisp_expr_t* expr, clisp_env_t* env);
@@ -22,9 +21,5 @@ clisp_chunk_t* clisp_builtin_math_log10(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_sin(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_cos(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_tan(clisp_expr_t* expr, clisp_env_t* env);
-clisp_chunk_t* clisp_builtin_math_asin(clisp_expr_t* expr, clisp_env_t* env);
-clisp_chunk_t* clisp_builtin_math_acos(clisp_expr_t* expr, clisp_env_t* env);
-clisp_chunk_t* clisp_builtin_math_atan(clisp_expr_t* expr, clisp_env_t* env);
-clisp_chunk_t* clisp_builtin_math_pi(clisp_expr_t* expr, clisp_env_t* env);
 
 #endif

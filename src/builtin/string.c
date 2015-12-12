@@ -54,11 +54,12 @@ clisp_builtin_string_concat(clisp_expr_t* expr, clisp_env_t* env) {
         chunk = clisp_expr_pop(expr, 0);
 
         if (chunk->type != CLISP_STRING) {
-            clisp_chunk_delete(chunk);
             clisp_chunk_delete(first);
             clisp_expr_delete(expr);
-            return clisp_chunk_error("Invalid type of argument. Got: %s, Expected: String",
-                                     clisp_print_type_name(chunk->type));
+            clisp_chunk_t* error = clisp_chunk_error(TYPE_ERROR, clisp_print_type_name(chunk->type),
+                                                     clisp_print_type_name(CLISP_STRING));
+            clisp_chunk_delete(chunk);
+            return error;
         }
 
         strcat(first->value.string, chunk->value.string);

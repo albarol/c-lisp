@@ -10,4 +10,6 @@ clisp_env_t* create_basic_env();
 clisp_expr_t* create_expr_with_two_numbers(float first, float second);
 clisp_expr_t* read_entry(char* input, clisp_env_t* env);
 
+int almost_equal(float a, float b, float epsilon);
+
 #endif

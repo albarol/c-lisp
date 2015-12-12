@@ -84,13 +84,14 @@ set(CLISP_TESTS
     tests/test_types.c
     tests/test_env.c
     tests/test_expr.c
-    tests/builtin/test_builtin_math.c
-    tests/builtin/test_builtin_list.c
-    tests/builtin/test_builtin_number.c
     tests/builtin/test_builtin_bool.c
-    tests/builtin/test_builtin_syntactic.c
-    tests/builtin/test_builtin_io.c
     tests/builtin/test_builtin_exception.c
+    tests/builtin/test_builtin_io.c
+    tests/builtin/test_builtin_list.c
+    tests/builtin/test_builtin_math.c
+    tests/builtin/test_builtin_number.c
+    tests/builtin/test_builtin_string.c
+    tests/builtin/test_builtin_syntactic.c
     tests/ast/test_ast.c
     tests/ast/test_builtin_list.c
     tests/ast/test_builtin_math.c

@@ -5,7 +5,7 @@
 
 PT_SUITE(suite_builtin_exception) {
 
-    PT_TEST(test_create_error) {
+    PT_TEST(test_exception_error) {
         clisp_env_t* env = clisp_env_new();
         clisp_expr_t* expr = clisp_expr_create(clisp_chunk_str("Some error"));
         clisp_chunk_t* result = clisp_builtin_exception_error(expr, env);
@@ -17,7 +17,7 @@ PT_SUITE(suite_builtin_exception) {
         clisp_env_delete(env);
     }
 
-    PT_TEST(test_error_throws_with_invalid_args_count) {
+    PT_TEST(test_exception_error_throws_with_invalid_args_count) {
         clisp_env_t* env = clisp_env_new();
         clisp_chunk_t* result = clisp_builtin_exception_error(clisp_expr_new(), env);
 
@@ -28,7 +28,7 @@ PT_SUITE(suite_builtin_exception) {
         clisp_env_delete(env);
     }
 
-    PT_TEST(test_error_throws_with_invalid_args_type) {
+    PT_TEST(test_exception_error_throws_with_invalid_args_type) {
         clisp_env_t* env = clisp_env_new();
         clisp_expr_t* expr = clisp_expr_create(clisp_chunk_number(1));
         clisp_chunk_t* result = clisp_builtin_exception_error(expr, env);
@@ -39,5 +39,4 @@ PT_SUITE(suite_builtin_exception) {
         clisp_chunk_delete(result);
         clisp_env_delete(env);
     }
-
 }

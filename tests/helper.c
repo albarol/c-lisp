@@ -48,3 +48,8 @@ read_entry(char* input, clisp_env_t* env) {
 
     return clisp_read_ast(r.output);
 }
+
+int
+almost_equal(float a, float b, float epsilon) {
+    return fabs(a - b) < epsilon;
+}
