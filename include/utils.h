@@ -4,6 +4,10 @@
 #include <math.h>
 #include <stdlib.h>
 
-int clisp_utils_isint(float number);
+#include <types.h>
+#include <ast.h>
+#include <parser.h>
+
+clisp_chunk_t* clisp_utils_load_script(char* filename, clisp_env_t* env);
 
 #endif

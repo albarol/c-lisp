@@ -4,8 +4,8 @@
 (def (sub1 z) (- z 1))
 (def (abs x) (if (< x 0) (* x -1) x))
 (def (sign x) (cond ((positive? x) 1) ((negative? x) -1) (#t 0)))
-(def (double b) (^ b 2))
-(def (triple b) (^ b 3))
+(def (double b) (* b 2))
+(def (triple b) (* b 3))
 (def (fib n) (cond ((< n 0) 0) ((eq n 1) 1) (#t (+ (fib (- n 1)) (fib (- n 2))))))
 (def (fact n) (if (<= n 0) 1 (* n (fact (- n 1)))))
 
@@ -18,8 +18,8 @@
 (def (map f xs) (if (empty? xs) [] (append (list (f (head xs))) (map f (tail xs)))))
 (def (fold f acc xs) (cond ((empty? xs) acc) (#t (fold f (f acc (head xs)) (tail xs)))))
 (def (reduce f xs) (if (empty? xs) (head xs) (fold f (head xs) (tail xs))))
-(def (filter f xs) (cond ((empty? xs) []) ((f (head xs)) (append (list (head xs)) (filter f (tail xs)))) (#t (filter f (tail xs))))))
-(def (for-each f xs) (when (#t (f (head xs))) (#t (for-each f (tail xs)))))
+(def (filter f xs) (cond ((empty? xs) []) ((f (head xs)) (append (list (head xs)) (filter f (tail xs)))) (#t (filter f (tail xs)))))
+(def (for-each f xs) (if (empty? xs) [] (when (#t (f (head xs))) (#t (for-each f (tail xs))))))
 
 (def (flatten xs) (cond ((empty? xs) []) ((list? (head xs)) (append (flatten (head xs)) (flatten (tail xs)))) (#t (append (list (head xs)) (flatten (tail xs))))))
 (def (zip xs ys) (cond ((empty? xs) []) ((empty? ys) []) (#t (append (list (list (head xs) (head ys))) (zip (tail xs) (tail ys))))))
@@ -37,9 +37,9 @@
 (def (takeLast f xs) (takeFirst f (reverse xs)))
 (def (slice s e xs) (take e (drop s xs)))
 
-(def (sum xs) (reduce (fn (acc v) (+ acc v)) xs))
-(def (multiply xs) (reduce (fn (acc v) (* acc v)) xs))
-(def (max xs) (reduce (fn (acc v) (if (>= acc v) acc v))))
-(def (min xs) (reduce (fn (acc v) (if (<= acc v) acc v))))
+(def (sum xs) (reduce + xs))
+(def (multiply xs) (reduce * xs))
+(def (max xs) (reduce (fn (acc v) (if (>= acc v) acc v)) xs))
+(def (min xs) (reduce (fn (acc v) (if (<= acc v) acc v)) xs))
 
 (def (remove v xs) (filter (fn (t) (ne t v)) xs))

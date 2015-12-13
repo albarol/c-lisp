@@ -16,11 +16,6 @@ void suite_builtin_string(void);
 void suite_builtin_syntactic(void);
 
 void suite_ast(void);
-void suite_ast_builtin_list(void);
-void suite_ast_builtin_math(void);
-void suite_ast_builtin_ordering(void);
-void suite_ast_builtin_comparison(void);
-void suite_ast_builtin_conditionals(void);
 
 int main(int argc, char** argv) {
     (void) argc; (void) argv;
@@ -43,11 +38,6 @@ int main(int argc, char** argv) {
 
     // AST tests
     pt_add_suite(suite_ast);
-    pt_add_suite(suite_ast_builtin_list);
-    pt_add_suite(suite_ast_builtin_math);
-    pt_add_suite(suite_ast_builtin_ordering);
-    pt_add_suite(suite_ast_builtin_comparison);
-    pt_add_suite(suite_ast_builtin_conditionals);
 
     return pt_run();
 }
