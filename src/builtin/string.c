@@ -1,5 +1,6 @@
 
 #include <builtin/string.h>
+#include <types.h>
 
 clisp_chunk_t*
 clisp_builtin_string_check_type(clisp_expr_t* expr, clisp_env_t* env) {
@@ -19,7 +20,7 @@ clisp_builtin_string_uppercase(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_assert_type(chunk, chunk->type, CLISP_STRING);
 
-    int total = strlen(chunk->value.string);
+    size_t total = strlen(chunk->value.string);
     for (int i = 0; i < total; i++){
         chunk->value.string[i] = toupper(chunk->value.string[i]);
     }
@@ -34,7 +35,7 @@ clisp_builtin_string_lowercase(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_assert_type(chunk, chunk->type, CLISP_STRING);
 
-    int total = strlen(chunk->value.string);
+    size_t total = strlen(chunk->value.string);
     for (int i = 0; i < total; i++){
         chunk->value.string[i] = tolower(chunk->value.string[i]);
     }
@@ -48,6 +49,7 @@ clisp_builtin_string_concat(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_STRING);
 
     clisp_chunk_t* first = clisp_expr_pop(expr, 0);
+    size_t total = strlen(first->value.string);
 
     clisp_chunk_t* chunk = NULL;
     while (expr->count) {
@@ -62,6 +64,8 @@ clisp_builtin_string_concat(clisp_expr_t* expr, clisp_env_t* env) {
             return error;
         }
 
+        total += strlen(chunk->value.string);
+        first->value.string = realloc(first->value.string, total + 1);
         strcat(first->value.string, chunk->value.string);
     }
     clisp_chunk_delete(chunk);
@@ -93,3 +97,14 @@ clisp_builtin_string_split(clisp_expr_t* expr, clisp_env_t* env) {
     return result;
 }
 
+clisp_chunk_t*
+clisp_builtin_string_length(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_pop(expr, 0);
+    clisp_chunk_assert_type(chunk, chunk->type, CLISP_STRING);
+
+    clisp_chunk_t* result = clisp_chunk_number(strlen(chunk->value.string));
+    clisp_chunk_delete(chunk);
+    return result;
+}

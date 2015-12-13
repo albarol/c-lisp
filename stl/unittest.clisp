@@ -1,5 +1,11 @@
 ; Assert
-(def (check-eq? f s m) (cond ((ne f s) (error m )))
+
+(def (test-suite name) (when (#t (print name)) (#t (print "\n---------------------------------\n"))))
+
+(def (test-case name expr) (cond ((error? expr) (when (#t (print name)) (#t (print expr)) (#t %exit))) (#t (print (string->concat name ": [Passed]")))))
+
+(def (check-eq? f s m) (cond ((ne f s) (error m ))))
 (def (check-not-eq? f s m) (cond ((eq f s) (error m))))
-(def (check-true c m) (cond ((ne c #t) (error m))))
-(def (check-false c m) (cond ((ne c #f) (error m))))
+(def (check-true? b m) (cond ((ne b #t) (error m))))
+(def (check-false? b m) (cond ((ne b #f) (error m))))
+(def (check-count? xs c m) (cond ((ne (length xs) c) (error m))))

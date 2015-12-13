@@ -52,7 +52,7 @@ struct clisp_chunk_t {
         char* string;
         clisp_expr_t* list;
 
-        struct { ;
+        struct {
             clisp_builtin_t body;
             clisp_function_type ftype;
         } builtin;

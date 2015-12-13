@@ -51,6 +51,7 @@ set(CLISP_SOURCES
     src/core/types.c
     src/core/env.c
     src/core/expr.c
+    src/core/parser.c
 )
 IF(WITH_PRELUDE)
     set(CLISP_SOURCES ${CLISP_SOURCES} ${PRELUDE_SOURCE})
@@ -64,6 +65,7 @@ set(CLISP_HEADERS
     include/types.h
     include/utils.h
     include/stl.h
+    include/parser.h
 )
 
 #=============================#
@@ -94,11 +96,6 @@ set(CLISP_TESTS
     tests/unit/builtin/test_builtin_string.c
     tests/unit/builtin/test_builtin_syntactic.c
     tests/unit/ast/test_ast.c
-    tests/unit/ast/test_builtin_list.c
-    tests/unit/ast/test_builtin_math.c
-    tests/unit/ast/test_builtin_ordering.c
-    tests/unit/ast/test_builtin_comparison.c
-    tests/unit/ast/test_builtin_conditionals.c
     tests/unit/helper.c
 )
 

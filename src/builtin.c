@@ -24,11 +24,14 @@ clisp_builtin_load_functions(clisp_env_t* env) {
      * Exception builtin functions
      */
     clisp_env_put_builtin(env, "error", clisp_builtin_exception_error, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "error?", clisp_builtin_exception_is_error, CLISP_FUNCTION_EAGER);
 
     /**
      * IO builtin functions
      */
     clisp_env_put_builtin(env, "display", clisp_builtin_io_display, CLISP_FUNCTION_LAZY);
+    clisp_env_put_builtin(env, "print", clisp_builtin_io_print, CLISP_FUNCTION_LAZY);
+    clisp_env_put_builtin(env, "load", clisp_builtin_io_load, CLISP_FUNCTION_LAZY);
 
     /**
      * List builtin functions
@@ -91,6 +94,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "string->lower",  clisp_builtin_string_lowercase, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, "string->split",  clisp_builtin_string_split, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, "string->concat",  clisp_builtin_string_concat, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "string->length",  clisp_builtin_string_length, CLISP_FUNCTION_EAGER);
 
 
     /**

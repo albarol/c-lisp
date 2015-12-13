@@ -1,0 +1,25 @@
+
+(load "stl/unittest.clisp")
+
+(test-suite "Boolean suite case")
+
+; Check type
+(test-case "Test If Bool is Bool" (check-true? (bool? #f) "Arg should be boolean"))
+(test-case "Test If Number is Bool" (check-false? (bool? 1) "Arg should be boolean"))
+
+; Not
+(test-case "Test Not Should Invert True" (check-false? (not #t) "Should be false"))
+(test-case "Test Not Should Invert False" (check-true? (not #f) "Should be true"))
+
+; And
+(test-case "Test And Should Check True And True" (check-true? (and #t #t) "Should be true"))
+(test-case "Test And Should Check False And False" (check-false? (and #f #f) "Should be false"))
+(test-case "Test And Should Check True And False" (check-false? (and #t #f) "Should be false"))
+(test-case "Test And Should Check False And True" (check-false? (and #f #t) "Should be false"))
+
+; Or
+(test-case "Test Or Should Check True And True" (check-true? (or #t #t) "Should be true"))
+(test-case "Test Or Should Check False And True" (check-true? (or #f #t) "Should be true"))
+(test-case "Test Or Should Check True And False" (check-true? (or #t #f) "Should be true"))
+(test-case "Test Or Should Check False And False" (check-false? (or #f #f) "Should be false"))
+

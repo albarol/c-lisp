@@ -7,7 +7,7 @@
 #include "types.h"
 #include "utils.h"
 
-void clisp_print_write(clisp_chunk_t* token);
+void clisp_print_write(clisp_chunk_t* chunk);
 void clisp_print_writeln(clisp_chunk_t* token);
 void clisp_print_write_expr(clisp_expr_t* expr, char open, char close);
 void clisp_print_write_str(clisp_chunk_t* token);
