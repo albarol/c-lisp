@@ -14,9 +14,19 @@
 
 static char input[2048];
 
-int main(int argc, char** argv) {
+void
+load_script(char* filename, clisp_env_t* env) {
+    char command[1024];
+    strcpy(command, "(load \"");
+    strcat(command, filename);
+    strcat(command, "\")");
+    clisp_process(command, env, false);
+}
 
-    puts("Welcome to CLisp, version 0.5.0\n");
+int
+main(int argc, char** argv) {
+
+    puts("Welcome to CLisp, version 0.6.0\n");
     puts("Press Ctrl+c to Exit");
 
 #ifdef HAVE_PRELUDE
@@ -37,13 +47,28 @@ int main(int argc, char** argv) {
     free(lines);
 #endif
 
-    if (argc > 1) {
-        char command[1024];
-        strcpy(command, "(load \"");
-        strcat(command, argv[1]);
-        strcat(command, "\")");
-        clisp_process(command, env, true);
-    } else {
+    bool enterRepl = true;
+    switch (argc) {
+        case 2: {
+            load_script(argv[1], env);
+            enterRepl = false;
+            break;
+        }
+        case 3: {
+            if (strcmp("-i", argv[1]) == 0) {
+                printf("Loaded file: %s\n\n", argv[2]);
+                load_script(argv[2], env);
+            }
+            else {
+                printf("the \"%s\" is an invalid argument.", argv[1]);
+                exit(EXIT_SUCCESS);
+            }
+            break;
+        }
+        default: break;
+    }
+
+    if (enterRepl) {
         while (1) {
             char* input = readline("> ");
             add_history(input);
