@@ -15,7 +15,7 @@ clisp_builtin_syntactic_if(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_expr_assert_type(expr, cond->type, CLISP_BOOL);
 
-    if (cond->value.boolean) {
+    if (cond->value.boolean == true) {
         clisp_expr_remove(expr, 1);
     } else {
         clisp_expr_remove(expr, 0);
@@ -222,9 +222,6 @@ clisp_builtin_syntactic_unless(clisp_expr_t* expr, clisp_env_t* env) {
     return clisp_chunk_nil();
 }
 
-
-
-
 clisp_chunk_t*
 clisp_builtin_syntactic_lambda(clisp_expr_t* expr, clisp_env_t* env) {
 
@@ -242,4 +239,16 @@ clisp_builtin_syntactic_lambda(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* func = clisp_chunk_function(args, body);
     func->value.func.env->parent = env;
     return func;
+}
+
+clisp_chunk_t*
+clisp_builtin_syntactic_type(clisp_expr_t* expr, clisp_env_t* env) {
+
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_t* result = clisp_chunk_str(clisp_print_type_name(chunk->type));
+
+    clisp_chunk_delete(chunk);
+    return result;
 }

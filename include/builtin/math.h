@@ -21,5 +21,6 @@ clisp_chunk_t* clisp_builtin_math_log10(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_sin(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_cos(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_math_tan(clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_builtin_math_abs(clisp_expr_t* expr, clisp_env_t* env);
 
 #endif

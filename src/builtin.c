@@ -69,6 +69,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "sin", clisp_builtin_math_sin, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, "cos", clisp_builtin_math_cos, CLISP_FUNCTION_EAGER);
     clisp_env_put_builtin(env, "tan", clisp_builtin_math_tan, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "abs", clisp_builtin_math_abs, CLISP_FUNCTION_EAGER);
 
 
     /**
@@ -107,4 +108,5 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "when", clisp_builtin_syntactic_when, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "unless", clisp_builtin_syntactic_unless, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "fn", clisp_builtin_syntactic_lambda, CLISP_FUNCTION_LAZY);
+    clisp_env_put_builtin(env, "type", clisp_builtin_syntactic_type, CLISP_FUNCTION_EAGER);
 }

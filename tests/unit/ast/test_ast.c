@@ -201,4 +201,27 @@ PT_SUITE(suite_ast) {
         clisp_chunk_delete(chunk);
         clisp_expr_delete(ast);
     }
+
+    PT_TEST(test_call_function_of_functions) {
+        clisp_env_t* env = create_basic_env();
+        clisp_expr_t* ast = read_entry("(def (test-case name expr) (if (error? expr) (when (#t (print name)) (#t (print expr)) (#t %exit)) (print (string->concat name \": [Passed]\"))))", env);
+        clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
+
+        clisp_expr_delete(ast);
+        clisp_chunk_delete(chunk);
+
+        ast = read_entry("(def (check-eq? f s m) (cond ((ne f s) (error m))))", env);
+        chunk = clisp_eval_ast(ast, env);
+
+        clisp_expr_delete(ast);
+        clisp_chunk_delete(chunk);
+
+        ast = read_entry("(test-case \"Test negative number\" (check-eq? -1 -1 \"should be negative\"))", env);
+        chunk = clisp_eval_ast(ast, env);
+
+        PT_ASSERT(chunk->type == CLISP_NIL);
+
+        clisp_chunk_delete(chunk);
+        clisp_expr_delete(ast);
+    }
 }

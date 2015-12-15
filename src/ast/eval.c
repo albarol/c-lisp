@@ -36,7 +36,8 @@ clisp_chunk_t*
 clisp_eval_ast_builtin_eager(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_t* params = clisp_expr_new();
     while (expr->count) {
-        clisp_expr_append(params, clisp_eval_ast(expr, env));
+        clisp_chunk_t* param = clisp_eval_ast(expr, env);
+        clisp_expr_append(params, param);
     }
     clisp_chunk_t* result = func->value.builtin.body(params, env);
 
