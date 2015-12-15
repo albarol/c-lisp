@@ -1,0 +1,92 @@
+
+(load "stl/unittest.clisp")
+
+(test-suite "Math suite case")
+
+; Negative number
+(test-case "Test negative number" (check-eq? -1 -1 "should be negative"))
+
+; Add
+(test-case "Test Add without args" (check-error? (+) "Arg should be error"))
+(test-case "Test Add invalid arg" (check-error? (+ "1" "2") "Arg should be error"))
+(test-case "Test Add two numbers" (check-eq? (+ 1 2) 3 "should be 3"))
+
+; Sub
+(test-case "Test Sub without args" (check-error? (-) "Arg should be error"))
+(test-case "Test Sub invalid arg" (check-error? (- "1" "2") "Arg should be error"))
+(test-case "Test Sub two numbers" (check-eq? (- 2 1) 1 "should be 1"))
+
+; Multiply
+(test-case "Test Mul without args" (check-error? (*) "Arg should be error"))
+(test-case "Test Mul invalid arg" (check-error? (* "1" "2") "Arg should be error"))
+(test-case "Test Mul two numbers" (check-eq? (* 2 1) 2 "should be 2"))
+
+; Divide
+(test-case "Test div without args" (check-error? (/) "Arg should be error"))
+(test-case "Test div invalid arg" (check-error? (/ "1" "2") "Arg should be error"))
+(test-case "Test div by zero" (check-error? (/ 10 0) "Arg should be error"))
+(test-case "Test div two numbers" (check-eq? (/ 4 2) 2 "should be 2"))
+
+; Mod
+(test-case "Test mod without args" (check-error? (%) "Arg should be error"))
+(test-case "Test mod invalid arg" (check-error? (% "1" "2") "Arg should be error"))
+(test-case "Test mod two numbers" (check-eq? (% 7 3) 1 "should be 1"))
+
+; Pow
+(test-case "Test pow without args" (check-error? (^) "Arg should be error"))
+(test-case "Test pow invalid arg" (check-error? (^ "1" "2") "Arg should be error"))
+(test-case "Test pow two numbers" (check-eq? (^ 2 3) 8 "should be 8"))
+
+; Round
+(test-case "Test round without args" (check-error? (round) "Arg should be error"))
+(test-case "Test round invalid arg" (check-error? (round "1") "Arg should be error"))
+(test-case "Test round number <0.5" (check-eq? (round 2.3) 2 "should be 2"))
+(test-case "Test round number >0.5" (check-eq? (round 2.6) 3 "should be 3"))
+
+; Floor
+(test-case "Test floor without args" (check-error? (floor) "Arg should be error"))
+(test-case "Test floor invalid arg" (check-error? (floor "1") "Arg should be error"))
+(test-case "Test floor number <0.5" (check-eq? (floor 2.3) 2 "should be 2"))
+(test-case "Test floor number >0.5" (check-eq? (floor 2.6) 2 "should be 2"))
+
+; Ceil
+(test-case "Test ceil without args" (check-error? (ceil) "Arg should be error"))
+(test-case "Test ceil invalid arg" (check-error? (ceil "1") "Arg should be error"))
+(test-case "Test ceil number <0.5" (check-eq? (ceil 2.3) 3 "should be 3"))
+(test-case "Test ceil number >0.5" (check-eq? (ceil 2.6) 3 "should be 3"))
+
+; Sqrt
+(test-case "Test sqrt without args" (check-error? (sqrt) "Arg should be error"))
+(test-case "Test sqrt invalid arg" (check-error? (sqrt "1") "Arg should be error"))
+(test-case "Test sqrt number" (check-eq? (sqrt 9) 3 "should be 3"))
+
+; Log
+(test-case "Test log without args" (check-error? (log) "Arg should be error"))
+(test-case "Test log invalid arg" (check-error? (log "1") "Arg should be error"))
+(test-case "Test log number" (check-eq? (log 1) 0 "should be 0"))
+
+; Log10
+(test-case "Test log10 without args" (check-error? (log10) "Arg should be error"))
+(test-case "Test log10 invalid arg" (check-error? (log10 "1") "Arg should be error"))
+(test-case "Test log10 number" (check-eq? (log10 100) 2 "should be 2"))
+
+; Cos
+(test-case "Test cos without args" (check-error? (cos) "Arg should be error"))
+(test-case "Test cos invalid arg" (check-error? (cos "1") "Arg should be error"))
+(test-case "Test cos number" (check-eq? (cos pi) -1 "should be -1"))
+
+; Sin
+(test-case "Test sin without args" (check-error? (sin) "Arg should be error"))
+(test-case "Test sin invalid arg" (check-error? (sin "1") "Arg should be error"))
+(test-case "Test sin number" (check-eq? (sin (/ (pi) 2)) 1 "should be 1"))
+
+; Tan
+(test-case "Test tan without args" (check-error? (tan) "Arg should be error"))
+(test-case "Test tan invalid arg" (check-error? (tan "1") "Arg should be error"))
+(test-case "Test tan number" (check-eqv? (tan 0.7854) 1 0.1 "should be < 0.1"))
+
+; Abs
+(test-case "Test abs without args" (check-error? (tan) "Arg should be error"))
+(test-case "Test abs invalid arg" (check-error? (tan "1") "Arg should be error"))
+(test-case "Test abs positive number" (check-eq? (abs -1) 1 "should be 1"))
+(test-case "Test abs negative number" (check-eq? (abs 1) 1 "should be 1"))
