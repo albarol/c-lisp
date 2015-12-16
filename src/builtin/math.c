@@ -114,6 +114,9 @@ clisp_builtin_math_functions(clisp_expr_t* expr, clisp_env_t* env, char* fn) {
     else if (strcmp(fn, "tan") == 0) {
         result = clisp_chunk_number(tanf(chunk->value.number));
     }
+    else if (strcmp(fn, "abs") == 0) {
+        result = clisp_chunk_number(fabsf(chunk->value.number));
+    }
 
     clisp_chunk_delete(chunk);
     return result;
@@ -162,4 +165,9 @@ clisp_builtin_math_cos(clisp_expr_t* expr, clisp_env_t* env) {
 clisp_chunk_t*
 clisp_builtin_math_tan(clisp_expr_t* expr, clisp_env_t* env) {
     return clisp_builtin_math_functions(expr, env, "tan");
+}
+
+clisp_chunk_t*
+clisp_builtin_math_abs(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_math_functions(expr, env, "abs");
 }

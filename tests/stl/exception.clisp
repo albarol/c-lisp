@@ -1,0 +1,14 @@
+
+(load "stl/unittest.clisp")
+
+(test-suite "Exception suite case")
+
+; Check type
+(test-case "Test Error? without args" (check-error? (error?) "Arg should be error"))
+(test-case "Test Error? using error" (check-true? (error? (error "Some Error")) "Arg should be error"))
+(test-case "Test Error? using boolean" (check-false? (error? #f) "Arg should be error"))
+
+; Error
+(test-case "Test Error without args" (check-error? (error) "Arg should be error"))
+(test-case "Test Error invalid args" (check-error? (error 1) "Arg should be error"))
+(test-case "Test Error create error" (check-error? (error "Some error") "Arg should be error"))

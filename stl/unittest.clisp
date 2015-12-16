@@ -2,10 +2,18 @@
 
 (def (test-suite name) (when (#t (print name)) (#t (print "\n---------------------------------\n"))))
 
-(def (test-case name expr) (cond ((error? expr) (when (#t (print name)) (#t (print expr)) (#t %exit))) (#t (print (string->concat name ": [Passed]")))))
+(def (test-case name expr) (if (error? expr) (when (#t (print name)) (#t (print expr)) (#t %exit)) (print (string->concat name ": [Passed]"))))
 
-(def (check-eq? f s m) (cond ((ne f s) (error m ))))
+(def (check-eq? f s m) (cond ((ne f s) (error m))))
 (def (check-not-eq? f s m) (cond ((eq f s) (error m))))
 (def (check-true? b m) (cond ((ne b #t) (error m))))
 (def (check-false? b m) (cond ((ne b #f) (error m))))
 (def (check-count? xs c m) (cond ((ne (length xs) c) (error m))))
+(def (check-eqv? f s e m) (cond ((> (abs (- f s)) e) (error m))))
+
+(def (check-bool? t1 m) (cond ((not (bool? t1)) (error m))))
+(def (check-error? t1 m) (cond ((not (error? t1)) (error m))))
+(def (check-list? t1 m) (cond ((not (list? t1)) (error m))))
+(def (check-number? t1 m) (cond ((not (number? t1)) (error m))))
+(def (check-string? t1 m) (cond ((not (string? t1)) (error m))))
+(def (check-type? t1 t2 m) (cond ((ne (type t1) t2) (error m))))

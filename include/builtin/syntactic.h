@@ -12,5 +12,6 @@ clisp_chunk_t* clisp_builtin_syntactic_cond(clisp_expr_t* expr, clisp_env_t* env
 clisp_chunk_t* clisp_builtin_syntactic_when(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_syntactic_unless(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_syntactic_lambda(clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_builtin_syntactic_type(clisp_expr_t* expr, clisp_env_t* env);
 
 #endif
