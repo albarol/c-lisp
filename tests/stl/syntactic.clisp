@@ -1,0 +1,20 @@
+
+(load "stl/unittest.clisp")
+
+(test-suite "Syntactic suite case")
+
+; If
+(test-case "test if without args" (check-error? (if) "should be error"))
+(test-case "Test if invalid cond" (check-error? (if 1 2 3) "should be error"))
+(test-case "Test if eval first" (check-true? (if #t #t #f) "should be true"))
+(test-case "Test if eval second" (check-false? (if #f #t #f) "should be false"))
+
+; Def
+(test-case "test def without args" (check-error? (def) "should be error"))
+(test-case "Test def invalid expr" (check-error? (def a 2) "should be error"))
+(test-case "Test def invalid arg" (check-error? (def (1) 2) "should be error"))
+
+; Cond
+(test-case "test cond invalid args" (check-error? (cond ((1) #t)) "should be error"))
+(test-case "test cond execute first" (check-true? (cond (#t #t)) "should be #t"))
+(test-case "test cond execute second" (check-false? (cond (#f #t) (#t #f)) "should be #f"))

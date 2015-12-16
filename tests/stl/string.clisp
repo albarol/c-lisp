@@ -1,0 +1,34 @@
+
+(load "stl/unittest.clisp")
+
+(test-suite "String suite case")
+
+; Check type
+(test-case "test string? without args" (check-error? (string?) "should be error"))
+(test-case "test string? using error" (check-true? (string? "String") "should be true"))
+(test-case "test string? using boolean" (check-false? (string? #f) "Arg should be falser"))
+
+; Uppercase
+(test-case "test uppercase without args" (check-error? (string->upper) "should be error"))
+(test-case "test uppercase invalid args" (check-error? (string->upper 1) "should be error"))
+(test-case "test uppercase" (check-eq? (string->upper "String") "STRING" "should be \"STRING\""))
+
+; Lowercase
+(test-case "test lowercase without args" (check-error? (string->lower) "should be error"))
+(test-case "test lowercase invalid args" (check-error? (string->lower 1) "should be error"))
+(test-case "test lowercase" (check-eq? (string->lower "String") "string" "should be \"string\""))
+
+; Concat
+(test-case "test concat without args" (check-error? (string->concat) "should be error"))
+(test-case "test concat invalid args" (check-error? (string->concat 1) "should be error"))
+(test-case "test concat" (check-eq? (string->concat "Hello " "World") "Hello World" "should be \"Hello World\""))
+
+; Split
+(test-case "test split without args" (check-error? (string->split) "should be error"))
+(test-case "test split invalid args" (check-error? (string->split 1) "should be error"))
+(test-case "test split" (check-eq? (string->split "Hello World" " ") ["Hello" "World"] "should be [\"Hello\" \"World\"]"))
+
+; Length
+(test-case "test split without args" (check-error? (string->length) "should be error"))
+(test-case "test split invalid args" (check-error? (string->length 1) "should be error"))
+(test-case "test split" (check-eq? (string->length "Hello World") 11 "should be 11"))

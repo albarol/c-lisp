@@ -1,0 +1,65 @@
+
+(load "stl/unittest.clisp")
+
+(test-suite "Number suite case")
+
+; Check type
+(test-case "Test Number? without args" (check-error? (number?) "should be error"))
+(test-case "Test Number? using number" (check-true? (number? 1) "should be true"))
+(test-case "Test Number? using boolean" (check-false? (number? #f) "should be false"))
+
+; Zero
+(test-case "test number? without args" (check-error? (zero?) "should be error"))
+(test-case "test number? invalid arg" (check-error? (zero? #f) "should be false"))
+(test-case "test number? using zero" (check-true? (zero? 0) "should be true"))
+(test-case "test number? using one" (check-false? (zero? 1) "should be false"))
+
+; Positive
+(test-case "test positive? without args" (check-error? (positive?) "should be error"))
+(test-case "test positive? invalid arg" (check-error? (positive? #f) "should be false"))
+(test-case "test positive? using 1" (check-true? (positive? 1) "should be true"))
+(test-case "test positive? using -1" (check-false? (positive? -1) "should be false"))
+
+; Negative
+(test-case "test negative? without args" (check-error? (negative?) "should be error"))
+(test-case "test negative? invalid arg" (check-error? (negative? #f) "should be false"))
+(test-case "test negative? using -1" (check-true? (negative? -1) "should be true"))
+(test-case "test negative? using 1" (check-false? (negative? 1) "should be false"))
+
+; Even
+(test-case "test even? without args" (check-error? (even?) "should be error"))
+(test-case "test even? invalid arg" (check-error? (even? #f) "should be false"))
+(test-case "test even? using 2" (check-true? (even? 2) "should be true"))
+(test-case "test even? using 1" (check-false? (even? 1) "should be false"))
+
+; Odd
+(test-case "test odd? without args" (check-error? (odd?) "should be error"))
+(test-case "test odd? invalid arg" (check-error? (odd? #f) "should be false"))
+(test-case "test odd? using 2" (check-false? (odd? 2) "should be false"))
+(test-case "test odd? using 1" (check-true? (odd? 1) "should be true"))
+
+; Gt
+(test-case "test gt without args" (check-error? (>) "should be error"))
+(test-case "test gt invalid arg" (check-error? (> 1 #f) "should be false"))
+(test-case "test gt false" (check-false? (> 1 5) "should be false"))
+(test-case "test gt true" (check-true? (> 5 1) "should be true"))
+
+; Gte
+(test-case "test gte without args" (check-error? (>=) "should be error"))
+(test-case "test gte invalid arg" (check-error? (>= 1 #f) "should be false"))
+(test-case "test gte false" (check-false? (>= 1 5) "should be false"))
+(test-case "test gte true" (check-true? (>= 5 1) "should be true"))
+(test-case "test gte equal" (check-true? (>= 5 5) "should be true"))
+
+; Lt
+(test-case "test lt without args" (check-error? (<) "should be error"))
+(test-case "test t invalid arg" (check-error? (< 1 #f) "should be false"))
+(test-case "test lt false" (check-false? (< 5 1) "should be false"))
+(test-case "test lt true" (check-true? (< 1 5) "should be true"))
+
+; Lte
+(test-case "test lte without args" (check-error? (<=) "should be error"))
+(test-case "test lte invalid arg" (check-error? (<= 1 #f) "should be false"))
+(test-case "test lte false" (check-false? (<= 5 1) "should be false"))
+(test-case "test lte true" (check-true? (<= 1 5) "should be true"))
+(test-case "test lte equal" (check-true? (<= 5 5) "should be true"))

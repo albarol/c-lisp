@@ -93,7 +93,7 @@ clisp_builtin_number_ordering(clisp_expr_t* expr, clisp_env_t* env, char* op) {
 
     clisp_chunk_delete(first);
     clisp_chunk_delete(second);
-    return clisp_chunk_bool(result);
+    return clisp_chunk_bool(result == 1 ? true : false);
 }
 
 clisp_chunk_t*

@@ -2,7 +2,6 @@
 (def (pi) 3.1415)
 (def (add1 z) (+ z 1))
 (def (sub1 z) (- z 1))
-(def (abs x) (if (< x 0) (* x -1) x))
 (def (sign x) (cond ((positive? x) 1) ((negative? x) -1) (#t 0)))
 (def (double b) (* b 2))
 (def (triple b) (* b 3))
@@ -14,12 +13,13 @@
 (def (nth n xs) (cond ((empty? xs) []) ((<= n 1) (head xs)) (#t (nth (- n 1) (tail xs)))))
 (def (last xs) (nth (length xs) xs))
 (def (first xs) (nth 1 xs))
+(def (remove v xs) (filter (fn (t) (ne t v)) xs))
 
 (def (map f xs) (if (empty? xs) [] (append (list (f (head xs))) (map f (tail xs)))))
 (def (fold f acc xs) (cond ((empty? xs) acc) (#t (fold f (f acc (head xs)) (tail xs)))))
 (def (reduce f xs) (if (empty? xs) (head xs) (fold f (head xs) (tail xs))))
 (def (filter f xs) (cond ((empty? xs) []) ((f (head xs)) (append (list (head xs)) (filter f (tail xs)))) (#t (filter f (tail xs)))))
-(def (for-each f xs) (if (empty? xs) [] (when (#t (f (head xs))) (#t (for-each f (tail xs))))))
+(def (for-each f xs) (cond ((> (length xs) 0) (when (#t (f (head xs))) (#t (for-each f (tail xs)))))))
 
 (def (flatten xs) (cond ((empty? xs) []) ((list? (head xs)) (append (flatten (head xs)) (flatten (tail xs)))) (#t (append (list (head xs)) (flatten (tail xs))))))
 (def (zip xs ys) (cond ((empty? xs) []) ((empty? ys) []) (#t (append (list (list (head xs) (head ys))) (zip (tail xs) (tail ys))))))
@@ -29,10 +29,10 @@
 (def (all xs) (if (empty? xs) #f (fold and (head xs) (tail xs))))
 (def (any xs) (if (empty? xs) #f (fold or (head xs) (tail xs))))
 
-(def (takeWhile f xs) (cond ((empty? xs) []) ((f (head xs)) (append (list (head xs)) (takeWhile f (tail xs)))) (#t [])))
-(def (dropWhile f xs) (cond ((empty? xs) []) ((f (head xs)) (append [] (dropWhile f (tail xs)))) (#t (append (list (head xs)) (dropWhile f (tail xs))))))
 (def (take n xs) (cond ((empty? xs) []) ((eq n 0) []) (#t (append (list (head xs)) (take (- n 1) (tail xs))))))
 (def (drop n xs) (cond ((empty? xs) []) ((eq n 0) (append (list (head xs)) (drop 0 (tail xs)))) (#t (drop (- n 1) (tail xs)))))
+(def (takeWhile f xs) (cond ((empty? xs) []) ((f (head xs)) (append (list (head xs)) (takeWhile f (tail xs)))) (#t [])))
+(def (dropWhile f xs) (cond ((empty? xs) []) ((f (head xs)) (dropWhile f (tail xs))) (#t xs)))
 (def (takeFirst f xs) (cond ((empty? xs) []) ((f (head xs)) (head xs)) (#t (takeFirst f (tail xs)))))
 (def (takeLast f xs) (takeFirst f (reverse xs)))
 (def (slice s e xs) (take e (drop s xs)))
@@ -42,4 +42,4 @@
 (def (max xs) (reduce (fn (acc v) (if (>= acc v) acc v)) xs))
 (def (min xs) (reduce (fn (acc v) (if (<= acc v) acc v)) xs))
 
-(def (remove v xs) (filter (fn (t) (ne t v)) xs))
+

@@ -5,7 +5,7 @@
 
 ; Check type
 (test-case "Test Error? without args" (check-error? (error?) "Arg should be error"))
-(test-case "Test Bool? using error" (check-true? (error? (error "Some Error")) "Arg should be error"))
+(test-case "Test Error? using error" (check-true? (error? (error "Some Error")) "Arg should be error"))
 (test-case "Test Error? using boolean" (check-false? (error? #f) "Arg should be error"))
 
 ; Error
