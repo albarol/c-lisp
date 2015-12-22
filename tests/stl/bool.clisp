@@ -4,22 +4,68 @@
 (test-suite "Boolean suite case")
 
 ; Check type
-(test-case "Test If Bool is Bool" (check-true? (bool? #f) "Arg should be boolean"))
-(test-case "Test If Number is Bool" (check-false? (bool? 1) "Arg should be boolean"))
+(test-case "Test Bool? without args" (check-error? (bool?) "Arg should be error"))
+(test-case "Test Bool? using boolean" (check-true? (bool? #f) "Arg should be boolean"))
+(test-case "Test Bool? using number" (check-false? (bool? 1) "Arg should be boolean"))
 
 ; Not
+(test-case "Test Not Without Args" (check-error? (not) "Arg should be error"))
+(test-case "Test Not Invalid Args" (check-error? (not 1) "Arg should be error"))
 (test-case "Test Not Should Invert True" (check-false? (not #t) "Should be false"))
 (test-case "Test Not Should Invert False" (check-true? (not #f) "Should be true"))
 
 ; And
+(test-case "Test And Without Args" (check-error? (and) "Arg should be error"))
+(test-case "Test And Invalid Args" (check-error? (and 1 #t) "Arg should be error"))
 (test-case "Test And Should Check True And True" (check-true? (and #t #t) "Should be true"))
 (test-case "Test And Should Check False And False" (check-false? (and #f #f) "Should be false"))
 (test-case "Test And Should Check True And False" (check-false? (and #t #f) "Should be false"))
 (test-case "Test And Should Check False And True" (check-false? (and #f #t) "Should be false"))
 
 ; Or
+(test-case "Test Or Without Args" (check-error? (or) "Arg should be error"))
+(test-case "Test Or Invalid Args" (check-error? (or 1 #t) "Arg should be error"))
 (test-case "Test Or Should Check True And True" (check-true? (or #t #t) "Should be true"))
 (test-case "Test Or Should Check False And True" (check-true? (or #f #t) "Should be true"))
 (test-case "Test Or Should Check True And False" (check-true? (or #t #f) "Should be true"))
 (test-case "Test Or Should Check False And False" (check-false? (or #f #f) "Should be false"))
 
+; Xor
+(test-case "Test Xor Without Args" (check-error? (xor) "Arg should be error"))
+(test-case "Test Xor Invalid Args" (check-error? (xor 1 #t) "Arg should be error"))
+(test-case "Test Xor Should Check True And True" (check-false? (xor #t #t) "Should be false"))
+(test-case "Test Xor Should Check False And True" (check-true? (xor #f #t) "Should be true"))
+(test-case "Test Xor Should Check True And False" (check-true? (xor #t #f) "Should be true"))
+(test-case "Test Xor Should Check False And False" (check-false? (xor #f #f) "Should be false"))
+
+; Nand
+(test-case "Test Nand Without Args" (check-error? (nand) "Arg should be error"))
+(test-case "Test Nand Invalid Args" (check-error? (nand 1 #t) "Arg should be error"))
+(test-case "Test Nand Should Check True And True" (check-false? (nand #t #t) "Should be false"))
+(test-case "Test Nand Should Check False And True" (check-true? (nand #f #t) "Should be true"))
+(test-case "Test Nand Should Check True And False" (check-true? (nand #t #f) "Should be true"))
+(test-case "Test Nand Should Check False And False" (check-true? (nand #f #f) "Should be true"))
+
+; Nor
+(test-case "Test Nor Without Args" (check-error? (nor) "Arg should be error"))
+(test-case "Test Nor Invalid Args" (check-error? (nor 1 #t) "Arg should be error"))
+(test-case "Test Nor Should Check True And True" (check-false? (nor #t #t) "Should be false"))
+(test-case "Test Nor Should Check False And True" (check-false? (nor #f #t) "Should be true"))
+(test-case "Test Nor Should Check True And False" (check-false? (nor #t #f) "Should be true"))
+(test-case "Test Nor Should Check False And False" (check-true? (nor #f #f) "Should be true"))
+
+; Eq
+(test-case "Test Eq Without Args" (check-error? (eq) "Arg should be error"))
+(test-case "Test Eq Should Check 1 and 1" (check-true? (eq 1 1) "Should be true"))
+(test-case "Test Eq Should Check 1 and 2" (check-false? (eq 1 2) "Should be false"))
+(test-case "Test Eq Should Check True And True" (check-true? (eq #t #t) "Should be true"))
+(test-case "Test Eq Should Check True And False" (check-false? (eq #f #t) "Should be false"))
+(test-case "Test Eq Should Check Different types" (check-false? (eq 1 #t) "Should be false"))
+
+; Ne
+(test-case "Test Ne Without Args" (check-error? (ne) "Arg should be error"))
+(test-case "Test Ne Should Check 1 and 1" (check-false? (ne 1 1) "Should be false"))
+(test-case "Test Ne Should Check 1 and 2" (check-true? (ne 1 2) "Should be true"))
+(test-case "Test Ne Should Check True And True" (check-false? (ne #t #t) "Should be false"))
+(test-case "Test Ne Should Check True And False" (check-true? (ne #f #t) "Should be true"))
+(test-case "Test Ne Should Check Different types" (check-true? (ne 1 #t) "Should be true"))

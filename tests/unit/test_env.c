@@ -6,6 +6,9 @@
 
 PT_SUITE(suite_env) {
 
+    /**
+     * Test new env
+     */
     PT_TEST(test_new_env) {
         clisp_env_t* env = clisp_env_new();
 
@@ -14,6 +17,9 @@ PT_SUITE(suite_env) {
         clisp_env_delete(env);
     }
 
+    /**
+     * Test get and put env
+     */
     PT_TEST(test_put_and_get_symbol) {
         clisp_env_t* env = clisp_env_new();
         clisp_chunk_t* symbol = clisp_chunk_symbol("x");
