@@ -3,6 +3,7 @@
 
 #include <builtin/bool.h>
 #include <builtin/exception.h>
+#include <builtin/fs.h>
 #include <builtin/io.h>
 #include <builtin/list.h>
 #include <builtin/magic.h>

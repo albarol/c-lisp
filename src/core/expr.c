@@ -13,8 +13,7 @@ clisp_expr_new() {
 clisp_expr_t*
 clisp_expr_create(clisp_chunk_t* chunk) {
     clisp_expr_t* expr = clisp_expr_new();
-    clisp_expr_append(expr, chunk);
-    return expr;
+    return clisp_expr_append(expr, chunk);
 }
 
 

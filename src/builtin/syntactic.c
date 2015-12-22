@@ -222,9 +222,6 @@ clisp_builtin_syntactic_unless(clisp_expr_t* expr, clisp_env_t* env) {
     return clisp_chunk_nil();
 }
 
-
-
-
 clisp_chunk_t*
 clisp_builtin_syntactic_lambda(clisp_expr_t* expr, clisp_env_t* env) {
 

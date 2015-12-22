@@ -39,6 +39,7 @@ set(CLISP_SOURCES
     src/builtin.c
     src/builtin/bool.c
     src/builtin/exception.c
+    src/builtin/fs.c
     src/builtin/io.c
     src/builtin/list.c
     src/builtin/magic.c
