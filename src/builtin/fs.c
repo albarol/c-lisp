@@ -2,12 +2,42 @@
 #include <builtin/fs.h>
 
 clisp_chunk_t*
+clisp_builtin_fs_permission(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+    clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_STRING);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_t* result = NULL;
+
+    struct stat fileStat;
+    if(stat(chunk->value.string, &fileStat) < 0) {
+        result = clisp_chunk_error("File not found.");
+    }
+    else {
+        char perm[5];
+        sprintf(perm, "#%i%i%i%i",
+                S_ISDIR(fileStat.st_mode),
+                (fileStat.st_mode & S_IRWXU) >> 6,
+                (fileStat.st_mode & S_IRWXG) >> 3,
+                (fileStat.st_mode & S_IRWXO));
+        result = clisp_chunk_str(perm);
+    }
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+
+/**
+ * File functions
+ */
+clisp_chunk_t*
 clisp_builtin_fs_file_exists(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 1);
     clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_STRING);
 
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
-    clisp_chunk_t* result = clisp_chunk_bool(access(chunk->value.string, F_OK ) != -1);
+    clisp_chunk_t* result = clisp_chunk_bool(access(chunk->value.string, F_OK) != -1);
 
     clisp_chunk_delete(chunk);
     return result;
@@ -118,9 +148,8 @@ clisp_builtin_fs_read_file(clisp_expr_t* expr, clisp_env_t* env) {
     return result;
 }
 
-
 clisp_chunk_t*
-clisp_builtin_fs_permission(clisp_expr_t* expr, clisp_env_t* env) {
+clisp_builtin_fs_directory_exists(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 1);
     clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_STRING);
 
@@ -129,17 +158,40 @@ clisp_builtin_fs_permission(clisp_expr_t* expr, clisp_env_t* env) {
 
     struct stat fileStat;
     if(stat(chunk->value.string, &fileStat) < 0) {
-        result = clisp_chunk_error("File not found.");
+        result = clisp_chunk_bool(false);
     }
     else {
-        char perm[5];
-        sprintf(perm, "#%i%i%i%i",
-                S_ISDIR(fileStat.st_mode),
-                (fileStat.st_mode & S_IRWXU) >> 6,
-                (fileStat.st_mode & S_IRWXG) >> 3,
-                (fileStat.st_mode & S_IRWXO));
-        result = clisp_chunk_str(perm);
+        result = clisp_chunk_bool(S_ISDIR(fileStat.st_mode));
     }
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_fs_delete_directory(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+    clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_STRING);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_t* result = clisp_chunk_bool(rmdir(chunk->value.string) == 0);
+
+    clisp_chunk_delete(chunk);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_builtin_fs_rename_directory(clisp_expr_t* expr, clisp_env_t* env) {
+    return clisp_builtin_fs_rename_file(expr, env);
+}
+
+clisp_chunk_t*
+clisp_builtin_fs_create_directory(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+    clisp_expr_assert_type(expr, expr->chunks[0]->type, CLISP_STRING);
+
+    clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
+    clisp_chunk_t* result = clisp_chunk_bool(mkdir(chunk->value.string, S_IRUSR | S_IRWXU | S_IRGRP | S_IROTH) == 0);
 
     clisp_chunk_delete(chunk);
     return result;
