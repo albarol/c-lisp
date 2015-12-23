@@ -1,6 +1,13 @@
 Changelog
 =========
 
+0.6.0
+-----
+* Added basic STL
+* Added `load` command
+* Added `when` and `unless` command
+* Added support to file system operations
+
 0.5.0
 -----
 * Add `for` command
