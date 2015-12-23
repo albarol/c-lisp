@@ -109,4 +109,24 @@ clisp_builtin_load_functions(clisp_env_t* env) {
     clisp_env_put_builtin(env, "unless", clisp_builtin_syntactic_unless, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "fn", clisp_builtin_syntactic_lambda, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "type", clisp_builtin_syntactic_type, CLISP_FUNCTION_EAGER);
+
+
+#ifdef HAVE_FILESYSTEM
+    /**
+     * Fs builtin functions
+     */
+    clisp_env_put_builtin(env, "file-exists?", clisp_builtin_fs_file_exists, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "file-delete", clisp_builtin_fs_delete_file, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "file-copy", clisp_builtin_fs_copy_file, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "file-rename", clisp_builtin_fs_rename_file, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "file-size", clisp_builtin_fs_file_size, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "file-read", clisp_builtin_fs_read_file, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "file-write", clisp_builtin_fs_write_file, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "file-or-directory-permission", clisp_builtin_fs_permission, CLISP_FUNCTION_EAGER);
+
+    clisp_env_put_builtin(env, "dir-exists?", clisp_builtin_fs_directory_exists, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "dir-delete", clisp_builtin_fs_delete_directory, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "dir-rename", clisp_builtin_fs_rename_directory, CLISP_FUNCTION_EAGER);
+    clisp_env_put_builtin(env, "dir-create", clisp_builtin_fs_create_directory, CLISP_FUNCTION_EAGER);
+#endif //_HAVE_FILESYSTEM
 }

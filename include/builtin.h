@@ -11,6 +11,11 @@
 #include <builtin/string.h>
 #include <builtin/syntactic.h>
 
+#ifdef HAVE_FILESYSTEM
+#include <builtin/fs.h>
+#endif
+
+
 #include "ast.h"
 #include "types.h"
 #include "error.h"

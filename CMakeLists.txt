@@ -21,6 +21,11 @@ IF(WITH_PRELUDE)
         COMMAND xxd -i stl/prelude.clisp > ${PRELUDE_SOURCE})
 ENDIF(WITH_PRELUDE)
 
+OPTION(WITH_FILESYSTEM "File system." ON)
+IF(WITH_FILESYSTEM)
+    add_definitions(-DHAVE_FILESYSTEM)
+ENDIF(WITH_FILESYSTEM)
+
 #=============================#
 #     Dependencies            #
 #=============================#
@@ -39,6 +44,7 @@ set(CLISP_SOURCES
     src/builtin.c
     src/builtin/bool.c
     src/builtin/exception.c
+
     src/builtin/io.c
     src/builtin/list.c
     src/builtin/magic.c
@@ -56,6 +62,11 @@ set(CLISP_SOURCES
 IF(WITH_PRELUDE)
     set(CLISP_SOURCES ${CLISP_SOURCES} ${PRELUDE_SOURCE})
 ENDIF(WITH_PRELUDE)
+
+IF(WITH_FILESYSTEM)
+    set(CLISP_SOURCES ${CLISP_SOURCES} src/builtin/fs.c)
+ENDIF(WITH_FILESYSTEM)
+
 
 set(CLISP_HEADERS
     include/ast.h

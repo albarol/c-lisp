@@ -73,12 +73,12 @@
 ; Cos
 (test-case "Test cos without args" (check-error? (cos) "Arg should be error"))
 (test-case "Test cos invalid arg" (check-error? (cos "1") "Arg should be error"))
-(test-case "Test cos number" (check-eq? (cos pi) -1 "should be -1"))
+(test-case "Test cos number" (check-eq? (cos 3.1415) -1 "should be -1"))
 
 ; Sin
 (test-case "Test sin without args" (check-error? (sin) "Arg should be error"))
 (test-case "Test sin invalid arg" (check-error? (sin "1") "Arg should be error"))
-(test-case "Test sin number" (check-eq? (sin (/ (pi) 2)) 1 "should be 1"))
+(test-case "Test sin number" (check-eq? (sin (/ 3.1415 2)) 1 "should be 1"))
 
 ; Tan
 (test-case "Test tan without args" (check-error? (tan) "Arg should be error"))

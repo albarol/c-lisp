@@ -10,30 +10,30 @@
 
 ; Create
 (test-case "Test Create List without args" (check-error? (list) "Should be error"))
-(test-case "Test Create List invalid args" (check-error? (list + -) "Should be error"))
+(test-case "Test Create List invalid args" (check-error? (list (error "invalid")) "Should be error"))
 (test-case "Test Create List using functions" (check-eq? (list (+ 0 1) 2 3) [1 2 3] "Should be [1 2 3]"))
 (test-case "Test Create List" (check-eq? (list 1 2 3) [1 2 3] "Should be [1 2 3]"))
 
 ; Head
 (test-case "Test Head without args" (check-error? (head) "Should be error"))
-(test-case "Test Head invalid args" (check-error? (head +) "Should be error"))
+(test-case "Test Head invalid args" (check-error? (head (error "invalid")) "Should be error"))
 (test-case "Test Head empty list" (check-error? (head []) "Should be error"))
 (test-case "Test Head" (check-eq? (head [1 2 3]) 1 "Should be 1"))
 
 ; Tail
 (test-case "Test Tail without args" (check-error? (tail) "Should be error"))
-(test-case "Test Tail invalid args" (check-error? (tail +) "Should be error"))
+(test-case "Test Tail invalid args" (check-error? (tail (error "invalid")) "Should be error"))
 (test-case "Test Tail empty list" (check-error? (tail []) "Should be error"))
 (test-case "Test Tail" (check-eq? (tail [1 2 3]) [2 3] "Should be [2 3]"))
 
 ; Empty
 (test-case "Test Empty without args" (check-error? (empty) "Should be error"))
-(test-case "Test Empty invalid args" (check-error? (empty +) "Should be error"))
+(test-case "Test Empty invalid args" (check-error? (empty (error "invalid")) "Should be error"))
 (test-case "Test Empty" (check-false? (empty? [1 2 3]) "Should be false"))
 
 ; Length
 (test-case "Test Length without args" (check-error? (length) "Should be error"))
-(test-case "Test Length invalid args" (check-error? (length +) "Should be error"))
+(test-case "Test Length invalid args" (check-error? (length (error "invalid")) "Should be error"))
 (test-case "Test Length" (check-eq? (length [1 2 4]) 3 "Should be 4"))
 
 ; Append
@@ -43,5 +43,5 @@
 
 ; Cons
 (test-case "Test Cons without args" (check-error? (cons) "Should be error"))
-(test-case "Test Cons" (check-eq? (cpns 1 2) [1 2] "Should be [1 2]"))
+(test-case "Test Cons" (check-eq? (cons 1 2) [1 2] "Should be [1 2]"))
 
