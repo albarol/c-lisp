@@ -275,6 +275,137 @@ List
         > (cons 1 [2 3])
         [1 2 3]
 
+Number
+------
+
+.. py:function:: (number? v)
+
+    Check if value is number
+
+    .. code-block:: racket
+
+        > (number? 1)
+        #t
+        > (number? #t)
+        #f
+
+.. py:function:: (zero? v)
+
+    Check if value is equal to zero
+
+    .. code-block:: racket
+
+        > (zero? 0)
+        #t
+        > (zero? 1)
+        #f
+        > (zero? #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (positive? v)
+
+    Check if value is positive
+
+    .. code-block:: racket
+
+        > (positive? -1)
+        #f
+        > (positive? 1)
+        #t
+        > (positive? #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (negative? v)
+
+    Check if value is negative
+
+    .. code-block:: racket
+
+        > (negative? 1)
+        #f
+        > (negative? -1)
+        #t
+        > (negative? #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (even? v)
+
+    Check if value is even
+
+    .. code-block:: racket
+
+        > (even? 1)
+        #f
+        > (even? 2)
+        #t
+        > (even? #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (odd? v)
+
+    Check if value is odd
+
+    .. code-block:: racket
+
+        > (odd? 1)
+        #t
+        > (odd? 2)
+        #f
+        > (odd? #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (> v1 v2)
+
+    Check if v1 is greater than v2
+
+    .. code-block:: racket
+
+        > (> 1 2)
+        #f
+        > (> 2 1)
+        #t
+        > (> 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (>= v1 v2)
+
+    Check if v1 is greater or equal v2
+
+    .. code-block:: racket
+
+        > (>= 1 2)
+        #f
+        > (>= 2 2)
+        #t
+        > (>= 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (< v1 v2)
+
+    Check if v1 is lesser than v2
+
+    .. code-block:: racket
+
+        > (< 1 2)
+        #t
+        > (< 2 2)
+        #f
+        > (< 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (<= v1 v2)
+
+    Check if v1 is lesser or equal v2
+
+    .. code-block:: racket
+
+        > (<= 1 2)
+        #t
+        > (<= 2 2)
+        #t
+        > (<= 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
 Math
 ----
 
@@ -457,3 +588,4 @@ Math
         1
         > (abs #t)
         Error: Wrong argument type. Got: Boolean, Expected: Number
+
