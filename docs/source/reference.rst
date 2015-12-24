@@ -250,3 +250,210 @@ List
         3
         > (length 1)
         Error: Wrong argument type. Got: Number, Expected: List
+
+.. py:function:: (empty? xs)
+
+    Check if the list is empty
+
+    .. code-block:: racket
+
+        > (empty? [])
+        #t
+        > (empty? [1])
+        #f
+        > (empty? 1)
+        Error: Wrong argument type. Got: Number, Expected: List
+
+.. py:function:: (cons el xs)
+
+    Get two elements and create one list
+
+    .. code-block:: racket
+
+        > (cons 1 2)
+        [1 2]
+        > (cons 1 [2 3])
+        [1 2 3]
+
+Math
+----
+
+.. py:function:: (+ v1 v2)
+
+    Sum two numbers
+
+    .. code-block:: racket
+
+        > (+ 1 2)
+        3
+        > (+ 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (- v1 v2)
+
+    Subtract two numbers
+
+    .. code-block:: racket
+
+        > (- 2 1)
+        1
+        > (- 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (* v1 v2)
+
+    Multiply two numbers
+
+    .. code-block:: racket
+
+        > (* 2 1)
+        2
+        > (* 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (/ v1 v2)
+
+    Divide two numbers
+
+    .. code-block:: racket
+
+        > (/ 2 1)
+        2
+        > (/ 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (% v1 v2)
+
+   Rest of division
+
+    .. code-block:: racket
+
+        > (% 10 3)
+        1
+        > (% 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (^ v1 v2)
+
+    Power of a number
+
+    .. code-block:: racket
+
+        > (^ 10 3)
+        1000
+        > (^ 1 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (ceil v)
+
+    Round number to ceiling
+
+    .. code-block:: racket
+
+        > (ceil 2.1)
+        3
+        > (ceil #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (floor v)
+
+    Round number to floor
+
+    .. code-block:: racket
+
+        > (floor 2.9)
+        2
+        > (floor #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (round v)
+
+    Round number
+
+    .. code-block:: racket
+
+        > (round 2.3)
+        2
+        > (round 2.7)
+        3
+        > (round #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (sqrt v)
+
+    Square root
+
+    .. code-block:: racket
+
+        > (sqrt 4)
+        2
+        > (sqrt #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (log10 v)
+
+    Logarithm base 10
+
+    .. code-block:: racket
+
+        > (log10 1000)
+        3
+        > (log10 #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (log v)
+
+    Natural logarithm
+
+    .. code-block:: racket
+
+        > (log 1)
+        0
+        > (log #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (sin v)
+
+    Sine of a radian
+
+    .. code-block:: racket
+
+        > (sin 3.1415)
+        0
+        > (sin #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (cos v)
+
+    Cosine of a radian
+
+    .. code-block:: racket
+
+        > (cos 3.1415)
+        1
+        > (cos #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (tan v)
+
+    Tangent of a radian
+
+    .. code-block:: racket
+
+        > (tan 0.7854)
+        1
+        > (tan #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
+
+.. py:function:: (abs v)
+
+    Absolute value of a number
+
+    .. code-block:: racket
+
+        > (abs -1)
+        1
+        > (abs 1)
+        1
+        > (abs #t)
+        Error: Wrong argument type. Got: Boolean, Expected: Number
