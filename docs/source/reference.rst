@@ -589,3 +589,158 @@ Math
         > (abs #t)
         Error: Wrong argument type. Got: Boolean, Expected: Number
 
+String
+------
+
+.. py:function:: (string? v)
+
+    Check if value is a string
+
+    .. code-block:: racket
+
+        > (string? "Value")
+        #t
+        > (string? 1)
+        #f
+
+.. py:function:: (string->upper v)
+
+    Transform all characters in uppercase
+
+    .. code-block:: racket
+
+        > (string->upper "Value")
+        VALUE
+        > (string->upper 1)
+        Error: Wrong argument type. Got: Number, Expected: String
+
+.. py:function:: (string->lower v)
+
+    Transform all characters in lowercase
+
+    .. code-block:: racket
+
+        > (string->lower "Value")
+        value
+        > (string->lower 1)
+        Error: Wrong argument type. Got: Number, Expected: String
+
+.. py:function:: (string->split v s)
+
+    Split a phrase in a list of words separated by element
+
+    .. code-block:: racket
+
+        > (string->split "Hello World" " ")
+        ["Hello" "World"]
+        > (string->split 1 " ")
+        Error: Wrong argument type. Got: Number, Expected: String
+
+.. py:function:: (string->concat el ...)
+
+    Concat all elements in a single string
+
+    .. code-block:: racket
+
+        > (string->concat "Hello " "World" " ...")
+        "Hello World ..."
+        > (string->concat 1 " ")
+        Error: Wrong argument type. Got: Number, Expected: String
+
+.. py:function:: (string->length str)
+
+    Count the number of characters in the string
+
+    .. code-block:: racket
+
+        > (string->length "Hello World")
+        11
+        > (string->length 1)
+        Error: Wrong argument type. Got: Number, Expected: String
+
+Syntactic
+---------
+
+.. py:function:: (if c e1 e2)
+
+    Conditional that executes first expression if conditional is true, else it executes second expression
+
+    .. code-block:: racket
+
+        > (if (> 2 1) "foo" "bar")
+        foo
+        > (if (< 2 1) "foo" "bar")
+        bar
+        > (if 1 "foo" "bar")
+        Error: Wrong argument type. Got: Number, Expected: Boolean
+
+.. py:function:: (cond expr1 ...)
+
+    Cond clause test expression by expression and execute if condition is true
+
+    .. code-block:: racket
+
+        > (cond ((> 2 1) "foo") (#t 2))
+        foo
+        > (cond ((< 2 1) "foo") (#t "bar"))
+        bar
+
+.. py:function:: (for it command)
+
+    Iterate over a list and execute the command
+
+    .. code-block:: racket
+
+        > (for (i [1 2 3]) (print i))
+        1
+        2
+        3
+        > (for i (print i))
+        Error: Wrong argument type. Got: Symbol, Expected: Expression
+
+.. py:function:: (def (name p1 ..) body)
+
+    Define a function
+
+    .. code-block:: racket
+
+        > (def (add1 x) (+ x 1))
+        > (add1 1)
+        2
+
+.. py:function:: (fn args body)
+
+    Create a lambda function to pass as parameter
+
+    .. code-block:: racket
+
+        > (filter (fn (a) (> a 4)) [3 4 5 6])
+        [5 6]
+
+.. py:function:: (when expr1 ...)
+
+    Execute all expressions that conditional is true
+
+    .. code-block:: racket
+
+        > (when (#t (print "foo")) (#f (print "foo")) (#t (print "bar")))
+        foo
+        bar
+
+.. py:function:: (unless expr1 ...)
+
+    Execute all expressions that conditional is false
+
+    .. code-block:: racket
+
+        > (unless (#t (print "foo")) (#f (print "foo")) (#t (print "bar")))
+        foo
+
+.. py:function:: (type v)
+
+    Show the type of value
+
+    .. code-block:: racket
+
+        > (type 1)
+        Number

@@ -6,3 +6,4 @@ C-lisp Documentation
 
     about.rst
     reference.rst
+    stl.rst
