@@ -52,6 +52,7 @@ clisp_builtin_syntactic_for(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_chunk_t* error = NULL;
     clisp_chunk_t* iterator = clisp_expr_pop(expr, 0);
+    clisp_chunk_assert_type(iterator, iterator->type, CLISP_EXPR)
     clisp_expr_assert_count(iterator->value.list, 2);
 
     clisp_chunk_t* vars = clisp_chunk_expr();

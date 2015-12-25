@@ -41,5 +41,3 @@
 (def (multiply xs) (reduce * xs))
 (def (max xs) (reduce (fn (acc v) (if (>= acc v) acc v)) xs))
 (def (min xs) (reduce (fn (acc v) (if (<= acc v) acc v)) xs))
-
-
