@@ -13,7 +13,7 @@ clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_pop(expr, 0);
 
     if (chunk->type == CLISP_SYMBOL) {
-        chunk = clisp_env_get(env, chunk);
+        chunk = clisp_eval_symbol(chunk, env);
     }
 
     if (chunk->type == CLISP_EXPR) {
@@ -30,6 +30,13 @@ clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
     }
 
     return chunk;
+}
+
+clisp_chunk_t*
+clisp_eval_symbol(clisp_chunk_t* symbol, clisp_env_t* env) {
+    clisp_chunk_t* result = clisp_env_get(env, symbol);
+    clisp_chunk_free(symbol);
+    return result;
 }
 
 clisp_chunk_t*
