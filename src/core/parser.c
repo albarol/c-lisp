@@ -33,12 +33,6 @@ clisp_grammar_new() {
 }
 
 void
-clisp_grammar_delete(clisp_grammar_t* grammar) {
-    mpc_cleanup(8, grammar->Comment, grammar->Number, grammar->String, grammar->Symbol, grammar->Sexpr, grammar->Expr, grammar->Lisp);
-    free(grammar);
-}
-
-void
 clisp_process(char* input, clisp_env_t* env, bool print) {
     if (Grammar == NULL) {
         Grammar = clisp_grammar_new();
@@ -49,7 +43,7 @@ clisp_process(char* input, clisp_env_t* env, bool print) {
         clisp_chunk_t* result = clisp_eval_ast(expr, env);
         if (print)
             clisp_print_writeln(result);
-        clisp_chunk_delete(result);
+        clisp_chunk_free(result);
         mpc_ast_delete(r.output);
     } else {
         mpc_err_print(r.output);

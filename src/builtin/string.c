@@ -1,4 +1,3 @@
-
 #include <builtin/string.h>
 #include <types.h>
 
@@ -9,7 +8,7 @@ clisp_builtin_string_check_type(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(chunk->type == CLISP_STRING);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -56,11 +55,11 @@ clisp_builtin_string_concat(clisp_expr_t* expr, clisp_env_t* env) {
         chunk = clisp_expr_pop(expr, 0);
 
         if (chunk->type != CLISP_STRING) {
-            clisp_chunk_delete(first);
-            clisp_expr_delete(expr);
+            clisp_chunk_free(first);
+            clisp_expr_free(expr);
             clisp_chunk_t* error = clisp_chunk_error(TYPE_ERROR, clisp_print_type_name(chunk->type),
                                                      clisp_print_type_name(CLISP_STRING));
-            clisp_chunk_delete(chunk);
+            clisp_chunk_free(chunk);
             return error;
         }
 
@@ -68,8 +67,8 @@ clisp_builtin_string_concat(clisp_expr_t* expr, clisp_env_t* env) {
         first->value.string = realloc(first->value.string, total + 1);
         strcat(first->value.string, chunk->value.string);
     }
-    clisp_chunk_delete(chunk);
-    clisp_expr_delete(expr);
+    clisp_chunk_free(chunk);
+    clisp_expr_free(expr);
 
     return first;
 }
@@ -91,8 +90,8 @@ clisp_builtin_string_split(clisp_expr_t* expr, clisp_env_t* env) {
         parts = strtok (NULL, delimiter->value.string);
     }
 
-    clisp_chunk_delete(chunk);
-    clisp_chunk_delete(delimiter);
+    clisp_chunk_free(chunk);
+    clisp_chunk_free(delimiter);
 
     return result;
 }
@@ -105,6 +104,6 @@ clisp_builtin_string_length(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_assert_type(chunk, chunk->type, CLISP_STRING);
 
     clisp_chunk_t* result = clisp_chunk_number(strlen(chunk->value.string));
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }

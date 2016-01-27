@@ -6,7 +6,7 @@ clisp_chunk_t*
 clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
 
     if (expr->count < 1) {
-        clisp_expr_delete(expr);
+        clisp_expr_free(expr);
         return clisp_chunk_nil();
     }
 
@@ -41,7 +41,7 @@ clisp_eval_ast_builtin_eager(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_
     }
     clisp_chunk_t* result = func->value.builtin.body(params, env);
 
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
     return result;
 }
 

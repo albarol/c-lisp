@@ -8,7 +8,7 @@ clisp_builtin_bool_check_type(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(chunk->type == CLISP_BOOL);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -21,7 +21,7 @@ clisp_builtin_bool_not(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_assert_type(chunk, chunk->type, CLISP_BOOL);
     clisp_chunk_t* result = clisp_chunk_bool(!chunk->value.boolean);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -53,8 +53,8 @@ clisp_builtin_bool_logical(clisp_expr_t* expr, clisp_env_t* env, char* op) {
         result = clisp_chunk_bool(!(first->value.boolean || second->value.boolean));
     }
 
-    clisp_chunk_delete(first);
-    clisp_chunk_delete(second);
+    clisp_chunk_free(first);
+    clisp_chunk_free(second);
     return result;
 }
 
@@ -99,7 +99,7 @@ clisp_builtin_bool_compare(clisp_expr_t* expr, clisp_env_t* env, char* op) {
         result = !clisp_chunk_cmp(first, second);
     }
 
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
     return clisp_chunk_bool(result);
 }
 

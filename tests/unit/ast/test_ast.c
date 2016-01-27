@@ -14,9 +14,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 5);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_get_chunk_symbol) {
@@ -27,9 +27,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 5);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_get_chunk_string) {
@@ -40,9 +40,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_STRING);
         PT_ASSERT_STR_EQ(chunk->value.string, "string");
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
+        clisp_env_free(env);
     }
 
     PT_TEST(test_get_chunk_boolean_true) {
@@ -53,9 +53,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_BOOL);
         PT_ASSERT(chunk->value.boolean == 1);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
+        clisp_env_free(env);
     }
 
     PT_TEST(test_get_chunk_boolean_false) {
@@ -66,9 +66,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_BOOL);
         PT_ASSERT(chunk->value.boolean == 0);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
+        clisp_env_free(env);
     }
 
     PT_TEST(test_get_chunk_expr) {
@@ -80,9 +80,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 3);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
+        clisp_env_free(env);
     }
 
     PT_TEST(test_get_complex_expr) {
@@ -94,9 +94,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 4);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
+        clisp_env_free(env);
     }
 
     PT_TEST(test_get_expr_using_symbol) {
@@ -108,9 +108,9 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 8);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
+        clisp_env_free(env);
     }
 
 
@@ -124,8 +124,8 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->value.list->chunks[0]->value.number == 1);
         PT_ASSERT(chunk->value.list->chunks[1]->value.number == 2);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
     }
 
     PT_TEST(test_get_chunk_list_of_strings) {
@@ -138,8 +138,8 @@ PT_SUITE(suite_ast) {
         PT_ASSERT_STR_EQ(chunk->value.list->chunks[0]->value.string, "1");
         PT_ASSERT_STR_EQ(chunk->value.list->chunks[1]->value.string, "2");
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);
     }
 
     PT_TEST(test_should_return_error_when_function_not_found) {
@@ -150,8 +150,8 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string,  "Unbound Symbol!");
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);;
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);;
     }
 
     PT_TEST(test_should_return_error_if_builtin_param_has_error) {
@@ -162,8 +162,8 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string,  "Incorrect type of argument. Got: Error, Expected: Any type");
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);
     }
 
     PT_TEST(test_should_run_function_with_empty_sexpr) {
@@ -174,8 +174,8 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string,  "Incorrect type of argument. Type: Nil is not supported");
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);
     }
 
     PT_TEST(test_one_function_should_call_another) {
@@ -183,14 +183,14 @@ PT_SUITE(suite_ast) {
         clisp_expr_t* ast = read_entry("(def (a t) t)", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
-        clisp_expr_delete(ast);
-        clisp_chunk_delete(chunk);
+        clisp_expr_free(ast);
+        clisp_chunk_free(chunk);
 
         ast = read_entry("(def (b t) (a t))", env);
         chunk = clisp_eval_ast(ast, env);
 
-        clisp_expr_delete(ast);
-        clisp_chunk_delete(chunk);
+        clisp_expr_free(ast);
+        clisp_chunk_free(chunk);
 
         ast = read_entry("(b 1)", env);
         chunk = clisp_eval_ast(ast, env);
@@ -198,8 +198,8 @@ PT_SUITE(suite_ast) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 1);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);
     }
 
     PT_TEST(test_call_function_of_functions) {
@@ -207,21 +207,21 @@ PT_SUITE(suite_ast) {
         clisp_expr_t* ast = read_entry("(def (test-case name expr) (if (error? expr) (when (#t (print name)) (#t (print expr)) (#t %exit)) (print (string->concat name \": [Passed]\"))))", env);
         clisp_chunk_t* chunk = clisp_eval_ast(ast, env);
 
-        clisp_expr_delete(ast);
-        clisp_chunk_delete(chunk);
+        clisp_expr_free(ast);
+        clisp_chunk_free(chunk);
 
         ast = read_entry("(def (check-eq? f s m) (cond ((ne f s) (error m))))", env);
         chunk = clisp_eval_ast(ast, env);
 
-        clisp_expr_delete(ast);
-        clisp_chunk_delete(chunk);
+        clisp_expr_free(ast);
+        clisp_chunk_free(chunk);
 
         ast = read_entry("(test-case \"Test negative number\" (check-eq? -1 -1 \"should be negative\"))", env);
         chunk = clisp_eval_ast(ast, env);
 
         PT_ASSERT(chunk->type == CLISP_NIL);
 
-        clisp_chunk_delete(chunk);
-        clisp_expr_delete(ast);
+        clisp_chunk_free(chunk);
+        clisp_expr_free(ast);
     }
 }

@@ -25,7 +25,6 @@ struct clisp_grammar_t {
 static clisp_grammar_t* Grammar;
 
 clisp_grammar_t* clisp_grammar_new();
-void clisp_grammar_delete(clisp_grammar_t* grammar);
 
 void clisp_process(char* input, clisp_env_t* env, bool print);
 

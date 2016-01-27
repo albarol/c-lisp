@@ -14,7 +14,7 @@ PT_SUITE(suite_env) {
 
         PT_ASSERT(env->count == 0);
 
-        clisp_env_delete(env);
+        clisp_env_free(env);
     }
 
     /**
@@ -31,9 +31,9 @@ PT_SUITE(suite_env) {
 
         PT_ASSERT(chunk->value.number == 5);
 
-        clisp_env_delete(env);
-        clisp_chunk_delete(symbol);
-        clisp_chunk_delete(value);
+        clisp_env_free(env);
+        clisp_chunk_free(symbol);
+        clisp_chunk_free(value);
     }
 
     PT_TEST(test_put_twice_and_get_symbol) {
@@ -49,10 +49,10 @@ PT_SUITE(suite_env) {
 
         PT_ASSERT(chunk->value.number == 6);
 
-        clisp_env_delete(env);
-        clisp_chunk_delete(symbol);
-        clisp_chunk_delete(value);
-        clisp_chunk_delete(new_value);
+        clisp_env_free(env);
+        clisp_chunk_free(symbol);
+        clisp_chunk_free(value);
+        clisp_chunk_free(new_value);
     }
 
     PT_TEST(test_get_unknown_symbol) {
@@ -63,7 +63,7 @@ PT_SUITE(suite_env) {
 
         PT_ASSERT_STR_EQ(error->value.string, "Unbound Symbol!");
 
-        clisp_env_delete(env);
-        clisp_chunk_delete(error);
+        clisp_env_free(env);
+        clisp_chunk_free(error);
     }
 }

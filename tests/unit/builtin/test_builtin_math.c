@@ -15,8 +15,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 12);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_add_throws_error_invalid_arg_type) {
@@ -30,8 +30,8 @@ PT_SUITE(suite_builtin_math) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Symbol, Expected: Number");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_add_throws_error_invalid_arg_count) {
@@ -42,8 +42,8 @@ PT_SUITE(suite_builtin_math) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 1, Expected: 2");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
 
@@ -57,8 +57,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 8);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_negative_number) {
@@ -69,8 +69,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == -10);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
 
@@ -84,8 +84,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 20);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -98,8 +98,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 5);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_div_throws_error_division_by_zero) {
@@ -110,8 +110,8 @@ PT_SUITE(suite_builtin_math) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Division By Zero!");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -124,8 +124,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 0);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -138,8 +138,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 8);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -152,8 +152,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 2);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_round_throws_arg_count) {
@@ -164,8 +164,8 @@ PT_SUITE(suite_builtin_math) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_round_throws_arg_type) {
@@ -176,8 +176,8 @@ PT_SUITE(suite_builtin_math) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Nil, Expected: Number");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_floor) {
@@ -187,8 +187,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 2);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_ceil) {
@@ -198,8 +198,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 3);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_sqrt) {
@@ -209,8 +209,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 2);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_log) {
@@ -220,8 +220,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 0);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_log10) {
@@ -231,8 +231,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 3);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_cos) {
@@ -242,8 +242,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == -1);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_sin) {
@@ -253,8 +253,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(result->value.number == 1);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_tan) {
@@ -264,8 +264,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(almost_equal(result->value.number, 1, 0.1));
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_math_tan) {
@@ -275,8 +275,8 @@ PT_SUITE(suite_builtin_math) {
 
         PT_ASSERT(almost_equal(result->value.number, 1, 0.1));
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
 }

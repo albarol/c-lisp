@@ -16,8 +16,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_check_type_should_be_false) {
@@ -28,8 +28,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == false);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_check_type_throws_exception_count_args) {
@@ -39,8 +39,8 @@ PT_SUITE(suite_builtin_bool) {
 
         PT_ASSERT(result->type == CLISP_ERROR);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -54,8 +54,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == false);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_not_throws_invalid_args_count) {
@@ -65,8 +65,8 @@ PT_SUITE(suite_builtin_bool) {
 
         PT_ASSERT(result->type == CLISP_ERROR);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_not_throws_invalid_args_type) {
@@ -76,8 +76,8 @@ PT_SUITE(suite_builtin_bool) {
 
         PT_ASSERT(result->type == CLISP_ERROR);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -92,8 +92,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_and_throws_invalid_args_count) {
@@ -103,8 +103,8 @@ PT_SUITE(suite_builtin_bool) {
 
         PT_ASSERT(result->type == CLISP_ERROR);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_and_throws_invalid_args_type) {
@@ -114,8 +114,8 @@ PT_SUITE(suite_builtin_bool) {
 
         PT_ASSERT(result->type == CLISP_ERROR);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -130,8 +130,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -146,8 +146,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == false);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -162,8 +162,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == false);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -178,8 +178,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -194,8 +194,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_eq_should_be_false) {
@@ -207,8 +207,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == false);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_eq_should_be_false_diff_types) {
@@ -220,8 +220,8 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == false);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_bool_eq_throws_args_count) {
@@ -231,8 +231,8 @@ PT_SUITE(suite_builtin_bool) {
 
         PT_ASSERT(result->type == CLISP_ERROR);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -247,7 +247,7 @@ PT_SUITE(suite_builtin_bool) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 }

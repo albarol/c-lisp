@@ -8,7 +8,7 @@ clisp_builtin_number_check_type(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(chunk->type == CLISP_NUMBER);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -39,7 +39,7 @@ clisp_builtin_number_check_property(clisp_expr_t* expr, clisp_env_t* env, char* 
         result = clisp_chunk_bool((number & 1) == 1);
     }
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -91,8 +91,8 @@ clisp_builtin_number_ordering(clisp_expr_t* expr, clisp_env_t* env, char* op) {
         result = (first->value.number <= second->value.number);
     }
 
-    clisp_chunk_delete(first);
-    clisp_chunk_delete(second);
+    clisp_chunk_free(first);
+    clisp_chunk_free(second);
     return clisp_chunk_bool(result == 1 ? true : false);
 }
 

@@ -17,8 +17,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_check_type_throws_arg_count) {
@@ -28,8 +28,8 @@ PT_SUITE(suite_builtin_number) {
 
         PT_ASSERT(result->type == CLISP_ERROR);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -43,8 +43,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_zero_throws_arg_count) {
@@ -55,8 +55,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_zero_throws_arg_type) {
@@ -67,8 +67,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Nil, Expected: Number");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -82,8 +82,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -97,8 +97,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -112,8 +112,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -127,8 +127,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
 
@@ -143,8 +143,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == 1);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_gte) {
@@ -155,8 +155,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == 1);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_lt) {
@@ -167,8 +167,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == 1);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_lte) {
@@ -179,8 +179,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == 1);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_gt_throws_error_empty_expr) {
@@ -190,8 +190,8 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 2");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_number_gt_throws_error_invalid_type) {
@@ -204,7 +204,7 @@ PT_SUITE(suite_builtin_number) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: String, Expected: Number");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 }

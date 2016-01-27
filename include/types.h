@@ -72,7 +72,7 @@ struct clisp_expr_t {
 };
 
 clisp_chunk_t* clisp_chunk_new(clisp_chunk_type_t type);
-void clisp_chunk_delete(clisp_chunk_t* chunk);
+void clisp_chunk_free(clisp_chunk_t* chunk);
 
 clisp_chunk_t* clisp_chunk_copy(clisp_chunk_t* metadata);
 bool clisp_chunk_cmp(clisp_chunk_t* first, clisp_chunk_t* second);
@@ -99,7 +99,7 @@ clisp_chunk_t* clisp_expr_pop(clisp_expr_t* expr, int position);
 void clisp_expr_remove(clisp_expr_t* expr, int position);
 clisp_chunk_t* clisp_expr_take(clisp_expr_t* super, int position);
 clisp_expr_t* clisp_expr_join(clisp_expr_t* first, clisp_expr_t* second);
-void clisp_expr_delete(clisp_expr_t* expr);
+void clisp_expr_free(clisp_expr_t* expr);
 
 /*
  * Env definitions
@@ -114,7 +114,7 @@ struct clisp_env_t {
 
 clisp_env_t* clisp_env_new(void);
 clisp_env_t* clisp_env_copy(clisp_env_t* env);
-void clisp_env_delete(clisp_env_t* env);
+void clisp_env_free(clisp_env_t* env);
 
 clisp_chunk_t* clisp_env_get(clisp_env_t* env, clisp_chunk_t* token);
 clisp_chunk_t* clisp_env_remove(clisp_env_t* env, clisp_chunk_t* token);

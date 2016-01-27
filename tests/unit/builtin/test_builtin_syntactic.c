@@ -20,8 +20,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 3);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_syntactic_if_returns_first_expr) {
@@ -35,8 +35,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 4);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_syntactic_if_throws_arg_count) {
@@ -47,8 +47,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect number of arguments. Got: 0, Expected: 3");
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_syntactic_if_throws_arg_type) {
@@ -62,8 +62,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect type of argument. Got: Number, Expected: Boolean");
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     /**
@@ -90,8 +90,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_FUNCTION);
         PT_ASSERT(chunk->value.func.args->value.list->count == 2);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_syntactic_def_throws_arg_count) {
@@ -102,8 +102,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect number of arguments. Got: 0, Expected: 2");
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_syntactic_def_throws_arg_type) {
@@ -126,8 +126,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect type of argument. Got: Number, Expected: Symbol");
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     /**
@@ -153,8 +153,8 @@ PT_SUITE(suite_builtin_syntactic) {
 
         PT_ASSERT(chunk->type == CLISP_NIL);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_for_throws_error_invalid_iterator_without_symbol) {
@@ -176,8 +176,8 @@ PT_SUITE(suite_builtin_syntactic) {
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_for_throws_error_invalid_iterator_without_list) {
@@ -198,8 +198,8 @@ PT_SUITE(suite_builtin_syntactic) {
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_for_throws_error_invalid_iterator_without_body) {
@@ -218,8 +218,8 @@ PT_SUITE(suite_builtin_syntactic) {
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     /**
@@ -244,8 +244,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_NUMBER);
         PT_ASSERT(chunk->value.number == 2);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_cond_throws_error_when_chunk_is_not_an_expression) {
@@ -259,8 +259,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Invalid expression. It should be ((Boolean) Type)");
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_cond_throws_error_when_expr_does_not_have_bool) {
@@ -277,8 +277,8 @@ PT_SUITE(suite_builtin_syntactic) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Invalid argument type. Got: Number, Expected: Boolean");
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     /**
@@ -297,8 +297,8 @@ PT_SUITE(suite_builtin_syntactic) {
 
         PT_ASSERT(chunk->type == CLISP_FUNCTION);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_lambda_throws_error_invalid_number_of_args) {
@@ -312,8 +312,8 @@ PT_SUITE(suite_builtin_syntactic) {
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_lambda_throws_error_invalid_arg_type) {
@@ -329,7 +329,7 @@ PT_SUITE(suite_builtin_syntactic) {
 
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 }

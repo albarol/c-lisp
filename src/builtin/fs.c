@@ -23,7 +23,7 @@ clisp_builtin_fs_permission(clisp_expr_t* expr, clisp_env_t* env) {
         result = clisp_chunk_str(perm);
     }
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -39,7 +39,7 @@ clisp_builtin_fs_file_exists(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(access(chunk->value.string, F_OK) != -1);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -51,7 +51,7 @@ clisp_builtin_fs_delete_file(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(unlink(chunk->value.string) == 0);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -66,8 +66,8 @@ clisp_builtin_fs_rename_file(clisp_expr_t* expr, clisp_env_t* env) {
 
     clisp_chunk_t* result = clisp_chunk_bool(rename(src->value.string, dst->value.string) == 0);
 
-    clisp_chunk_delete(src);
-    clisp_chunk_delete(dst);
+    clisp_chunk_free(src);
+    clisp_chunk_free(dst);
     return result;
 }
 
@@ -105,7 +105,7 @@ clisp_builtin_fs_file_size(clisp_expr_t* expr, clisp_env_t* env) {
         result = clisp_chunk_number(fileStat.st_size);
     }
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -131,8 +131,8 @@ clisp_builtin_fs_write_file(clisp_expr_t* expr, clisp_env_t* env) {
     }
 
 
-    clisp_chunk_delete(name);
-    clisp_chunk_delete(content);
+    clisp_chunk_free(name);
+    clisp_chunk_free(content);
     return result;
 }
 
@@ -144,7 +144,7 @@ clisp_builtin_fs_read_file(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_utils_read_file(chunk->value.string);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -164,7 +164,7 @@ clisp_builtin_fs_directory_exists(clisp_expr_t* expr, clisp_env_t* env) {
         result = clisp_chunk_bool(S_ISDIR(fileStat.st_mode));
     }
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -176,7 +176,7 @@ clisp_builtin_fs_delete_directory(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(rmdir(chunk->value.string) == 0);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -193,6 +193,6 @@ clisp_builtin_fs_create_directory(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(mkdir(chunk->value.string, S_IRUSR | S_IRWXU | S_IRGRP | S_IROTH) == 0);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }

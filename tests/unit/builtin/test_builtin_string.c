@@ -17,8 +17,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == true);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_check_type_throws_arg_count) {
@@ -29,8 +29,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -44,8 +44,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_STRING);
         PT_ASSERT_STR_EQ(result->value.string, "STRING");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_uppercase_throws_arg_count) {
@@ -56,8 +56,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_uppercase_throws_arg_type) {
@@ -68,8 +68,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: String");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -83,8 +83,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_STRING);
         PT_ASSERT_STR_EQ(result->value.string, "string");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_lowercase_throws_arg_count) {
@@ -95,8 +95,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_lowercase_throws_arg_type) {
@@ -107,8 +107,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: String");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -123,8 +123,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_STRING);
         PT_ASSERT_STR_EQ(result->value.string, "Hello World");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_concat_throws_arg_count) {
@@ -135,8 +135,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Invalid number of arguments. Got: 0, Excepted: > 0");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_concat_throws_arg_type) {
@@ -147,8 +147,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: String");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_concat_intermediate_throws_arg_type) {
@@ -160,8 +160,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: String");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -178,8 +178,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT_STR_EQ(result->value.list->chunks[0]->value.string, "Hello");
         PT_ASSERT_STR_EQ(result->value.list->chunks[1]->value.string, "World");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_split_throws_arg_count) {
@@ -190,8 +190,8 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Invalid number of arguments. Got: 0, Excepted: > 0");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_string_split_throws_arg_type) {
@@ -203,7 +203,7 @@ PT_SUITE(suite_builtin_string) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: String");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 }
