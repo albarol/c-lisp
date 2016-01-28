@@ -2,7 +2,7 @@
 
 clisp_chunk_t*
 clisp_chunk_new(clisp_chunk_type_t type) {
-    clisp_chunk_t* chunk = malloc(sizeof(clisp_chunk_t));
+    clisp_chunk_t* chunk = alloc(sizeof(clisp_chunk_t));
     chunk->type = type;
     return chunk;
 }
@@ -40,7 +40,7 @@ clisp_chunk_free(clisp_chunk_t* chunk) {
 
 clisp_chunk_t*
 clisp_chunk_copy(clisp_chunk_t* metadata) {
-    clisp_chunk_t* chunk = malloc(sizeof(clisp_chunk_t));
+    clisp_chunk_t* chunk = alloc(sizeof(clisp_chunk_t));
     chunk->type = metadata->type;
 
     switch (metadata->type) {
@@ -67,7 +67,7 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
         case CLISP_ERROR:
         case CLISP_SYMBOL:
         case CLISP_STRING:
-            chunk->value.string = malloc(strlen(metadata->value.string) + 1);
+            chunk->value.string = alloc(strlen(metadata->value.string) + 1);
             strcpy(chunk->value.string, metadata->value.string);
             break;
 
@@ -75,7 +75,7 @@ clisp_chunk_copy(clisp_chunk_t* metadata) {
         case CLISP_EXPR:
             chunk->value.list = clisp_expr_new();
             chunk->value.list->count = metadata->value.list->count;
-            chunk->value.list->chunks = malloc(sizeof(clisp_chunk_t*) * metadata->value.list->count);
+            chunk->value.list->chunks = alloc(sizeof(clisp_chunk_t*) * metadata->value.list->count);
             for (int i = 0; i < chunk->value.list->count; i++) {
                 chunk->value.list->chunks[i] = clisp_chunk_copy(metadata->value.list->chunks[i]);
             }
@@ -146,7 +146,7 @@ clisp_chunk_t*
 clisp_chunk_symbol(char* symbol) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_SYMBOL);
 
-    chunk->value.string = malloc(strlen(symbol) + 1);
+    chunk->value.string = alloc(strlen(symbol) + 1);
     strcpy(chunk->value.string, symbol);
 
     return chunk;
@@ -156,7 +156,7 @@ clisp_chunk_t*
 clisp_chunk_str(char* str) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_STRING);
 
-    chunk->value.string = malloc(strlen(str) + 1);
+    chunk->value.string = alloc(strlen(str) + 1);
     strcpy(chunk->value.string, str);
 
     return chunk;
@@ -169,7 +169,7 @@ clisp_chunk_error(char* error, ...) {
     va_list args;
     va_start(args, error);
 
-    chunk->value.string = malloc(1024);
+    chunk->value.string = alloc(1024);
     vsnprintf(chunk->value.string, 1023, error, args);
 
     chunk->value.string = realloc(chunk->value.string, strlen(chunk->value.string) + 1);
@@ -181,7 +181,7 @@ clisp_chunk_error(char* error, ...) {
 clisp_chunk_t*
 clisp_chunk_list(void) {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_LIST);
-    chunk->value.list = malloc(sizeof(clisp_expr_t));
+    chunk->value.list = alloc(sizeof(clisp_expr_t));
     chunk->value.list->count = 0;
     chunk->value.list->chunks = NULL;
     return chunk;
@@ -214,7 +214,7 @@ clisp_chunk_function(clisp_chunk_t* args, clisp_chunk_t* body) {
 clisp_chunk_t*
 clisp_chunk_expr() {
     clisp_chunk_t* chunk = clisp_chunk_new(CLISP_EXPR);
-    chunk->value.list = malloc(sizeof(clisp_expr_t));
+    chunk->value.list = alloc(sizeof(clisp_expr_t));
     chunk->value.list->count = 0;
     chunk->value.list->chunks = NULL;
     return chunk;

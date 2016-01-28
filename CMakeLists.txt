@@ -77,6 +77,7 @@ set(CLISP_HEADERS
     include/utils.h
     include/stl.h
     include/parser.h
+    include/common.h
 )
 
 #=============================#
