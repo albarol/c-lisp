@@ -59,7 +59,6 @@ clisp_eval_ast_builtin_lazy(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t
 
 clisp_chunk_t*
 clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* env) {
-    clisp_expr_t* call = clisp_expr_new();
     chunk->value.func.env->parent = env;
 
     if (chunk->value.func.args->value.list->count != expr->count) {
@@ -75,13 +74,13 @@ clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* e
             if (param->type == CLISP_EXPR) {
                 param = clisp_eval_ast(param->value.list, chunk->value.func.env);
             } else if (param->type == CLISP_SYMBOL) {
-                param = clisp_env_get(chunk->value.func.env, param);
+                param = clisp_eval_symbol(param, chunk->value.func.env);
             }
         }
 
         clisp_env_put(chunk->value.func.env, chunk->value.func.args->value.list->chunks[i], param);
     }
 
-    clisp_expr_append(call, chunk->value.func.body);
+    clisp_expr_t* call = clisp_expr_create(chunk->value.func.body);
     return clisp_eval_ast(call, chunk->value.func.env);
 }
