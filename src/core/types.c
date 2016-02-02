@@ -19,7 +19,7 @@ clisp_chunk_free(clisp_chunk_t* chunk) {
 
         case CLISP_EXPR:
         case CLISP_LIST:
-            if (chunk->value.list->count > 0) {
+            if (chunk->value.list != NULL) {
                 clisp_expr_free(chunk->value.list);
             }
             break;

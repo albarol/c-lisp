@@ -9,10 +9,8 @@
 #include <utils.h>
 
 #ifdef HAVE_PRELUDE
-#include "stl.h"
+#include <stl.h>
 #endif
-
-static char input[2048];
 
 void
 load_script(char* filename, clisp_env_t* env) {

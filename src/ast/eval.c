@@ -17,7 +17,7 @@ clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
     }
 
     if (chunk->type == CLISP_EXPR) {
-        return clisp_eval_ast(chunk->value.list, env);
+        return clisp_eval_expr(chunk, env);
     }
     else if (chunk->type == CLISP_FUNCTION_C) {
         if (chunk->value.builtin.ftype == CLISP_FUNCTION_LAZY) {
@@ -36,6 +36,16 @@ clisp_chunk_t*
 clisp_eval_symbol(clisp_chunk_t* symbol, clisp_env_t* env) {
     clisp_chunk_t* result = clisp_env_get(env, symbol);
     clisp_chunk_free(symbol);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_eval_expr(clisp_chunk_t* expr, clisp_env_t* env) {
+    clisp_expr_t *list = expr->value.list;
+    expr->value.list = NULL;
+    clisp_chunk_free(expr);
+
+    clisp_chunk_t* result = clisp_eval_ast(list, env);
     return result;
 }
 
@@ -72,7 +82,7 @@ clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* e
         while ((param->type & (CLISP_EXPR|CLISP_SYMBOL)) > 0) {
 
             if (param->type == CLISP_EXPR) {
-                param = clisp_eval_ast(param->value.list, chunk->value.func.env);
+                param = clisp_eval_expr(param, chunk->value.func.env);
             } else if (param->type == CLISP_SYMBOL) {
                 param = clisp_eval_symbol(param, chunk->value.func.env);
             }
