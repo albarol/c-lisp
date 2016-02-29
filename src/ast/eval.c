@@ -6,18 +6,18 @@ clisp_chunk_t*
 clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
 
     if (expr->count < 1) {
-        clisp_expr_delete(expr);
+        clisp_expr_free(expr);
         return clisp_chunk_nil();
     }
 
     clisp_chunk_t* chunk = clisp_expr_pop(expr, 0);
 
     if (chunk->type == CLISP_SYMBOL) {
-        chunk = clisp_env_get(env, chunk);
+        chunk = clisp_eval_symbol(chunk, env);
     }
 
     if (chunk->type == CLISP_EXPR) {
-        return clisp_eval_ast(chunk->value.list, env);
+        return clisp_eval_expr(chunk, env);
     }
     else if (chunk->type == CLISP_FUNCTION_C) {
         if (chunk->value.builtin.ftype == CLISP_FUNCTION_LAZY) {
@@ -33,6 +33,23 @@ clisp_eval_ast(clisp_expr_t* expr, clisp_env_t* env) {
 }
 
 clisp_chunk_t*
+clisp_eval_symbol(clisp_chunk_t* symbol, clisp_env_t* env) {
+    clisp_chunk_t* result = clisp_env_get(env, symbol);
+    clisp_chunk_free(symbol);
+    return result;
+}
+
+clisp_chunk_t*
+clisp_eval_expr(clisp_chunk_t* expr, clisp_env_t* env) {
+    clisp_expr_t *list = expr->value.list;
+    expr->value.list = NULL;
+    clisp_chunk_free(expr);
+
+    clisp_chunk_t* result = clisp_eval_ast(list, env);
+    return result;
+}
+
+clisp_chunk_t*
 clisp_eval_ast_builtin_eager(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_t* params = clisp_expr_new();
     while (expr->count) {
@@ -41,7 +58,7 @@ clisp_eval_ast_builtin_eager(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_
     }
     clisp_chunk_t* result = func->value.builtin.body(params, env);
 
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
     return result;
 }
 
@@ -52,7 +69,6 @@ clisp_eval_ast_builtin_lazy(clisp_chunk_t* func, clisp_expr_t* expr, clisp_env_t
 
 clisp_chunk_t*
 clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* env) {
-    clisp_expr_t* call = clisp_expr_new();
     chunk->value.func.env->parent = env;
 
     if (chunk->value.func.args->value.list->count != expr->count) {
@@ -66,15 +82,15 @@ clisp_eval_ast_function(clisp_chunk_t* chunk, clisp_expr_t* expr, clisp_env_t* e
         while ((param->type & (CLISP_EXPR|CLISP_SYMBOL)) > 0) {
 
             if (param->type == CLISP_EXPR) {
-                param = clisp_eval_ast(param->value.list, chunk->value.func.env);
+                param = clisp_eval_expr(param, chunk->value.func.env);
             } else if (param->type == CLISP_SYMBOL) {
-                param = clisp_env_get(chunk->value.func.env, param);
+                param = clisp_eval_symbol(param, chunk->value.func.env);
             }
         }
 
         clisp_env_put(chunk->value.func.env, chunk->value.func.args->value.list->chunks[i], param);
     }
 
-    clisp_expr_append(call, chunk->value.func.body);
+    clisp_expr_t* call = clisp_expr_create(chunk->value.func.body);
     return clisp_eval_ast(call, chunk->value.func.env);
 }

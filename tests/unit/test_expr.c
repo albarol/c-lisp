@@ -13,7 +13,7 @@ PT_SUITE(suite_expr) {
         PT_ASSERT_STR_EQ(expr->chunks[0]->value.string, "x");
         PT_ASSERT(expr->count == 1);
 
-        clisp_expr_delete(expr);
+        clisp_expr_free(expr);
     }
 
     PT_TEST(test_pop_chunk_in_expr) {
@@ -25,8 +25,8 @@ PT_SUITE(suite_expr) {
         PT_ASSERT_STR_EQ(symbol->value.string, "x");
         PT_ASSERT(expr->count == 0);
 
-        clisp_expr_delete(expr);
-        clisp_chunk_delete(symbol);
+        clisp_expr_free(expr);
+        clisp_chunk_free(symbol);
     }
 
     PT_TEST(test_take_chunk_in_expr) {
@@ -37,7 +37,7 @@ PT_SUITE(suite_expr) {
 
         PT_ASSERT_STR_EQ(symbol->value.string, "x");
 
-        clisp_chunk_delete(symbol);
+        clisp_chunk_free(symbol);
     }
 
     PT_TEST(test_join_two_chunks) {
@@ -50,8 +50,8 @@ PT_SUITE(suite_expr) {
         clisp_chunk_t* symbol = clisp_expr_pop(first, 0);
         PT_ASSERT_STR_EQ(symbol->value.string, "x");
 
-        clisp_chunk_delete(symbol);
-        clisp_expr_delete(first);
+        clisp_chunk_free(symbol);
+        clisp_expr_free(first);
     }
 
     PT_TEST(test_remove_element_from_expr) {
@@ -61,6 +61,6 @@ PT_SUITE(suite_expr) {
 
         PT_ASSERT(expr->count == 0);
 
-        clisp_expr_delete(expr);
+        clisp_expr_free(expr);
     }
 }

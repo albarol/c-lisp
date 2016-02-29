@@ -8,7 +8,7 @@ clisp_chunk_new(clisp_chunk_type_t type) {
 }
 
 void
-clisp_chunk_delete(clisp_chunk_t* chunk) {
+clisp_chunk_free(clisp_chunk_t* chunk) {
     switch (chunk->type) {
 
         case CLISP_STRING:
@@ -19,15 +19,15 @@ clisp_chunk_delete(clisp_chunk_t* chunk) {
 
         case CLISP_EXPR:
         case CLISP_LIST:
-            if (chunk->value.list->count > 0) {
-                clisp_expr_delete(chunk->value.list);
+            if (chunk->value.list != NULL) {
+                clisp_expr_free(chunk->value.list);
             }
             break;
 
         case CLISP_FUNCTION:
-            clisp_env_delete(chunk->value.func.env);
-            clisp_chunk_delete(chunk->value.func.args);
-            clisp_chunk_delete(chunk->value.func.body);
+            clisp_env_free(chunk->value.func.env);
+            clisp_chunk_free(chunk->value.func.args);
+            clisp_chunk_free(chunk->value.func.body);
             break;
 
         default:

@@ -24,7 +24,7 @@ PT_SUITE(suite_types) {
         PT_ASSERT(chunk->value.number == 5);
         PT_ASSERT(chunk->type == CLISP_NUMBER);
 
-        clisp_chunk_delete(chunk);
+        clisp_chunk_free(chunk);
     }
 
     PT_TEST(test_new_chunk_symbol) {
@@ -33,7 +33,7 @@ PT_SUITE(suite_types) {
         PT_ASSERT(strcmp(chunk->value.string, "symbol") == 0);
         PT_ASSERT(chunk->type == CLISP_SYMBOL);
 
-        clisp_chunk_delete(chunk);
+        clisp_chunk_free(chunk);
     }
 
     PT_TEST(test_new_chunk_string) {
@@ -42,7 +42,7 @@ PT_SUITE(suite_types) {
         PT_ASSERT(strcmp(chunk->value.string, "string") == 0);
         PT_ASSERT(chunk->type == CLISP_STRING);
 
-        clisp_chunk_delete(chunk);
+        clisp_chunk_free(chunk);
     }
 
     PT_TEST(test_new_chunk_error) {
@@ -51,7 +51,7 @@ PT_SUITE(suite_types) {
         PT_ASSERT(strcmp(chunk->value.string, "Error 1") == 0);
         PT_ASSERT(chunk->type == CLISP_ERROR);
 
-        clisp_chunk_delete(chunk);
+        clisp_chunk_free(chunk);
     }
 
     PT_TEST(test_new_chunk_builtin_should_return_number) {
@@ -63,8 +63,8 @@ PT_SUITE(suite_types) {
         clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_number(5)), env);
         PT_ASSERT(result->value.number == 5);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_new_chunk_builtin_should_return_str) {
@@ -76,8 +76,8 @@ PT_SUITE(suite_types) {
         clisp_chunk_t* result = chunk->value.builtin.body(fake_args(clisp_chunk_str("string")), env);
         PT_ASSERT(strcmp(result->value.string, "string") == 0);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_new_chunk_function) {
@@ -87,7 +87,7 @@ PT_SUITE(suite_types) {
         PT_ASSERT(chunk->value.func.args->value.list->count == 0);
         PT_ASSERT(chunk->value.func.body->value.list->count == 0);
 
-        clisp_chunk_delete(chunk);
+        clisp_chunk_free(chunk);
     }
 
     PT_TEST(test_copy_chunk_builtin) {
@@ -98,10 +98,10 @@ PT_SUITE(suite_types) {
         clisp_chunk_t* result = copied->value.builtin.body(fake_args(clisp_chunk_number(5)), env);
         PT_ASSERT(result->value.number == 5);
 
-        clisp_chunk_delete(chunk);
-        clisp_chunk_delete(copied);
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_chunk_free(copied);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_copy_chunk_number) {
@@ -111,8 +111,8 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(copied->value.number == 5);
 
-        clisp_chunk_delete(chunk);
-        clisp_chunk_delete(copied);
+        clisp_chunk_free(chunk);
+        clisp_chunk_free(copied);
     }
 
     PT_TEST(test_copy_chunk_symbol) {
@@ -122,8 +122,8 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT_STR_EQ(copied->value.string, "symbol");
 
-        clisp_chunk_delete(chunk);
-        clisp_chunk_delete(copied);
+        clisp_chunk_free(chunk);
+        clisp_chunk_free(copied);
     }
 
     PT_TEST(test_cmp_chunk_number) {
@@ -133,8 +133,8 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(clisp_chunk_cmp(first, second));
 
-        clisp_chunk_delete(first);
-        clisp_chunk_delete(second);
+        clisp_chunk_free(first);
+        clisp_chunk_free(second);
     }
 
     PT_TEST(test_cmp_chunk_symbol) {
@@ -144,8 +144,8 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(clisp_chunk_cmp(first, second));
 
-        clisp_chunk_delete(first);
-        clisp_chunk_delete(second);
+        clisp_chunk_free(first);
+        clisp_chunk_free(second);
     }
 
     PT_TEST(test_cmp_two_different_chunks) {
@@ -155,7 +155,7 @@ PT_SUITE(suite_types) {
 
         PT_ASSERT(clisp_chunk_cmp(first, second) != 1);
 
-        clisp_chunk_delete(first);
-        clisp_chunk_delete(second);
+        clisp_chunk_free(first);
+        clisp_chunk_free(second);
     }
 }

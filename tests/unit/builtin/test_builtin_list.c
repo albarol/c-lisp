@@ -35,8 +35,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_LIST);
         PT_ASSERT(result->value.list->count == 1);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_create_throws_empty_args) {
@@ -48,8 +48,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: > 0");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_create_throws_invalid_args) {
@@ -62,8 +62,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Type: Nil is not supported");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -79,8 +79,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(head->type == CLISP_STRING);
         PT_ASSERT_STR_EQ(head->value.string, "item1");
 
-        clisp_chunk_delete(head);
-        clisp_env_delete(env);
+        clisp_chunk_free(head);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_head_throws_empty_list) {
@@ -92,8 +92,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(head->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(head->value.string, "List is empty");
 
-        clisp_chunk_delete(head);
-        clisp_env_delete(env);
+        clisp_chunk_free(head);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_head_throws_arg_type) {
@@ -104,8 +104,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Boolean, Expected: List");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -121,8 +121,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(tail->type == CLISP_LIST);
         PT_ASSERT(tail->value.list->count == 2);
 
-        clisp_chunk_delete(tail);
-        clisp_env_delete(env);
+        clisp_chunk_free(tail);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_tail_throws_empty_list) {
@@ -135,8 +135,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(tail->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(tail->value.string, "List is empty");
 
-        clisp_chunk_delete(tail);
-        clisp_env_delete(env);
+        clisp_chunk_free(tail);
+        clisp_env_free(env);
     }
 
     /**
@@ -152,8 +152,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_BOOL);
         PT_ASSERT(result->value.boolean == false);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_empty_throws_empty_args) {
@@ -165,8 +165,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_empty_throws_invalid_args) {
@@ -179,8 +179,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: List");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -196,8 +196,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_NUMBER);
         PT_ASSERT(result->value.number == 3);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_length_throws_empty_args) {
@@ -209,8 +209,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 1");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_length_throws_invalid_args) {
@@ -223,8 +223,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: List");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -241,8 +241,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_LIST);
         PT_ASSERT(result->value.list->count == 4);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_append_throws_empty_args) {
@@ -254,8 +254,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 2");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_append_throws_invalid_args) {
@@ -268,8 +268,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect type of argument. Got: Number, Expected: List");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     /**
@@ -285,8 +285,8 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_LIST);
         PT_ASSERT(result->value.list->count == 2);
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_list_cons_throws_empty_args) {
@@ -298,7 +298,7 @@ PT_SUITE(suite_builtin_list) {
         PT_ASSERT(result->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(result->value.string, "Incorrect number of arguments. Got: 0, Expected: 2");
 
-        clisp_chunk_delete(result);
-        clisp_env_delete(env);
+        clisp_chunk_free(result);
+        clisp_env_free(env);
     }
 }

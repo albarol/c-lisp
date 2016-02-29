@@ -1,4 +1,3 @@
-
 #include <builtin/math.h>
 
 clisp_chunk_t*
@@ -33,14 +32,14 @@ clisp_builtin_math_arithmetic(clisp_expr_t* expr, clisp_env_t* env, char* op) {
         }
         if (strcmp(op, "/") == 0) {
             if (second->value.number == 0) {
-                clisp_chunk_delete(first);
+                clisp_chunk_free(first);
                 first = clisp_chunk_error("Division By Zero!");
             } else {
                 first->value.number /= second->value.number;
             }
         }
 
-        clisp_chunk_delete(second);
+        clisp_chunk_free(second);
     }
 
     return first;
@@ -118,7 +117,7 @@ clisp_builtin_math_functions(clisp_expr_t* expr, clisp_env_t* env, char* fn) {
         result = clisp_chunk_number(fabsf(chunk->value.number));
     }
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 

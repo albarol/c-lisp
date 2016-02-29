@@ -9,10 +9,8 @@
 #include <utils.h>
 
 #ifdef HAVE_PRELUDE
-#include "stl.h"
+#include <stl.h>
 #endif
-
-static char input[2048];
 
 void
 load_script(char* filename, clisp_env_t* env) {
@@ -47,11 +45,11 @@ main(int argc, char** argv) {
     free(lines);
 #endif
 
-    bool enterRepl = true;
+    bool enter_repl = true;
     switch (argc) {
         case 2: {
             load_script(argv[1], env);
-            enterRepl = false;
+            enter_repl = false;
             break;
         }
         case 3: {
@@ -68,7 +66,7 @@ main(int argc, char** argv) {
         default: break;
     }
 
-    if (enterRepl) {
+    if (enter_repl) {
         while (1) {
             char* input = readline("> ");
             add_history(input);

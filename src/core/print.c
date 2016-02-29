@@ -62,7 +62,7 @@ clisp_print_write_expr(clisp_expr_t* expr, char open, char close) {
 
 void
 clisp_print_write_str(clisp_chunk_t* token) {
-//    char* escaped = malloc(strlen(token->value.string) + 1);
+//    char* escaped = alloc(strlen(token->value.string) + 1);
 //    strcpy(escaped, token->value.string);
 //
 //    escaped = mpcf_escape(escaped);

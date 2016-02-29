@@ -1,4 +1,3 @@
-
 #include <builtin/list.h>
 
 clisp_chunk_t*
@@ -10,7 +9,8 @@ clisp_builtin_list_create(clisp_expr_t* expr, clisp_env_t* env) {
                       CLISP_NUMBER|CLISP_LIST|CLISP_STRING;
     for (int i = 0; i < expr->count; i++) {
         clisp_expr_assert(expr, (expr->chunks[i]->type & valid_types) > 0,
-                          "Incorrect type of argument. Type: %s is not supported", clisp_print_type_name(expr->chunks[i]->type));
+                          "Incorrect type of argument. Type: %s is not supported",
+                          clisp_print_type_name(expr->chunks[i]->type));
     }
 
     clisp_chunk_t* chunk = clisp_chunk_list();
@@ -33,7 +33,7 @@ clisp_builtin_list_tail(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_assert_type(chunk, chunk->type, CLISP_LIST)
     clisp_chunk_assert(chunk, chunk->value.list->count > 0, "List is empty")
-    clisp_chunk_delete(clisp_expr_pop(chunk->value.list, 0));
+    clisp_chunk_free(clisp_expr_pop(chunk->value.list, 0));
     return chunk;
 }
 
@@ -51,7 +51,7 @@ clisp_builtin_list_empty(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(chunk->value.list->count == 0);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -63,7 +63,7 @@ clisp_builtin_list_length(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_number(chunk->value.list->count);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -102,6 +102,6 @@ clisp_builtin_list_cons(clisp_expr_t* expr, clisp_env_t* env) {
             clisp_expr_append(result->value.list, chunk);
         }
     }
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
     return result;
 }

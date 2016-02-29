@@ -12,8 +12,8 @@ PT_SUITE(suite_builtin_io) {
 
         PT_ASSERT(chunk->type == CLISP_NIL);
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 
     PT_TEST(test_throws_error_invalid_params_count) {
@@ -26,7 +26,7 @@ PT_SUITE(suite_builtin_io) {
         PT_ASSERT(chunk->type == CLISP_ERROR);
         PT_ASSERT_STR_EQ(chunk->value.string, "Incorrect number of arguments. Got: 2, Expected: 1");
 
-        clisp_chunk_delete(chunk);
-        clisp_env_delete(env);
+        clisp_chunk_free(chunk);
+        clisp_env_free(env);
     }
 }

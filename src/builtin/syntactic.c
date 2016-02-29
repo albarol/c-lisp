@@ -21,7 +21,7 @@ clisp_builtin_syntactic_if(clisp_expr_t* expr, clisp_env_t* env) {
         clisp_expr_remove(expr, 0);
     }
 
-    clisp_chunk_delete(cond);
+    clisp_chunk_free(cond);
     return clisp_eval_ast(expr, env);
 }
 
@@ -42,7 +42,7 @@ clisp_builtin_syntactic_def(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* func = clisp_chunk_function(args, body);
     clisp_env_put(env, name, func);
 
-    clisp_chunk_delete(name);
+    clisp_chunk_free(name);
     return func;
 }
 
@@ -78,17 +78,17 @@ clisp_builtin_syntactic_for(clisp_expr_t* expr, clisp_env_t* env) {
         clisp_expr_t* call = clisp_expr_new();
         clisp_expr_append(call, clisp_chunk_copy(body));
         clisp_env_put(local_env, vars->value.list->chunks[0], args->value.list->chunks[i]);
-        clisp_chunk_delete(clisp_eval_ast(call, local_env));
-        clisp_expr_delete(call);
+        clisp_chunk_free(clisp_eval_ast(call, local_env));
+        clisp_expr_free(call);
     }
 
-    clisp_env_delete(local_env);
+    clisp_env_free(local_env);
 
 cleanup:
-    clisp_chunk_delete(body);
-    clisp_chunk_delete(args);
-    clisp_chunk_delete(iterator);
-    clisp_expr_delete(expr);
+clisp_chunk_free(body);
+    clisp_chunk_free(args);
+    clisp_chunk_free(iterator);
+    clisp_expr_free(expr);
     if (error != NULL) {
         return error;
     } else {
@@ -129,12 +129,12 @@ clisp_builtin_syntactic_cond(clisp_expr_t* expr, clisp_env_t* env) {
 
         cleanup:
             if (cond != NULL) {
-                clisp_chunk_delete(cond);
+                clisp_chunk_free(cond);
             }
-            clisp_chunk_delete(tree);
+        clisp_chunk_free(tree);
     }
 
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
     if (call != NULL) {
         return clisp_eval_ast(clisp_expr_create(call), env);
     }
@@ -174,10 +174,10 @@ clisp_builtin_syntactic_when(clisp_expr_t* expr, clisp_env_t* env) {
             clisp_eval_ast(clisp_expr_create(call), env);
         }
 
-        clisp_chunk_delete(cond);
-        clisp_chunk_delete(tree);
+        clisp_chunk_free(cond);
+        clisp_chunk_free(tree);
     }
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
 
     if (error != NULL) {
         return error;
@@ -214,10 +214,10 @@ clisp_builtin_syntactic_unless(clisp_expr_t* expr, clisp_env_t* env) {
             clisp_eval_ast(clisp_expr_create(call), env);
         }
 
-        clisp_chunk_delete(cond);
-        clisp_chunk_delete(tree);
+        clisp_chunk_free(cond);
+        clisp_chunk_free(tree);
     }
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
 
     if (error != NULL) {
         return error;
@@ -234,8 +234,8 @@ clisp_builtin_syntactic_lambda(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* body = clisp_expr_take(expr, 0);
 
     if ((args->type & (CLISP_EXPR|CLISP_NIL)) == 0) {
-        clisp_chunk_delete(args);
-        clisp_chunk_delete(body);
+        clisp_chunk_free(args);
+        clisp_chunk_free(body);
         return clisp_chunk_error("Invalid argument type. Got: %s, Expected: Expression", clisp_print_type_name(args->type));
     }
 
@@ -252,6 +252,6 @@ clisp_builtin_syntactic_type(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_str(clisp_print_type_name(chunk->type));
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }

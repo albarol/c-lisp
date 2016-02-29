@@ -8,7 +8,7 @@ clisp_builtin_exception_is_error(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_t* chunk = clisp_expr_take(expr, 0);
     clisp_chunk_t* result = clisp_chunk_bool(chunk->type == CLISP_ERROR);
 
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return result;
 }
 
@@ -20,6 +20,6 @@ clisp_builtin_exception_error(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_chunk_assert_type(chunk, chunk->type, CLISP_STRING);
 
     clisp_chunk_t* error = clisp_chunk_error(chunk->value.string);
-    clisp_chunk_delete(chunk);
+    clisp_chunk_free(chunk);
     return error;
 }

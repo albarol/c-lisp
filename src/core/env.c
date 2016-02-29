@@ -29,10 +29,10 @@ clisp_env_copy(clisp_env_t* env) {
 }
 
 void
-clisp_env_delete(clisp_env_t* env) {
+clisp_env_free(clisp_env_t* env) {
     for (int i = 0; i < env->count; i++) {
         free(env->symbols[i]);
-        clisp_chunk_delete(env->chunks[i]);
+        clisp_chunk_free(env->chunks[i]);
     }
     free(env->symbols);
     free(env->chunks);
@@ -60,7 +60,7 @@ clisp_env_put(clisp_env_t* env, clisp_chunk_t* symbol, clisp_chunk_t* value) {
 
     for (int i = 0; i < env->count; i++) {
         if (strcmp(env->symbols[i], symbol->value.string) == 0) {
-            clisp_chunk_delete(env->chunks[i]);
+            clisp_chunk_free(env->chunks[i]);
             env->chunks[i] = clisp_chunk_copy(value);
             return;
         }
@@ -81,6 +81,6 @@ clisp_env_put_builtin(clisp_env_t* env, char* symbol, clisp_builtin_t builtin, c
     clisp_chunk_t* b = clisp_chunk_builtin(builtin, type);
 
     clisp_env_put(env, s, b);
-    clisp_chunk_delete(s);
-    clisp_chunk_delete(b);
+    clisp_chunk_free(s);
+    clisp_chunk_free(b);
 }

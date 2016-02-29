@@ -18,9 +18,9 @@ clisp_expr_create(clisp_chunk_t* chunk) {
 
 
 void
-clisp_expr_delete(clisp_expr_t* expr) {
+clisp_expr_free(clisp_expr_t* expr) {
     for (int i = 0; i < expr->count; i++)
-        clisp_chunk_delete(expr->chunks[i]);
+        clisp_chunk_free(expr->chunks[i]);
     free(expr);
 }
 
@@ -42,7 +42,7 @@ clisp_expr_remove(clisp_expr_t* expr, int position) {
 
     expr->count--;
     expr->chunks = realloc(expr->chunks, sizeof(clisp_chunk_t*) * (expr->count));
-    clisp_chunk_delete(item);
+    clisp_chunk_free(item);
 }
 
 
@@ -64,7 +64,7 @@ clisp_expr_pop(clisp_expr_t* expr, int position) {
 clisp_chunk_t*
 clisp_expr_take(clisp_expr_t* expr, int position) {
     clisp_chunk_t* item = clisp_expr_pop(expr, position);
-    clisp_expr_delete(expr);
+    clisp_expr_free(expr);
     return item;
 }
 
@@ -74,6 +74,6 @@ clisp_expr_join(clisp_expr_t* first, clisp_expr_t* second) {
         first = clisp_expr_append(first, clisp_expr_pop(second, 0));
     }
 
-    clisp_expr_delete(second);
+    clisp_expr_free(second);
     return first;
 }
