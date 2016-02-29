@@ -33,7 +33,7 @@ clisp_read_number(mpc_ast_t* ast) {
 clisp_chunk_t*
 clisp_read_string(mpc_ast_t* ast) {
     ast->contents[strlen(ast->contents)-1] = '\0';
-    char* unescaped = alloc(strlen(ast->contents+1) + 1);
+    char* unescaped = malloc(strlen(ast->contents+1) + 1);
     strcpy(unescaped, ast->contents+1);
     unescaped = mpcf_unescape(unescaped);
     clisp_chunk_t* str = clisp_chunk_str(unescaped);

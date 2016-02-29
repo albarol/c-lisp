@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include <common.h>
-
 
 struct clisp_chunk_t;
 struct clisp_env_t;

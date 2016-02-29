@@ -4,7 +4,7 @@
 
 clisp_expr_t*
 clisp_expr_new() {
-    clisp_expr_t* expr = alloc(sizeof(clisp_expr_t));
+    clisp_expr_t* expr = malloc(sizeof(clisp_expr_t));
     expr->count = 0;
     expr->chunks = NULL;
     return expr;

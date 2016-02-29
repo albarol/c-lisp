@@ -3,7 +3,7 @@
 
 clisp_grammar_t*
 clisp_grammar_new() {
-    clisp_grammar_t* grammar = alloc(sizeof(clisp_grammar_t));
+    clisp_grammar_t* grammar = malloc(sizeof(clisp_grammar_t));
 
     grammar->Comment = mpc_new("comment");
     grammar->Boolean = mpc_new("boolean");

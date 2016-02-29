@@ -3,7 +3,7 @@
 
 clisp_env_t*
 clisp_env_new(void) {
-    clisp_env_t* env = alloc(sizeof(clisp_env_t));
+    clisp_env_t* env = malloc(sizeof(clisp_env_t));
     env->parent = NULL;
     env->count = 0;
     env->symbols = NULL;
@@ -13,16 +13,16 @@ clisp_env_new(void) {
 
 clisp_env_t*
 clisp_env_copy(clisp_env_t* env) {
-    clisp_env_t* new_env = alloc(sizeof(clisp_env_t));
+    clisp_env_t* new_env = malloc(sizeof(clisp_env_t));
     new_env->parent = env->parent;
     new_env->count = env->count;
 
-    new_env->symbols = alloc(sizeof(char*) * new_env->count);
-    new_env->chunks = alloc(sizeof(clisp_chunk_t*) * new_env->count);
+    new_env->symbols = malloc(sizeof(char*) * new_env->count);
+    new_env->chunks = malloc(sizeof(clisp_chunk_t*) * new_env->count);
 
     for (int i = 0; i < new_env->count; i++) {
         new_env->chunks[i] = clisp_chunk_copy(env->chunks[i]);
-        new_env->symbols[i] = alloc(strlen(env->symbols[i]) + 1);
+        new_env->symbols[i] = malloc(strlen(env->symbols[i]) + 1);
         strcpy(new_env->symbols[i], env->symbols[i]);
     }
     return new_env;
@@ -71,7 +71,7 @@ clisp_env_put(clisp_env_t* env, clisp_chunk_t* symbol, clisp_chunk_t* value) {
     env->symbols = realloc(env->symbols, sizeof(char*) * env->count);
 
     env->chunks[env->count - 1] = clisp_chunk_copy(value);
-    env->symbols[env->count - 1] = alloc(strlen(symbol->value.string) + 1);
+    env->symbols[env->count - 1] = malloc(strlen(symbol->value.string) + 1);
     strcpy(env->symbols[env->count - 1], symbol->value.string);
 }
 
