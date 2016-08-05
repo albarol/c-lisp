@@ -29,7 +29,7 @@ main(int argc, char** argv) {
 
 #ifdef HAVE_PRELUDE
     printf("\nLoaded libraries\n");
-    printf("  * prelude.clisp\n");
+    printf("\t* prelude.clisp\n");
 #endif
     putchar('\n');
 
