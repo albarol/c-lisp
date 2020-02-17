@@ -30,6 +30,7 @@ clisp_builtin_load_functions(clisp_env_t* env) {
      * IO builtin functions
      */
     clisp_env_put_builtin(env, "display", clisp_builtin_io_display, CLISP_FUNCTION_LAZY);
+    clisp_env_put_builtin(env, "println", clisp_builtin_io_println, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "print", clisp_builtin_io_print, CLISP_FUNCTION_LAZY);
     clisp_env_put_builtin(env, "load", clisp_builtin_io_load, CLISP_FUNCTION_LAZY);
 

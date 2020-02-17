@@ -12,13 +12,39 @@ clisp_builtin_io_display(clisp_expr_t* expr, clisp_env_t* env) {
     }
 
     printf("%s -> ", clisp_print_type_name(chunk->type));
-    clisp_print_writeln(chunk);
+    clisp_print_write(chunk);
     clisp_chunk_free(chunk);
     return clisp_chunk_nil();
 }
 
 clisp_chunk_t*
 clisp_builtin_io_print(clisp_expr_t* expr, clisp_env_t* env) {
+    clisp_expr_assert_count(expr, 1);
+
+    clisp_chunk_t* chunk = clisp_expr_pop(expr, 0);
+
+
+    if (chunk->type == CLISP_SYMBOL) {
+        chunk = clisp_env_get(env, chunk);
+        clisp_print_write(chunk);
+        clisp_chunk_free(chunk);
+    }
+    else if (chunk->type == CLISP_EXPR) {
+        clisp_expr_t* call = clisp_expr_create(chunk);
+        clisp_chunk_t* result = clisp_eval_ast(call, env);
+        clisp_print_write(result);
+        clisp_chunk_free(result);
+    }
+    else {
+        clisp_print_write(chunk);
+        clisp_chunk_free(chunk);
+    }
+
+    return clisp_chunk_nil();
+}
+
+clisp_chunk_t*
+clisp_builtin_io_println(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_expr_assert_count(expr, 1);
 
     clisp_chunk_t* chunk = clisp_expr_pop(expr, 0);

@@ -85,7 +85,7 @@ clisp_builtin_syntactic_for(clisp_expr_t* expr, clisp_env_t* env) {
     clisp_env_free(local_env);
 
 cleanup:
-clisp_chunk_free(body);
+    clisp_chunk_free(body);
     clisp_chunk_free(args);
     clisp_chunk_free(iterator);
     clisp_expr_free(expr);

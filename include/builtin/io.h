@@ -13,6 +13,7 @@
 
 clisp_chunk_t* clisp_builtin_io_display(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_io_print(clisp_expr_t* expr, clisp_env_t* env);
+clisp_chunk_t* clisp_builtin_io_println(clisp_expr_t* expr, clisp_env_t* env);
 clisp_chunk_t* clisp_builtin_io_load(clisp_expr_t* expr, clisp_env_t* env);
 
 #endif
